@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Steam Calculator</string>
+
+    <string name="pressureUnits"><![CDATA[
+    m H2O`m H<sub><small>2</small></sub>O`
+    ]]></string>
+    <string name="temperatureUnits"><![CDATA[
+    C`&deg;C`
+    F`&deg;F`
+    Ra`&deg;Ra`
+    D`&deg;D`
+    N`&deg;N`
+    Re`&deg;R`
+    Ro`&deg;Rø`
+    ]]></string>
+    <string name="specificEnergyUnits"><![CDATA[
+    calth`cal<sub><small>th</small></sub>`
+    cal15`cal<sub><small>15</small></sub>`
+    ]]></string>
+    <string name="ratioUnits" />
+
+    <string name="temperature">Temperature</string>
+    <string name="pressure">Pressure</string>
+    <string name="enthalpy">Enthalpy</string>
+    <string name="entropy">Entropy</string>
+    <string name="vapourFraction">Vapour Fraction</string>
+</resources>

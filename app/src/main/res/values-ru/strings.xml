@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pressureUnits"><![CDATA[
+    Pa`Па`
+    kPa`кПа`
+    MPa`МПа`
+    bar`бар`
+    at`ат`
+    atm`атм`
+    mm Hg`мм рт. ст.`
+    m H2O`м вод. ст.`
+    ]]></string>
+
+    <string name="specificEnergyUnits"><![CDATA[
+    J/kg`Дж/кг`
+    kJ/kg`кДж/кг`
+    MJ/kg`МДж/кг`
+    erg`эрг`
+    cal`кал`
+    calth`кал<sub><small>ТХ</small></sub>`
+    cal15`кал<sub><small>15</small></sub>`
+    kWh`кВт⋅ч`
+    ]]></string>
+</resources>
