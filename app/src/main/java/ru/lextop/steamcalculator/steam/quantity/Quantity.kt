@@ -1,18 +1,18 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-class Quantity(val property: Property, val value: Double, val unit: DerivativeUnit) {
-    constructor(property: Property, value: Number, unit: DerivativeUnit) : this(property, value.toDouble(), unit)
+class Quantity(val property: Property, val value: Double, val unit: UnitPh) {
+    constructor(property: Property, value: Number, unit: UnitPh) : this(property, value.toDouble(), unit)
 
     private val basicValue = unit.convertToBasic(value)
 
-    operator fun get(unit: DerivativeUnit): Quantity =
+    operator fun get(unit: UnitPh): Quantity =
             if (unit.baseUnit != property.baseUnit) {
                 throw RuntimeException("Incompatible BaseUnit: ${unit.baseUnit}")
             } else {
                 Quantity(property, unit.convertFromBasic(basicValue), unit)
             }
 
-    fun copy(value: Number, unit: DerivativeUnit): Quantity =
+    fun copy(value: Number, unit: UnitPh): Quantity =
             Quantity(property, value, unit)
 
     override fun hashCode(): Int {
@@ -60,5 +60,5 @@ class Quantity(val property: Property, val value: Double, val unit: DerivativeUn
     }
 }
 
-operator fun Double.invoke(unit: DerivativeUnit) = Quantity(unit.baseUnit.defaultProperty, this, unit)
-operator fun Number.invoke(unit: DerivativeUnit) = Quantity(unit.baseUnit.defaultProperty, this, unit)
+operator fun Double.invoke(unit: UnitPh) = Quantity(unit.baseUnit.defaultProperty, this, unit)
+operator fun Number.invoke(unit: UnitPh) = Quantity(unit.baseUnit.defaultProperty, this, unit)

@@ -24,11 +24,10 @@ class QuantityUI : Binding.Component<QuantityViewModel, MainActivity>() {
                     bindLive(this::setText) { valueLive }
                 }.lparams(0, wrapContent, 1f)
                 spinner {
-                    adapter = UnitArrayAdapter(ctx)
-                    bind({ (adapter as UnitArrayAdapter).units = it }) { units }
+                    bind({adapter = HtmlArrayAdapter(ctx, android.R.layout.simple_spinner_item, it!!)}) { units }
                     bindLive({ setSelection(it!!) }) { unitSelectionLive }
                     onItemSelectedListener = OnItemSelectedListener { notify { selectUnit(it) } }
-                }.lparams(0, wrapContent, 1f)
+                }.lparams(0, wrapContent, 2f)
             }
         }
 

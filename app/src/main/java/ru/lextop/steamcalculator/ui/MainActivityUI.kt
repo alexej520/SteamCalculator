@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
@@ -46,8 +45,7 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         addTextChangedListener(listener)
                     }.lparams(0, wrapContent, 1f)
                     spinner {
-                        adapter = UnitArrayAdapter(ctx)
-                        bindLive({ (adapter as UnitArrayAdapter).units = it }) { firstUnitsLive }
+                        bindLive({ adapter = HtmlArrayAdapter(ctx, android.R.layout.simple_spinner_item, it!!) }) { firstUnitsLive }
                         bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
                     }.lparams(0, wrapContent, 0.8f)
@@ -79,8 +77,7 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         addTextChangedListener(listener)
                     }.lparams(0, wrapContent, 1f)
                     spinner {
-                        adapter = UnitArrayAdapter(ctx)
-                        bindLive({ (adapter as UnitArrayAdapter).units = it }) { secondUnitsLive }
+                        bindLive({ adapter = HtmlArrayAdapter(ctx, android.R.layout.simple_spinner_item, it!!) }) { secondUnitsLive }
                         bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
                     }.lparams(0, wrapContent, 0.8f)

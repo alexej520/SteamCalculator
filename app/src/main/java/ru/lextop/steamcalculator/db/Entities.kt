@@ -3,7 +3,7 @@ package ru.lextop.steamcalculator.db
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import ru.lextop.steamcalculator.steam.quantity.DerivativeUnit
+import ru.lextop.steamcalculator.steam.quantity.UnitPh
 import ru.lextop.steamcalculator.steam.quantity.Property
 import ru.lextop.steamcalculator.steam.quantity.Quantity
 import ru.lextop.steamcalculator.toProperty
@@ -25,7 +25,7 @@ data class ViewUnit(
 }
 
 @JvmName("viewUnitToUnitMap")
-fun List<ViewUnit>.toPropUnitList(): List<Pair<Property, DerivativeUnit>> =
+fun List<ViewUnit>.toPropUnitList(): List<Pair<Property, UnitPh>> =
         map {
             val propType = it.propSymbol.toProperty()
             propType to it.unitName.toUnit(propType)
@@ -47,7 +47,7 @@ data class EditUnit(
 }
 
 @JvmName("editUnitToUnitMap")
-fun List<EditUnit>.toPropUnitList(): List<Pair<Property, DerivativeUnit>> =
+fun List<EditUnit>.toPropUnitList(): List<Pair<Property, UnitPh>> =
         map {
             val propType = it.propSymbol.toProperty()
             propType to it.unitName.toUnit(propType)

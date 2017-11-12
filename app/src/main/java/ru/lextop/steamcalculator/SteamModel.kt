@@ -2,9 +2,9 @@ package ru.lextop.steamcalculator
 
 import ru.lextop.steamcalculator.steam.quantity.*
 
-val Property.unitList get() = baseUnit.derivativeUnitMap.values.toList()
+val Property.unitList get() = baseUnit.unitList
 
-val init = listOf(PressureUnit, TemperatureUnit, SpecificEnergyUnit, RatioUnit)
+val units = Units
 
 val resPropMap = mapOf<Property, Int>(
         Pressure to R.string.pressure,
@@ -13,12 +13,6 @@ val resPropMap = mapOf<Property, Int>(
         SpecificEntropy to R.string.entropy,
         VapourFraction to R.string.vapourFraction
 ).mapKeys { it.key }
-val resBaseUnitMap = mapOf<BaseUnit, Int>(
-        Pressure.baseUnit to R.string.pressureUnits,
-        Temperature.baseUnit to R.string.temperatureUnits,
-        SpecificEnthalpy.baseUnit to R.string.specificEnergyUnits,
-        VapourFraction.baseUnit to R.string.ratioUnits
-)
 private val computablePairs: List<Pair<Property, Property>> = listOf(
         Pressure to Temperature,
         SpecificEnthalpy to SpecificEntropy,
@@ -45,5 +39,5 @@ val computablePropMap: Map<Property, List<Property>> = props.associate { type ->
 fun String.toProperty(): Property =
         props.first { this == it.symbol }
 
-fun String.toUnit(propType: Property): DerivativeUnit =
-        propType.baseUnit.derivativeUnitMap[this]!!
+fun String.toUnit(propType: Property): UnitPh =
+        propType.baseUnit.unitMap[this]!!

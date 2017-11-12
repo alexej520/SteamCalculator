@@ -6,7 +6,7 @@ import org.jetbrains.anko.doAsync
 import ru.lextop.steamcalculator.binding.setValueIfNotSame
 import ru.lextop.steamcalculator.db.*
 import ru.lextop.steamcalculator.steam.*
-import ru.lextop.steamcalculator.steam.quantity.DerivativeUnit
+import ru.lextop.steamcalculator.steam.quantity.UnitPh
 import ru.lextop.steamcalculator.steam.quantity.Property
 import ru.lextop.steamcalculator.steam.quantity.Quantity
 import javax.inject.Inject
@@ -15,13 +15,13 @@ import javax.inject.Singleton
 @Singleton
 class SteamRepository @Inject constructor
 (private val steamDao: SteamDao) {
-    private val viewUnits: Map<Property, LiveData<DerivativeUnit>> = props.associate {
-        val live = MutableLiveData<DerivativeUnit>()
+    private val viewUnits: Map<Property, LiveData<UnitPh>> = props.associate {
+        val live = MutableLiveData<UnitPh>()
         live.value = it.baseUnit.alias
         it to live
     }
-    private val editUnits: Map<Property, LiveData<DerivativeUnit>> = props.associate {
-        val live = MutableLiveData<DerivativeUnit>()
+    private val editUnits: Map<Property, LiveData<UnitPh>> = props.associate {
+        val live = MutableLiveData<UnitPh>()
         live.value = it.baseUnit.alias
         it to live
     }
@@ -62,17 +62,17 @@ class SteamRepository @Inject constructor
     }
 
 
-    fun getEditUnitLive(type: Property): LiveData<DerivativeUnit> =
+    fun getEditUnitLive(type: Property): LiveData<UnitPh> =
             editUnits[type]!!
 
-    fun setEditUnit(type: Property, unit: DerivativeUnit) {
+    fun setEditUnit(type: Property, unit: UnitPh) {
         doAsync { steamDao.insertEditUnit(EditUnit(type.symbol, unit.name)) }
     }
 
-    fun getViewUnitLive(type: Property): LiveData<DerivativeUnit> =
+    fun getViewUnitLive(type: Property): LiveData<UnitPh> =
             viewUnits[type]!!
 
-    fun setViewUnit(type: Property, unit: DerivativeUnit) {
+    fun setViewUnit(type: Property, unit: UnitPh) {
         doAsync { steamDao.insertViewUnit(ViewUnit(type.symbol, unit.name)) }
     }
 

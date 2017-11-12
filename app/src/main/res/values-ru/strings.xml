@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pressureUnits"><![CDATA[
-    Pa`Па`
-    kPa`кПа`
-    MPa`МПа`
-    bar`бар`
-    at`ат`
-    atm`атм`
-    mm Hg`мм рт. ст.`
-    m H2O`м вод. ст.`
-    ]]></string>
 
-    <string name="specificEnergyUnits"><![CDATA[
-    J/kg`Дж/кг`
-    kJ/kg`кДж/кг`
-    MJ/kg`МДж/кг`
-    erg`эрг`
-    cal`кал`
-    calth`кал<sub><small>ТХ</small></sub>`
-    cal15`кал<sub><small>15</small></sub>`
-    kWh`кВт⋅ч`
-    ]]></string>
+    <string name="Pa">Па</string>
+    <string name="MPa">МПа</string>
+    <string name="mmHg">мм рт. ст.</string>
+    <string name="mH2O">м вод. ст.</string>
+    <string name="kPa">кПа</string>
+    <string name="kg">кг</string>
+    <string name="J_kg">Дж/кг</string>
+    <string name="J">Дж</string>
+    <string name="entropy">Энтропия</string>
+    <string name="enthalpy">Энтальпия</string>
+    <string name="vapourFraction">Сухость пара</string>
+    <string name="temperature">Температура</string>
+    <string name="pressure">Давление</string>
+    <string name="bar">бар</string>
+    <string name="at">ат</string>
+    <string name="atm">атм</string>
+    <string name="kJ">кДж</string>
+    <string name="MJ">МДж</string>
+    <string name="erg">эрг</string>
+    <string name="cal">кал</string>
+    <string name="calth"><![CDATA[кал<sub><small>ТХ</small></sub>]]></string>
+    <string name="cal15"><![CDATA[кал<sub><small>15</small></sub>]]></string>
+    <string name="kWh"><![CDATA[кВт&times;ч]]></string>
+    <string name="kJ_kg">кДж/кг</string>
 </resources>

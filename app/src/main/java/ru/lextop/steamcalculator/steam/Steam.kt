@@ -2,10 +2,10 @@ package ru.lextop.steamcalculator.steam
 
 import com.hummeling.if97.IF97
 import ru.lextop.steamcalculator.steam.quantity.*
-import ru.lextop.steamcalculator.steam.quantity.PressureUnit.Pa
-import ru.lextop.steamcalculator.steam.quantity.RatioUnit.ratio
-import ru.lextop.steamcalculator.steam.quantity.SpecificEnergyUnit.J_kg
-import ru.lextop.steamcalculator.steam.quantity.TemperatureUnit.K
+import ru.lextop.steamcalculator.steam.quantity.Units.PressureUnit.Pa
+import ru.lextop.steamcalculator.steam.quantity.Units.RatioUnit.ratio
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergyUnit.J_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.TemperatureUnit.K
 import java.lang.Double.NaN
 
 open class Steam private constructor(protected val initQs: Triple<Quantity, Quantity, Double?>)
@@ -138,7 +138,7 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
         private val if97Instance = IF97(IF97.UnitSystem.SI)
         private fun if97(
                 type: Property,
-                unit: DerivativeUnit,
+                unit: UnitPh,
                 eval: IF97.() -> Triple<Quantity, Quantity, Double?>): Lazy<Quantity> =
                 lazy { type(if97Instance.eval().third ?: NaN, unit) }
 

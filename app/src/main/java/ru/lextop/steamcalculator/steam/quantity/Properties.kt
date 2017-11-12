@@ -1,9 +1,9 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-import ru.lextop.steamcalculator.steam.quantity.PressureUnit.Pa
-import ru.lextop.steamcalculator.steam.quantity.RatioUnit.ratio
-import ru.lextop.steamcalculator.steam.quantity.SpecificEnergyUnit.J_kg
-import ru.lextop.steamcalculator.steam.quantity.TemperatureUnit.K
+import ru.lextop.steamcalculator.steam.quantity.Units.PressureUnit.Pa
+import ru.lextop.steamcalculator.steam.quantity.Units.RatioUnit.ratio
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergyUnit.J_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.TemperatureUnit.K
 
 val SpecificEnthalpy = Property("Specific Enthalpy", "h", J_kg.baseUnit)
 val SpecificEntropy = Property("Specific Entropy", "s", J_kg.baseUnit)

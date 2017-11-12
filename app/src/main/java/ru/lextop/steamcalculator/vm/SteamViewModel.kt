@@ -4,17 +4,18 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
+import android.content.Context
 import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.nullIfNotInitialized
 import ru.lextop.steamcalculator.computablePropMap
-import ru.lextop.steamcalculator.steam.quantity.DerivativeUnit
+import ru.lextop.steamcalculator.steam.quantity.UnitPh
 import ru.lextop.steamcalculator.steam.quantity.Property
 import ru.lextop.steamcalculator.steam.quantity.Quantity
 import ru.lextop.steamcalculator.unitList
 import javax.inject.Inject
 
 class SteamViewModel @Inject constructor
-(private val repo: SteamRepository) : ViewModel() {
+(private val repo: SteamRepository, private val context: Context) : ViewModel() {
     val firstInputFocusLive: LiveData<Unit> = MutableLiveData()
     val secondInputFocusLive: LiveData<Unit> = MutableLiveData()
 
@@ -27,34 +28,44 @@ class SteamViewModel @Inject constructor
     private lateinit var firstQuantity: Quantity
     private lateinit var secondQuantity: Quantity
     //set lateinit if Kotlin 1.2
-    private var firstUnitLive: LiveData<DerivativeUnit> = MutableLiveData()
+    private var firstUnitLive: LiveData<UnitPh> = MutableLiveData()
     //set lateinit if Kotlin 1.2
-    private var secondUnitLive: LiveData<DerivativeUnit> = MutableLiveData()
-    val firstUnitsLive: LiveData<List<DerivativeUnit>> =  MutableLiveData()
-    val secondUnitsLive: LiveData<List<DerivativeUnit>> = MutableLiveData()
+    private var secondUnitLive: LiveData<UnitPh> = MutableLiveData()
+    val firstUnitsLive: LiveData<List<String>> = MutableLiveData()
+    val secondUnitsLive: LiveData<List<String>> = MutableLiveData()
+    private var firstUnits: List<UnitPh> = listOf()
+        set(value) {
+            field = value
+            firstUnitsLive as MutableLiveData
+            firstUnitsLive.value = value.map { context.getString(it.id) }
+        }
+    private var secondUnits: List<UnitPh> = listOf()
+        set(value) {
+            field = value
+            secondUnitsLive as MutableLiveData
+            secondUnitsLive.value = value.map { context.getString(it.id) }
+        }
     val firstUnitSelectionLive: LiveData<Int> = MutableLiveData()
     val secondUnitSelectionLive: LiveData<Int> = MutableLiveData()
     val firstValueLive: LiveData<CharSequence> = MutableLiveData()
     val secondValueLive: LiveData<CharSequence> = MutableLiveData()
 
-    private val firstUnitObserver = Observer<DerivativeUnit> { unit ->
-        (firstUnitSelectionLive as MutableLiveData).value = firstUnitsLive.value!!.indexOf(unit)
-        firstUnitSelectionLive.value = firstUnitsLive.value!!.indexOf(unit)
+    private val firstUnitObserver = Observer<UnitPh> { unit ->
+        (firstUnitSelectionLive as MutableLiveData).value = firstUnits.indexOf(unit)
+        firstUnitSelectionLive.value = firstUnits.indexOf(unit)
     }
-    private val secondUnitObserver = Observer<DerivativeUnit> { unit ->
-        (secondUnitSelectionLive as MutableLiveData).value = secondUnitsLive.value!!.indexOf(unit)
-        secondUnitSelectionLive.value = secondUnitsLive.value!!.indexOf(unit)
+    private val secondUnitObserver = Observer<UnitPh> { unit ->
+        (secondUnitSelectionLive as MutableLiveData).value = secondUnits.indexOf(unit)
+        secondUnitSelectionLive.value = secondUnits.indexOf(unit)
     }
-    private val firstQuantityObserver = Observer<Quantity>{
-        p ->
+    private val firstQuantityObserver = Observer<Quantity> { p ->
         val newProp = p!!.property
         val oldProp = nullIfNotInitialized { firstQuantity.property }
         firstQuantity = p
         if (newProp != oldProp) {
             firstPropSelectionLive as MutableLiveData
             firstPropSelectionLive.value = firstProps.indexOf(newProp)
-            firstUnitsLive as MutableLiveData
-            firstUnitsLive.value = newProp.unitList
+            firstUnits = newProp.unitList
             firstUnitLive.removeObserver(firstUnitObserver)
             firstUnitLive = repo.getEditUnitLive(newProp)
             firstUnitLive.observeForever(firstUnitObserver)
@@ -62,16 +73,14 @@ class SteamViewModel @Inject constructor
             secondPropsLive.value = computablePropMap[newProp]
         }
     }
-    private val secondPropObserver = Observer<Quantity>{ p ->
+    private val secondPropObserver = Observer<Quantity> { p ->
         val newProp = p!!.property
         val oldProp = nullIfNotInitialized { secondQuantity.property }
         secondQuantity = p
         if (newProp != oldProp) {
             secondPropSelectionLive as MutableLiveData
             secondPropSelectionLive.value = secondPropsLive.value!!.indexOf(newProp)
-            secondUnitsLive as MutableLiveData
-
-            secondUnitsLive.value = newProp.unitList
+            secondUnits = newProp.unitList
             secondUnitLive.removeObserver(secondUnitObserver)
             secondUnitLive = repo.getEditUnitLive(newProp)
             secondUnitLive.observeForever(secondUnitObserver)
@@ -80,7 +89,11 @@ class SteamViewModel @Inject constructor
 
     init {
         quantityModels = repo.quantityLives.values.map { quantityLive ->
-            QuantityViewModel(quantityLive, repo.getViewUnitLive(quantityLive.value!!.property), repo)
+            QuantityViewModel(
+                    quantityLive,
+                    repo.getViewUnitLive(quantityLive.value!!.property),
+                    context,
+                    repo)
         }
         (quantityModels as MutableList).addAll(quantityModels)
         quantityModels.addAll(quantityModels)
@@ -116,7 +129,7 @@ class SteamViewModel @Inject constructor
     }
 
     fun selectFirstProp(index: Int) {
-        nullIfNotInitialized { firstQuantity }?:return
+        nullIfNotInitialized { firstQuantity } ?: return
         val oldProp = firstQuantity.property
         val newProp = firstProps[index]
         val newSecondProps = computablePropMap[newProp]!!
@@ -136,10 +149,10 @@ class SteamViewModel @Inject constructor
     }
 
     fun selectFirstUnit(index: Int) {
-        repo.setEditUnit(firstQuantity.property, firstUnitsLive.value!![index])
+        repo.setEditUnit(firstQuantity.property, firstUnits[index])
     }
 
     fun selectSecondUnit(index: Int) {
-        repo.setEditUnit(secondQuantity.property, secondUnitsLive.value!![index])
+        repo.setEditUnit(secondQuantity.property, secondUnits[index])
     }
 }

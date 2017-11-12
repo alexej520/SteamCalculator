@@ -1,27 +1,42 @@
 <resources>
-    <string name="app_name">Steam Calculator</string>
+    <string name="app_name" translatable="false">Steam Calculator</string>
 
-    <string name="pressureUnits"><![CDATA[
-    m H2O`m H<sub><small>2</small></sub>O`
-    ]]></string>
-    <string name="temperatureUnits"><![CDATA[
-    C`&deg;C`
-    F`&deg;F`
-    Ra`&deg;Ra`
-    D`&deg;D`
-    N`&deg;N`
-    Re`&deg;R`
-    Ro`&deg;Rø`
-    ]]></string>
-    <string name="specificEnergyUnits"><![CDATA[
-    calth`cal<sub><small>th</small></sub>`
-    cal15`cal<sub><small>15</small></sub>`
-    ]]></string>
-    <string name="ratioUnits" />
+    <string name="kg">kg</string>
+    <string name="J">J</string>
+
 
     <string name="temperature">Temperature</string>
     <string name="pressure">Pressure</string>
     <string name="enthalpy">Enthalpy</string>
     <string name="entropy">Entropy</string>
     <string name="vapourFraction">Vapour Fraction</string>
+    <string name="J_kg">J/kg</string>
+    <string name="Pa">Pa</string>
+    <string name="K">K</string>
+    <string name="ratio">_</string>
+    <string name="percent" translatable="false">%</string>
+    <string name="Ro">Rø</string>
+    <string name="Re"><![CDATA[&deg;R]]></string>
+    <string name="N"><![CDATA[&deg;N]]>></string>
+    <string name="D"><![CDATA[&deg;D]]></string>
+    <string name="Ra"><![CDATA[&deg;Ra]]></string>
+    <string name="F"><![CDATA[&deg;F]]></string>
+    <string name="C"><![CDATA[&deg;C]]></string>
+    <string name="kPa">kPa</string>
+    <string name="MPa">MPa</string>
+    <string name="bar">bar</string>
+    <string name="at">at</string>
+    <string name="atm">atm</string>
+    <string name="psi">psi</string>
+    <string name="mmHg">mm Hg</string>
+    <string name="mH2O"><![CDATA[m H<sub><small>2</small></sub>O]]></string>
+    <string name="kJ">kJ</string>
+    <string name="MJ">MJ</string>
+    <string name="erg" >erg</string>
+    <string name="cal">cal</string>
+    <string name="calth"><![CDATA[cal<sub><small>th</small></sub>]]></string>
+    <string name="cal15"><![CDATA[cal<sub><small>15</small></sub>]]></string>
+    <string name="BTU">BTU</string>
+    <string name="kWh">kWh</string>
+    <string name="kJ_kg">kJ/kg</string>
 </resources>
