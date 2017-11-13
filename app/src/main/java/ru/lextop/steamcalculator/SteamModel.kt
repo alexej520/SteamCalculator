@@ -6,38 +6,36 @@ val Property.unitList get() = baseUnit.unitList
 
 val units = Units
 
-val resPropMap = mapOf<Property, Int>(
-        Pressure to R.string.pressure,
-        Temperature to R.string.temperature,
-        SpecificEnthalpy to R.string.enthalpy,
-        SpecificEntropy to R.string.entropy,
-        VapourFraction to R.string.vapourFraction
-).mapKeys { it.key }
 private val computablePairs: List<Pair<Property, Property>> = listOf(
         Pressure to Temperature,
-        SpecificEnthalpy to SpecificEntropy,
         Pressure to SpecificEnthalpy,
-        Pressure to VapourFraction,
-        Temperature to VapourFraction,
         Pressure to SpecificEntropy,
-        Temperature to SpecificEntropy
+        SpecificEnthalpy to SpecificEntropy,
+        Temperature to SpecificEntropy,
+        Density to Temperature,
+        SpecificVolume to Temperature,
+        Pressure to VapourFraction,
+        Temperature to VapourFraction
 )
 
-val props = resPropMap.keys.toList()
-
-val computablePropMap: Map<Property, List<Property>> = props.associate { type ->
-    val symbol = type.symbol
-    type to computablePairs.mapNotNull { (p1, p2) ->
-        when (symbol) {
-            p1.symbol -> p2
-            p2.symbol -> p1
-            else -> null
+val computablePropMap: Map<Property, List<Property>> = with(computablePairs.unzip()){
+    first.union(second).associate { prop ->
+        prop to computablePairs.mapNotNull { (p1, p2) ->
+            when (prop) {
+                p1 -> p2
+                p2 -> p1
+                else -> null
+            }
         }
     }
-}.filter { it.value.isNotEmpty() }
+}
+
+val computableProps = computablePropMap.keys.toList()
+
+val allProps = Property.symbolPropMap.values
 
 fun String.toProperty(): Property =
-        props.first { this == it.symbol }
+        Property.symbolPropMap[this]!!
 
-fun String.toUnit(propType: Property): UnitPh =
-        propType.baseUnit.unitMap[this]!!
+fun String.toUnit(prop: Property): UnitPh =
+        prop.baseUnit.unitMap[this]!!

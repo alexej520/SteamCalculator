@@ -14,8 +14,8 @@ open class QuantityViewModel(
         private val repo: SteamRepository)
     : ViewModel() {
     private val prop = quantityLive.value!!.property
-    val propName = prop.name
-    val propSymbol = prop.symbol
+    val propName = context.getString(prop.nameId)!!
+    val propSymbol = context.getString(prop.symbolId)!!
     val valueLive: LiveData<CharSequence> = MutableLiveData()
     private val _units = quantityLive.value!!.property.unitList
     val units = _units.map {

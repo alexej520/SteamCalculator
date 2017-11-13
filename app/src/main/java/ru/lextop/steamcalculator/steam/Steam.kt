@@ -22,15 +22,19 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
     : Iterable<Quantity> {
     constructor(arg1: Quantity, arg2: Quantity) : this(getTripleFromPropertyPair(arg1, arg2))
 
-    constructor(s: Quantity? = null,
-                x: Quantity? = null,
-                P: Quantity? = null,
-                T: Quantity? = null,
-                h: Quantity? = null) : this(getTripleOrThrowException(s, x, P, T, h))
+    constructor(rho: Quantity?,
+                v: Quantity?,
+                P: Quantity?,
+                T: Quantity?,
+                h: Quantity?,
+                s: Quantity?,
+                x: Quantity?) : this(getTripleOrThrowException(rho, v, P, T, h, s, x))
 
     val rho: Quantity by if97(Density, kg_m3) {
         initQs.tryEval(Density) { rho ->
             rho
+        }.tryEval(SpecificVolume) { v ->
+            1 / v
         }.tryEval(Pressure, Temperature) { p, t ->
             densityPT(p, t)
         }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
@@ -46,7 +50,7 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
         }
     }
 
-    val e: Quantity by if97(RelativePermittivity, ratio) {
+    val epsilon: Quantity by if97(RelativePermittivity, ratio) {
         initQs.tryEval(Pressure, Temperature) { p, t ->
             dielectricConstantPT(p, t)
         }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
@@ -57,6 +61,8 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             dielectricConstantHS(h, s)
         }.tryEval(Density, Temperature) { rho, t ->
             dielectricConstantRhoT(rho, t)
+        }.tryEval(SpecificVolume, Temperature) { v, t ->
+            dielectricConstantRhoT(1 / v, t)
         }
     }
 
@@ -71,6 +77,8 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             dynamicViscosityHS(h, s)
         }.tryEval(Density, Temperature) { rho, t ->
             dynamicViscosityRhoT(rho, t)
+        }.tryEval(SpecificVolume, Temperature) { v, t ->
+            dynamicViscosityRhoT(1 / v, t)
         }
     }
 
@@ -109,6 +117,8 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             kinematicViscosityHS(h, s)
         }.tryEval(Density, Temperature) { rho, t ->
             kinematicViscosityRhoT(rho, t)
+        }.tryEval(SpecificVolume, Temperature) { v, t ->
+            kinematicViscosityRhoT(1 / v, t)
         }
     }
 
@@ -217,7 +227,11 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
     }
 
     val v: Quantity by if97(SpecificVolume, m3_kg) {
-        initQs.tryEval(Pressure, Temperature) { p, t ->
+        initQs.tryEval(SpecificVolume) { v ->
+            v
+        }.tryEval(Density) { rho ->
+            1 / rho
+        }.tryEval(Pressure, Temperature) { p, t ->
             specificVolumePT(p, t)
         }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
             specificVolumePH(p, h)
@@ -244,7 +258,7 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
         }
     }
 
-    val o: Quantity by if97(SurfaceTension, N_m) {
+    val sigma: Quantity by if97(SurfaceTension, N_m) {
         initQs.tryEval(Pressure) { p ->
             surfaceTensionP(p)
         }.tryEval(Temperature) { t ->
@@ -277,6 +291,8 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             thermalConductivityHS(h, s)
         }.tryEval(Density, Temperature) { rho, t ->
             thermalConductivityRhoT(rho, t)
+        }.tryEval(SpecificVolume, Temperature) { v, t ->
+            thermalConductivityRhoT(1 / v, t)
         }
     }
 
@@ -314,7 +330,7 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
 
     open protected val quantities: List<Quantity> by lazy {
         listOf(
-                P, T, h, s, x
+               rho, epsilon, eta, av, kT, nu, Pr, P, /*n,*/ h, u, s, cp, cv, v, w, sigma, T, lambda, k, x, g
         )
     }
 
@@ -384,18 +400,20 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
                 null)
 
         private fun getTripleOrThrowException(
-                s: Quantity?,
-                x: Quantity?,
+                rho: Quantity?,
+                v: Quantity?,
                 P: Quantity?,
                 T: Quantity?,
-                h: Quantity?
+                h: Quantity?,
+                s: Quantity?,
+                x: Quantity?
         ): Triple<Quantity, Quantity, Double?> {
             var q1: Quantity? = null
             var q2: Quantity? = null
             var quantity: Quantity
-            if (s != null) q1 = SpecificEntropy(s.value, s.unit)
-            if (x != null) {
-                quantity = VapourFraction(x.value, x.unit)
+            if (rho != null) q1 = Density(rho.value, rho.unit)
+            if (v != null) {
+                quantity = SpecificVolume(v.value, v.unit)
                 when {
                     q1 == null -> q1 = quantity
                     else -> q2 = quantity
@@ -419,6 +437,22 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             }
             if (h != null) {
                 quantity = SpecificEnthalpy(h.value, h.unit)
+                when {
+                    q1 == null -> q1 = quantity
+                    q2 == null -> q2 = quantity
+                    else -> throw RuntimeException("There must be exactly 2 parameters")
+                }
+            }
+            if (s != null) {
+                quantity = SpecificEntropy(s.value, s.unit)
+                when {
+                    q1 == null -> q1 = quantity
+                    q2 == null -> q2 = quantity
+                    else -> throw RuntimeException("There must be exactly 2 parameters")
+                }
+            }
+            if (x != null) {
+                quantity = VapourFraction(x.value, x.unit)
                 when {
                     q1 == null -> q1 = quantity
                     q2 == null -> q2 = quantity

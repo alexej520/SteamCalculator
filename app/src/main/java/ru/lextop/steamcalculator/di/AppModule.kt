@@ -11,6 +11,7 @@ import dagger.Provides
 import org.jetbrains.anko.defaultSharedPreferences
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.db.*
+import ru.lextop.steamcalculator.steam.quantity.Property
 import javax.inject.Singleton
 
 @Module(includes = arrayOf(
@@ -55,7 +56,7 @@ abstract class AppModule {
                                 columns = listOf(
                                         EditUnit.PROP_SYMBOL,
                                         EditUnit.UNIT_NAME),
-                                values = props.map { prop ->
+                                values = computableProps.map { prop ->
                                     listOf(
                                             prop.symbol,
                                             prop.baseUnit.alias.name)
@@ -65,7 +66,7 @@ abstract class AppModule {
                                 columns = listOf(
                                         ViewUnit.PROP_SYMBOL,
                                         ViewUnit.UNIT_NAME),
-                                values = props.map { prop ->
+                                values = allProps.map { prop ->
                                     listOf(
                                             prop.symbol,
                                             prop.baseUnit.alias.name)

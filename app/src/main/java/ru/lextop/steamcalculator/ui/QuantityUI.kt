@@ -13,18 +13,18 @@ class QuantityUI : Binding.Component<QuantityViewModel, MainActivity>() {
                 lparams(matchParent, wrapContent)
                 orientation = LinearLayout.HORIZONTAL
                 textView {
-                    bind(this::setText) { propName }
+                    bind({ text = spannedFromHtml(it!!) }) { propName }
                 }.lparams(0, wrapContent, 2f) {
                     marginStart = dip(16)
                 }
                 textView {
-                    bind(this::setText) { propSymbol }
+                    bind({ text = spannedFromHtml(it!!) }) { propSymbol }
                 }.lparams(0, wrapContent, 1f)
                 textView {
                     bindLive(this::setText) { valueLive }
                 }.lparams(0, wrapContent, 1f)
                 spinner {
-                    bind({adapter = HtmlArrayAdapter(ctx, it!!)}) { units }
+                    bind({ adapter = HtmlArrayAdapter(ctx, it!!) }) { units }
                     bindLive({ setSelection(it!!) }) { unitSelectionLive }
                     onItemSelectedListener = OnItemSelectedListener { notify { selectUnit(it) } }
                 }.lparams(0, wrapContent, 2f)

@@ -15,17 +15,17 @@ import javax.inject.Singleton
 @Singleton
 class SteamRepository @Inject constructor
 (private val steamDao: SteamDao) {
-    private val viewUnits: Map<Property, LiveData<UnitPh>> = props.associate {
+    private val viewUnits: Map<Property, LiveData<UnitPh>> = allProps.associate {
         val live = MutableLiveData<UnitPh>()
         live.value = it.baseUnit.alias
         it to live
     }
-    private val editUnits: Map<Property, LiveData<UnitPh>> = props.associate {
+    private val editUnits: Map<Property, LiveData<UnitPh>> = computableProps.associate {
         val live = MutableLiveData<UnitPh>()
         live.value = it.baseUnit.alias
         it to live
     }
-    val quantityLives: Map<Property, LiveData<Quantity>> = props.associate {
+    val quantityLives: Map<Property, LiveData<Quantity>> = allProps.associate {
         val live = MutableLiveData<Quantity>()
         live.value = it(Double.NaN, it.baseUnit.alias)
         it to live

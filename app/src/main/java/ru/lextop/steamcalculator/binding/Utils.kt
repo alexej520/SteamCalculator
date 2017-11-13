@@ -1,7 +1,9 @@
 package ru.lextop.steamcalculator.binding
 
 import android.arch.lifecycle.*
+import android.os.Build
 import android.support.v4.app.FragmentActivity
+import android.text.Html
 import android.view.View
 import android.widget.AdapterView
 
@@ -40,3 +42,10 @@ class OnItemSelectedListener(private val onItemSelected: (id: Int) -> Unit)
 
 fun <VM : Any> View.getBinding(): Binding<VM> = Binding.getForView(this)
 
+fun spannedFromHtml(string: String) =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(string, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            @Suppress("DEPRECATION")
+            Html.fromHtml(string)
+        }

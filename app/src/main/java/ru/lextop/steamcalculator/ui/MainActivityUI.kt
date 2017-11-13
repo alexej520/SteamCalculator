@@ -24,8 +24,7 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                 linearLayout {
                     orientation = LinearLayout.HORIZONTAL
                     spinner {
-                        adapter = PropertyArrayAdapter(ctx)
-                        bind({ (adapter as PropertyArrayAdapter).properties = it }) { firstProps }
+                        bind({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstPropSymbols }
                         bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
                     }.lparams(0, wrapContent, 1.5f)
@@ -61,8 +60,7 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                 linearLayout {
                     orientation = LinearLayout.HORIZONTAL
                     spinner {
-                        adapter = PropertyArrayAdapter(ctx)
-                        bindLive({ (adapter as PropertyArrayAdapter).properties = it }) { secondPropsLive }
+                        bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { secondPropSymbolsLive }
                         bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
                     }.lparams(0, wrapContent, 1.2f)
