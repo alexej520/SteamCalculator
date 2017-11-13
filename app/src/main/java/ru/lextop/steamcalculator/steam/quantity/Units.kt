@@ -21,12 +21,12 @@ object Units{
         val kWh = J / 3.6e6 addWith Pair("kWh", R.string.kWh)
     }
 
-    object SpecificEnergyUnit : BaseUnit(m = 2, s = -2) {
+    object SpecificEnergy : BaseUnit(m = 2, s = -2) {
         val J_kg = createAlias(Pair("J/kg", R.string.J_kg))
         val kJ_kg = kJ / kg addWith Pair(byDefault, R.string.kJ_kg)
     }
 
-    object PressureUnit : BaseUnit(kg = 1, m = -1, s = -2) {
+    object Pressure : BaseUnit(kg = 1, m = -1, s = -2) {
         val Pa = createAlias(Pair("Pa", R.string.Pa))
         val kPa = k(Pa) addWith Pair(byDefault, R.string.kPa)
         val MPa = M(Pa) addWith Pair(byDefault, R.string.MPa)
@@ -39,7 +39,7 @@ object Units{
 
     }
 
-    object TemperatureUnit : BaseUnit(K = 1) {
+    object Temperature : BaseUnit(K = 1) {
         val K = createAlias(Pair("K", R.string.K))
         val C = K - 273.15 addWith Pair("C", R.string.C)
         val F = 9.0 / 5.0 * C + 32.0 addWith Pair("F", R.string.F)
@@ -51,8 +51,49 @@ object Units{
 
     }
 
-    object RatioUnit : BaseUnit() {
+    object Ratio : BaseUnit() {
         val ratio = createAlias(Pair("_", R.string.ratio))
         val percent = ratio * 100.0 addWith Pair("%", R.string.percent)
+    }
+
+    object Density : BaseUnit(kg = 1, m = -3) {
+        val kg_m3 = createAlias(Pair("kg/m3", R.string.kg_m3))
+    }
+
+    object DynamicViscosity : BaseUnit(kg = 1, s = -1, m = -1){
+        val Pas = createAlias(Pair("Pa*s", R.string.Pas))
+    }
+
+    object Temperature_1 : BaseUnit(K = -1){
+        val K_1 = createAlias(Pair("1/K", R.string.K_1))
+    }
+
+    object Compressibility : BaseUnit(kg = -1, m = 1, s = 2){
+        val Pa_1 = createAlias(Pair("1/Pa", R.string.Pa_1))
+        val MPa_1 = Pa_1 * 1e6 addWith Pair("1/MPa", R.string.MPa_1)
+    }
+
+    object KinematicViscosity : BaseUnit(m = 2, s = -1){
+        val m2_s = createAlias(Pair("m2/s", R.string.m2_s))
+    }
+
+    object SpecificHeatCapacity : BaseUnit(m = 2, K = -1, s = -2){
+        val J_kgK = createAlias(Pair("J/(kg*K)", R.string.J_kgK))
+    }
+
+    object SpecificVolume: BaseUnit(m = 3, kg = -1){
+        val m3_kg = createAlias(Pair("m3/kg", R.string.m3_kg))
+    }
+
+    object Speed: BaseUnit(m = 1, s = 1){
+        val m_s = createAlias(Pair("m/s", R.string.m_s))
+    }
+
+    object SurfaceTension: BaseUnit(kg = 1, s = -2){
+        val N_m = createAlias(Pair("N/m", R.string.N_m))
+    }
+
+    object ThermalConductivity: BaseUnit(kg = 1, m = 1, s = -3, K = -1){
+        val W_mK = createAlias(Pair("W/(m*K)", R.string.W_mK))
     }
 }

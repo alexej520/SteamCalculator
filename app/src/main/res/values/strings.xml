@@ -39,4 +39,15 @@
     <string name="BTU">BTU</string>
     <string name="kWh">kWh</string>
     <string name="kJ_kg">kJ/kg</string>
+    <string name="kg_m3"><![CDATA[kg/m<sup><small>3</small></sup>]]></string>
+    <string name="Pas"><![CDATA[Pa&times;s]]></string>
+    <string name="K_1">1/K</string>
+    <string name="Pa_1">1/Pa</string>
+    <string name="MPa_1">1/MPa</string>
+    <string name="m2_s"><![CDATA[m<sup><small>2</small></sup>/s]]></string>
+    <string name="J_kgK"><![CDATA[J/(kg&times;K)]]></string>
+    <string name="m3_kg"><![CDATA[m<sup><small>3</small></sup>/kg]]></string>
+    <string name="m_s">m/s</string>
+    <string name="N_m">N/m</string>
+    <string name="W_mK"><![CDATA[W/m&times;K]]></string>
 </resources>

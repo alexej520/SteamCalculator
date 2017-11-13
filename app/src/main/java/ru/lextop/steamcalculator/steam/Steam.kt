@@ -2,10 +2,20 @@ package ru.lextop.steamcalculator.steam
 
 import com.hummeling.if97.IF97
 import ru.lextop.steamcalculator.steam.quantity.*
-import ru.lextop.steamcalculator.steam.quantity.Units.PressureUnit.Pa
-import ru.lextop.steamcalculator.steam.quantity.Units.RatioUnit.ratio
-import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergyUnit.J_kg
-import ru.lextop.steamcalculator.steam.quantity.Units.TemperatureUnit.K
+import ru.lextop.steamcalculator.steam.quantity.Units.Compressibility.Pa_1
+import ru.lextop.steamcalculator.steam.quantity.Units.Density.kg_m3
+import ru.lextop.steamcalculator.steam.quantity.Units.Pressure.Pa
+import ru.lextop.steamcalculator.steam.quantity.Units.Ratio.ratio
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.J_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.Temperature.K
+import ru.lextop.steamcalculator.steam.quantity.Units.Temperature_1.K_1
+import ru.lextop.steamcalculator.steam.quantity.Units.DynamicViscosity.Pas
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificHeatCapacity.J_kgK
+import ru.lextop.steamcalculator.steam.quantity.Units.KinematicViscosity.m2_s
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificVolume.m3_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.Speed.m_s
+import ru.lextop.steamcalculator.steam.quantity.Units.SurfaceTension.N_m
+import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.W_mK
 import java.lang.Double.NaN
 
 open class Steam private constructor(protected val initQs: Triple<Quantity, Quantity, Double?>)
@@ -18,24 +28,127 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
                 T: Quantity? = null,
                 h: Quantity? = null) : this(getTripleOrThrowException(s, x, P, T, h))
 
+    val rho: Quantity by if97(Density, kg_m3) {
+        initQs.tryEval(Density) { rho ->
+            rho
+        }.tryEval(Pressure, Temperature) { p, t ->
+            densityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            densityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            densityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            densityHS(h, s)
+        }.tryEval(Pressure, VapourFraction) { p, x ->
+            densityPX(p, x)
+        }.tryEval(Temperature, VapourFraction) { t, x ->
+            densityTX(t, x)
+        }
+    }
+
+    val e: Quantity by if97(RelativePermittivity, ratio) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            dielectricConstantPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            dielectricConstantPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            dielectricConstantPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            dielectricConstantHS(h, s)
+        }.tryEval(Density, Temperature) { rho, t ->
+            dielectricConstantRhoT(rho, t)
+        }
+    }
+
+    val eta: Quantity by if97(DynamicViscosity, Pas) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            dynamicViscosityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            dynamicViscosityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            dynamicViscosityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            dynamicViscosityHS(h, s)
+        }.tryEval(Density, Temperature) { rho, t ->
+            dynamicViscosityRhoT(rho, t)
+        }
+    }
+
+    val av: Quantity by if97(IsobaricCubicExpansionCoefficient, K_1) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            isobaricCubicExpansionCoefficientPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            isobaricCubicExpansionCoefficientPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            isobaricCubicExpansionCoefficientPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            isobaricCubicExpansionCoefficientHS(h, s)
+        }
+    }
+
+    val kT: Quantity by if97(IsothermalCompressibility, Pa_1) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            compressibilityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            compressibilityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            compressibilityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            compressibilityHS(h, s)
+        }
+    }
+
+    val nu: Quantity by if97(KinematicViscosity, m2_s) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            kinematicViscosityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            kinematicViscosityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            kinematicViscosityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            kinematicViscosityHS(h, s)
+        }.tryEval(Density, Temperature) { rho, t ->
+            kinematicViscosityRhoT(rho, t)
+        }
+    }
+
+    val Pr: Quantity by if97(IsothermalCompressibility, ratio) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            PrandtlPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            PrandtlPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            PrandtlPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            PrandtlHS(h, s)
+        }
+    }
+
     val P: Quantity by if97(Pressure, Pa) {
         initQs.tryEval(Pressure) { p ->
             p
-        }.tryEval(Temperature) { t ->
-            saturationPressureT(t)
         }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
             pressureHS(h, s)
+        }.tryEval(Temperature) { t ->
+            saturationPressureT(t)
         }
     }
-    val T: Quantity by if97(Temperature, K) {
-        initQs.tryEval(Temperature) { t ->
-            t
-        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
-            temperatureHS(h, s)
-        }.tryEval(Pressure) { p ->
-            saturationTemperatureP(p)
+
+    /*
+        val n: Quantity by if97(KinematicViscosity, m2_s) {
+            initQs.tryEval(Pressure, Temperature) { p, t ->
+                refractiveIndexPTLambda(p, t)
+            }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+                kinematicViscosityPH(p, h)
+            }.tryEval(Pressure, SpecificEntropy) { p, s ->
+                kinematicViscosityPS(p, s)
+            }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+                kinematicViscosityHS(h, s)
+            }.tryEval(Density, Temperature) { rho, t ->
+                kinematicViscosityRhoT(rho, t)
+            }
         }
-    }
+    */
     val h: Quantity by if97(SpecificEnthalpy, J_kg) {
         initQs.tryEval(SpecificEnthalpy) { h ->
             h
@@ -47,11 +160,25 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             specificEnthalpyPX(p, x)
         }.tryEval(Temperature, VapourFraction) { t, x ->
             specificEnthalpyTX(t, x)
-        }.tryEval(Temperature, SpecificEntropy) { t, s ->
-            specificEnthalpyTX(t, vapourFractionTS(t, s))
+        }.
+                tryEval(Temperature, SpecificEntropy) { t, s ->
+                    specificEnthalpyTX(t, vapourFractionTS(t, s))
+                }
+    }
+
+    val u: Quantity by if97(SpecificInternalEnergy, J_kg) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            specificInternalEnergyPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            specificInternalEnergyPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            specificInternalEnergyPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            specificInternalEnergyHS(h, s)
         }
     }
-    val s: Quantity by if97(SpecificEntropy, J_kg) {
+
+    val s: Quantity by if97(SpecificEntropy, J_kgK) {
         initQs.tryEval(SpecificEntropy) { s ->
             s
         }.tryEval(Pressure, Temperature) { p, t ->
@@ -64,19 +191,127 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
             specificEntropyTX(t, x)
         }
     }
+
+    val cp: Quantity by if97(SpecificIsobaricHeatCapacity, J_kgK) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            isobaricHeatCapacityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            isobaricHeatCapacityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            isobaricHeatCapacityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            isobaricHeatCapacityHS(h, s)
+        }
+    }
+
+    val cv: Quantity by if97(SpecificIsochoricHeatCapacity, J_kgK) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            isochoricHeatCapacityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            isochoricHeatCapacityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            isobaricHeatCapacityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            isochoricHeatCapacityHS(h, s)
+        }
+    }
+
+    val v: Quantity by if97(SpecificVolume, m3_kg) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            specificVolumePT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            specificVolumePH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            specificVolumePS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            specificVolumeHS(h, s)
+        }.tryEval(Pressure, VapourFraction) { p, x ->
+            specificVolumePX(p, x)
+        }.tryEval(Temperature, VapourFraction) { t, x ->
+            specificVolumeTX(t, x)
+        }
+    }
+
+    val w: Quantity by if97(SpeedOfSound, m_s) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            speedOfSoundPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            speedOfSoundPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            speedOfSoundPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            speedOfSoundHS(h, s)
+        }
+    }
+
+    val o: Quantity by if97(SurfaceTension, N_m) {
+        initQs.tryEval(Pressure) { p ->
+            surfaceTensionP(p)
+        }.tryEval(Temperature) { t ->
+            surfaceTensionT(t)
+        }
+    }
+
+    val T: Quantity by if97(Temperature, K) {
+        initQs.tryEval(Temperature) { t ->
+            t
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            temperaturePH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            temperaturePS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            temperatureHS(h, s)
+        }.tryEval(Pressure) { p ->
+            saturationTemperatureP(p)
+        }
+    }
+
+    val lambda: Quantity by if97(ThermalConductivity, W_mK) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            thermalConductivityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            thermalConductivityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            thermalConductivityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            thermalConductivityHS(h, s)
+        }.tryEval(Density, Temperature) { rho, t ->
+            thermalConductivityRhoT(rho, t)
+        }
+    }
+
+    val k: Quantity by if97(ThermalDiffusivity, m2_s) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            thermalDiffusivityPT(p, t)
+        }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
+            thermalDiffusivityPH(p, h)
+        }.tryEval(Pressure, SpecificEntropy) { p, s ->
+            thermalDiffusivityPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            thermalDiffusivityHS(h, s)
+        }
+    }
+
     val x: Quantity by if97(VapourFraction, ratio) {
         initQs.tryEval(VapourFraction) { x ->
             x
-        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
-            vapourFractionHS(h, s)
         }.tryEval(Pressure, SpecificEnthalpy) { p, h ->
             vapourFractionPH(p, h)
         }.tryEval(Pressure, SpecificEntropy) { p, s ->
             vapourFractionPS(p, s)
+        }.tryEval(SpecificEnthalpy, SpecificEntropy) { h, s ->
+            vapourFractionHS(h, s)
         }.tryEval(Temperature, SpecificEntropy) { t, s ->
             vapourFractionTS(t, s)
         }
     }
+
+    val g: Quantity by if97(SpecificGibbsFreeEnergy, J_kg) {
+        initQs.tryEval(Pressure, Temperature) { p, t ->
+            specificGibbsFreeEnergyPT(p, t)
+        }
+    }
+
     open protected val quantities: List<Quantity> by lazy {
         listOf(
                 P, T, h, s, x

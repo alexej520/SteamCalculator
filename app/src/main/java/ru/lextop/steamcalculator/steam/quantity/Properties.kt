@@ -1,12 +1,23 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-import ru.lextop.steamcalculator.steam.quantity.Units.PressureUnit.Pa
-import ru.lextop.steamcalculator.steam.quantity.Units.RatioUnit.ratio
-import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergyUnit.J_kg
-import ru.lextop.steamcalculator.steam.quantity.Units.TemperatureUnit.K
-
-val SpecificEnthalpy = Property("Specific Enthalpy", "h", J_kg.baseUnit)
-val SpecificEntropy = Property("Specific Entropy", "s", J_kg.baseUnit)
-val Pressure = Property("Pressure", "P", Pa.baseUnit)
-val VapourFraction = Property("Vapour Fraction", "x", ratio.baseUnit)
-val Temperature = Property("Temperature", "T", K.baseUnit)
+val SpecificEnthalpy = Property("Specific Enthalpy", "h", Units.SpecificEnergy)
+val Pressure = Property("Pressure", "P", Units.Pressure)
+val VapourFraction = Property("Vapour Fraction", "x", Units.Ratio)
+val Density = Property("Density", "rho", Units.Density)
+val RelativePermittivity = Property("Relative Permittivity", "e", Units.Ratio)
+val DynamicViscosity = Property("Dynamic DynamicViscosity", "n", Units.DynamicViscosity)
+val IsobaricCubicExpansionCoefficient = Property("Isobaric Cubic Expansion Coefficient", "av", Units.Temperature_1)
+val IsothermalCompressibility = Property("Isothermal Compressibility", "kT", Units.Compressibility)
+val KinematicViscosity = Property("Kinematic Viscosity", "nu", Units.KinematicViscosity)
+val PrandtlNumber = Property("Prandtl Number", "Pr", Units.Ratio)
+val SpecificInternalEnergy = Property("Specific Internal Energy", "u", Units.SpecificEnergy)
+val SpecificEntropy = Property("Specific Entropy", "s", Units.SpecificHeatCapacity)
+val SpecificIsobaricHeatCapacity = Property("Specific Isobaric Heat Capacity", "cp", Units.SpecificHeatCapacity)
+val SpecificIsochoricHeatCapacity = Property("Specific Isochoric Heat Capacity", "cv", Units.SpecificHeatCapacity)
+val SpecificVolume = Property("Specific Volume", "v", Units.SpecificVolume)
+val SpeedOfSound = Property("Speed of Sound", "w", Units.Speed)
+val SurfaceTension = Property("Surface Tension", "o", Units.SurfaceTension)
+val Temperature = Property("Temperature", "T", Units.Temperature)
+val ThermalConductivity = Property("Thermal Conductivity", "lambda", Units.ThermalConductivity)
+val ThermalDiffusivity = Property("Thermal Diffusivity", "k", Units.KinematicViscosity)
+val SpecificGibbsFreeEnergy = Property("Specific Gibbs Free Energy", "g", Units.SpecificEnergy)

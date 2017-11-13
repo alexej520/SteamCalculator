@@ -28,7 +28,7 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         bind({ (adapter as PropertyArrayAdapter).properties = it }) { firstProps }
                         bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
-                    }.lparams(0, wrapContent, 1.2f)
+                    }.lparams(0, wrapContent, 1.5f)
                     editText {
                         val listener = object : TextWatcher {
                             override fun afterTextChanged(input: Editable) {
@@ -56,7 +56,7 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstUnitsLive }
                         bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
-                    }.lparams(0, wrapContent, 0.8f)
+                    }.lparams(0, wrapContent, 1.0f)
                 }.lparams(matchParent, wrapContent)
                 linearLayout {
                     orientation = LinearLayout.HORIZONTAL
