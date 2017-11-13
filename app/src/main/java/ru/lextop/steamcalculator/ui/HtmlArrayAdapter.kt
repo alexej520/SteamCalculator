@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.view.LayoutInflater
+import ru.lextop.steamcalculator.R
 
 
-class HtmlArrayAdapter<T>(context: Context, private val resource: Int, objects: List<T>)
-    : ArrayAdapter<T>(context, resource, objects) {
+class HtmlArrayAdapter<T>(context: Context, objects: List<T>)
+    : ArrayAdapter<T>(context, R.layout.html_spinner_item, objects) {
     private val inflater = LayoutInflater.from(context)
+    private val resource = R.layout.html_spinner_item
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = convertView ?: inflater.inflate(resource, parent, false)

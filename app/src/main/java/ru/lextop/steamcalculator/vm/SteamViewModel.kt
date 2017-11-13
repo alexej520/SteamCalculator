@@ -52,38 +52,50 @@ class SteamViewModel @Inject constructor
 
     private val firstUnitObserver = Observer<UnitPh> { unit ->
         (firstUnitSelectionLive as MutableLiveData).value = firstUnits.indexOf(unit)
-        firstUnitSelectionLive.value = firstUnits.indexOf(unit)
+        (firstValueLive as MutableLiveData).value = doubleToInputValue(firstQuantity[unit!!].value)
+        (firstInputFocusLive as MutableLiveData).value = Unit
     }
     private val secondUnitObserver = Observer<UnitPh> { unit ->
         (secondUnitSelectionLive as MutableLiveData).value = secondUnits.indexOf(unit)
-        secondUnitSelectionLive.value = secondUnits.indexOf(unit)
+        (secondValueLive as MutableLiveData).value = doubleToInputValue(secondQuantity[unit!!].value)
+        if (secondUnitSelectedByUser){
+            (secondInputFocusLive as MutableLiveData).value = Unit
+        } else{
+            secondUnitSelectedByUser = true
+        }
     }
+    private var secondPropSelectedByUser = false
+    private var secondUnitSelectedByUser = false
     private val firstQuantityObserver = Observer<Quantity> { p ->
         val newProp = p!!.property
         val oldProp = nullIfNotInitialized { firstQuantity.property }
         firstQuantity = p
         if (newProp != oldProp) {
-            firstPropSelectionLive as MutableLiveData
-            firstPropSelectionLive.value = firstProps.indexOf(newProp)
+            (firstPropSelectionLive as MutableLiveData).value = firstProps.indexOf(newProp)
             firstUnits = newProp.unitList
             firstUnitLive.removeObserver(firstUnitObserver)
             firstUnitLive = repo.getEditUnitLive(newProp)
             firstUnitLive.observeForever(firstUnitObserver)
-            secondPropsLive as MutableLiveData
-            secondPropsLive.value = computablePropMap[newProp]
+            (firstValueLive as MutableLiveData).value = doubleToInputValue(p[firstUnitLive.value!!].value)
+            (secondPropsLive as MutableLiveData).value = computablePropMap[newProp]
+            secondPropSelectedByUser = false
         }
     }
-    private val secondPropObserver = Observer<Quantity> { p ->
+    private val secondQuantityObserver = Observer<Quantity> { p ->
         val newProp = p!!.property
         val oldProp = nullIfNotInitialized { secondQuantity.property }
         secondQuantity = p
+        if (!secondPropSelectedByUser){
+            secondPropSelectedByUser = true
+            (secondPropSelectionLive as MutableLiveData).value = secondPropsLive.value!!.indexOf(newProp)
+            secondUnitSelectedByUser = false
+        }
         if (newProp != oldProp) {
-            secondPropSelectionLive as MutableLiveData
-            secondPropSelectionLive.value = secondPropsLive.value!!.indexOf(newProp)
             secondUnits = newProp.unitList
             secondUnitLive.removeObserver(secondUnitObserver)
             secondUnitLive = repo.getEditUnitLive(newProp)
             secondUnitLive.observeForever(secondUnitObserver)
+            (secondValueLive as MutableLiveData).value = doubleToInputValue(p[secondUnitLive.value!!].value)
         }
     }
 
@@ -99,15 +111,18 @@ class SteamViewModel @Inject constructor
         quantityModels.addAll(quantityModels)
         quantityModels.addAll(quantityModels)
         repo.firstQuantityLive.observeForever(firstQuantityObserver)
-        repo.secondQuantityLive.observeForever(secondPropObserver)
+        repo.secondQuantityLive.observeForever(secondQuantityObserver)
     }
 
     override fun onCleared() {
         repo.firstQuantityLive.removeObserver(firstQuantityObserver)
-        repo.secondQuantityLive.removeObserver(secondPropObserver)
+        repo.secondQuantityLive.removeObserver(secondQuantityObserver)
         firstUnitLive.removeObserver(firstUnitObserver)
         secondUnitLive.removeObserver(secondUnitObserver)
     }
+
+    private fun doubleToInputValue(double: Double): CharSequence =
+            if (double.isNaN()) "" else String.format("%.1f", double)
 
     private fun inputValueToDouble(input: CharSequence): Double =
             input.toString().toDoubleOrNull() ?: Double.NaN

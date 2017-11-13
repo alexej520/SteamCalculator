@@ -1,10 +1,13 @@
 package ru.lextop.steamcalculator.ui
 
+import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
@@ -35,17 +38,22 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                         }
-                        bindLive({ requestFocus() }) { firstInputFocusLive }
+                        bindLive({
+                            requestFocus()
+                            (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                                    .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                        }) { firstInputFocusLive }
                         bindLive({
                             removeTextChangedListener(listener)
                             setText(it)
+                            setSelection(length())
                             addTextChangedListener(listener)
                         }) { firstValueLive }
                         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                         addTextChangedListener(listener)
                     }.lparams(0, wrapContent, 1f)
                     spinner {
-                        bindLive({ adapter = HtmlArrayAdapter(ctx, android.R.layout.simple_spinner_item, it!!) }) { firstUnitsLive }
+                        bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstUnitsLive }
                         bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
                     }.lparams(0, wrapContent, 0.8f)
@@ -67,17 +75,22 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                         }
-                        bindLive({ requestFocus() }) { secondInputFocusLive }
+                        bindLive({
+                            requestFocus()
+                            (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                                    .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                        }) { secondInputFocusLive }
                         bindLive({
                             removeTextChangedListener(listener)
                             setText(it)
+                            setSelection(length())
                             addTextChangedListener(listener)
                         }) { secondValueLive }
                         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                         addTextChangedListener(listener)
                     }.lparams(0, wrapContent, 1f)
                     spinner {
-                        bindLive({ adapter = HtmlArrayAdapter(ctx, android.R.layout.simple_spinner_item, it!!) }) { secondUnitsLive }
+                        bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { secondUnitsLive }
                         bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
                     }.lparams(0, wrapContent, 0.8f)
