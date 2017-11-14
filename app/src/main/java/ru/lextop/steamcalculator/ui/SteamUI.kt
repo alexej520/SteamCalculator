@@ -6,10 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import ru.lextop.steamcalculator.*
@@ -17,7 +15,7 @@ import ru.lextop.steamcalculator.binding.*
 import ru.lextop.steamcalculator.vm.QuantityViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
-class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
+class SteamUI : Binding.Component<SteamViewModel, MainActivity>() {
 
     override fun Binding<SteamViewModel>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<MainActivity>): View = with(ui) {
         with(bindingLo) {
@@ -26,10 +24,15 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                 val smargin = dip(8)
                 val editTextWeight = 1.0f
                 val selectUnitWidth = dip(48) + sp(96)
+                textView {
+                    bind({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisible }
+                    bindLive(this::setText) { firstPropNameLive }
+                }
                 linearLayout {
-                    orientation = LinearLayout.HORIZONTAL
                     spinner {
-                        bind({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstPropSymbols }
+                        adapter = CharSequensePairArrayAdapter(ctx, isFirstVisible = false)
+                        bind({ (adapter as CharSequensePairArrayAdapter).items = it!! }) { firstPropNameToSymbolList }
+                        bind({ (adapter as CharSequensePairArrayAdapter).isFirstInDropdownVisible = it!! }) { isPropNameVisible }
                         bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
                     }.lparams(selectPropWidth, wrapContent)
@@ -57,17 +60,23 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         addTextChangedListener(listener)
                     }.lparams(0, wrapContent, editTextWeight)
                     spinner {
-                        bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstUnitsLive }
+                        adapter = CharSequenceArrayAdapter(ctx)
+                        bindLive({ (adapter as CharSequenceArrayAdapter).items = it!! }) { firstUnitsLive }
                         bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
                     }.lparams(selectUnitWidth, wrapContent)
-                }.lparams(matchParent, wrapContent){
+                }.lparams(matchParent, wrapContent) {
                     marginStart = smargin
                 }
+                textView {
+                    bind({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisible }
+                    bindLive(this::setText) { secondPropNameLive }
+                }
                 linearLayout {
-                    orientation = LinearLayout.HORIZONTAL
                     spinner {
-                        bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { secondPropSymbolsLive }
+                        adapter = CharSequensePairArrayAdapter(ctx, isFirstVisible = false)
+                        bindLive({ (adapter as CharSequensePairArrayAdapter).items = it!! }) { secondPropNameToSymbolListLive }
+                        bind({ (adapter as CharSequensePairArrayAdapter).isFirstInDropdownVisible = it!! }) { isPropNameVisible }
                         bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
                     }.lparams(selectPropWidth, wrapContent)
@@ -95,11 +104,12 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         addTextChangedListener(listener)
                     }.lparams(0, wrapContent, editTextWeight)
                     spinner {
-                        bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { secondUnitsLive }
+                        adapter = CharSequenceArrayAdapter(ctx)
+                        bindLive({ (adapter as CharSequenceArrayAdapter).items = it!! }) { secondUnitsLive }
                         bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
                     }.lparams(selectUnitWidth, wrapContent)
-                }.lparams(matchParent, wrapContent){
+                }.lparams(matchParent, wrapContent) {
                     marginStart = smargin
                 }
                 recyclerView {
