@@ -13,7 +13,7 @@ class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
             ui.verticalLayout {
                 lparams(matchParent, wrapContent)
                 textView {
-                    bind({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisible }
+                    bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
                     bind(this::setText) { propName }
                 }.lparams(matchParent, wrapContent) {
                     marginStart = dip(16)

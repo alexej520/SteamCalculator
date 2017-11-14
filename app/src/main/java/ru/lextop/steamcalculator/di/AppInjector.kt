@@ -3,7 +3,12 @@ package ru.lextop.steamcalculator.di
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.HasSupportFragmentInjector
 import ru.lextop.steamcalculator.App
 
 object AppInjector {
@@ -20,8 +25,19 @@ object AppInjector {
             override fun onActivityStopped(activity: Activity) {}
             // try inject all Activities was created
             override fun onActivityCreated(activity: Activity, p1: Bundle?) {
-                if (activity is Injectable) {
+                if (activity is Injectable || activity is HasSupportFragmentInjector) {
                     AndroidInjection.inject(activity)
+                }
+                if (activity is FragmentActivity) {
+                    activity.supportFragmentManager.registerFragmentLifecycleCallbacks(
+                            object : FragmentManager.FragmentLifecycleCallbacks() {
+
+                                override fun onFragmentCreated(fm: FragmentManager?, f: android.support.v4.app.Fragment?, savedInstanceState: Bundle?) {
+                                    if (f is Injectable) {
+                                        AndroidSupportInjection.inject(f)
+                                    }
+                                }
+                            }, true)
                 }
             }
         })

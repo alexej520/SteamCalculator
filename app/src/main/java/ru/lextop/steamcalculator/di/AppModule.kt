@@ -6,12 +6,11 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import android.content.SharedPreferences
+import android.support.v7.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
-import org.jetbrains.anko.defaultSharedPreferences
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.db.*
-import ru.lextop.steamcalculator.steam.quantity.Property
 import javax.inject.Singleton
 
 @Module(includes = arrayOf(
@@ -95,7 +94,7 @@ abstract class AppModule {
         @Provides
         @Singleton
         @JvmStatic
-        fun provideSharedPreferences(app: Application): SharedPreferences = app.defaultSharedPreferences
+        fun provideSharedPreferences(app: Application): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
 
         @Provides
         @Singleton

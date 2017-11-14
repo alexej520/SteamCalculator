@@ -6,6 +6,7 @@ import dagger.Component
 import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
 import ru.lextop.steamcalculator.App
 import ru.lextop.steamcalculator.MainActivity
 import javax.inject.Singleton
@@ -13,6 +14,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(
         AndroidInjectionModule::class,
+        AndroidSupportInjectionModule::class,
         AppModule::class,
         MainActivityModule::class
 ))

@@ -15,9 +15,9 @@ import ru.lextop.steamcalculator.binding.*
 import ru.lextop.steamcalculator.vm.QuantityViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
-class SteamUI : Binding.Component<SteamViewModel, MainActivity>() {
+class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
 
-    override fun Binding<SteamViewModel>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<MainActivity>): View = with(ui) {
+    override fun Binding<SteamViewModel>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<SteamFragment>): View = with(ui) {
         with(bindingLo) {
             verticalLayout {
                 val selectPropWidth = dip(48) + sp(32)
@@ -25,14 +25,14 @@ class SteamUI : Binding.Component<SteamViewModel, MainActivity>() {
                 val editTextWeight = 1.0f
                 val selectUnitWidth = dip(48) + sp(96)
                 textView {
-                    bind({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisible }
+                    bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
                     bindLive(this::setText) { firstPropNameLive }
                 }
                 linearLayout {
                     spinner {
                         adapter = CharSequensePairArrayAdapter(ctx, isFirstVisible = false)
                         bind({ (adapter as CharSequensePairArrayAdapter).items = it!! }) { firstPropNameToSymbolList }
-                        bind({ (adapter as CharSequensePairArrayAdapter).isFirstInDropdownVisible = it!! }) { isPropNameVisible }
+                        bindLive({ (adapter as CharSequensePairArrayAdapter).isFirstInDropdownVisible = it!! }) { isPropNameVisibleLive }
                         bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
                     }.lparams(selectPropWidth, wrapContent)
@@ -69,14 +69,14 @@ class SteamUI : Binding.Component<SteamViewModel, MainActivity>() {
                     marginStart = smargin
                 }
                 textView {
-                    bind({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisible }
+                    bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
                     bindLive(this::setText) { secondPropNameLive }
                 }
                 linearLayout {
                     spinner {
                         adapter = CharSequensePairArrayAdapter(ctx, isFirstVisible = false)
                         bindLive({ (adapter as CharSequensePairArrayAdapter).items = it!! }) { secondPropNameToSymbolListLive }
-                        bind({ (adapter as CharSequensePairArrayAdapter).isFirstInDropdownVisible = it!! }) { isPropNameVisible }
+                        bindLive({ (adapter as CharSequensePairArrayAdapter).isFirstInDropdownVisible = it!! }) { isPropNameVisibleLive }
                         bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
                     }.lparams(selectPropWidth, wrapContent)

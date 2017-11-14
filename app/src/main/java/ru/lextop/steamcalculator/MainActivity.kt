@@ -2,22 +2,23 @@ package ru.lextop.steamcalculator
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import org.jetbrains.anko.*
-import ru.lextop.steamcalculator.binding.viewModel
-import ru.lextop.steamcalculator.di.Injectable
-import ru.lextop.steamcalculator.ui.SteamUI
-import ru.lextop.steamcalculator.vm.ViewModelFactory
+import android.support.v4.app.Fragment
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), Injectable {
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
+
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> =
+            dispatchingAndroidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = SteamUI()
-                .createBinding(this, AnkoContext.Companion.create(this, this))
-        binding.setViewModel(this, viewModel(viewModelFactory))
-        setContentView(binding.view)
+        setContentView(R.layout.main_activity)
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, SteamFragment()).commit()
     }
 }

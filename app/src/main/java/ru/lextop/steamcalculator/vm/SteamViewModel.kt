@@ -38,7 +38,7 @@ class SteamViewModel @Inject constructor
     val secondPropNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>> = MutableLiveData()
     val firstPropSelectionLive: LiveData<Int> = MutableLiveData()
     val secondPropSelectionLive: LiveData<Int> = MutableLiveData()
-    var isPropNameVisible = prefs.getBoolean("showPropNames", false)
+    var isPropNameVisibleLive: LiveData<Boolean> = MutableLiveData()
     private lateinit var firstQuantity: Quantity
     private lateinit var secondQuantity: Quantity
     //set lateinit if Kotlin 1.2
@@ -115,18 +115,21 @@ class SteamViewModel @Inject constructor
         }
     }
 
-    init {
-        prefs.registerOnSharedPreferenceChangeListener{ prefs, key ->
-            when(key){
-                "showPropNames" -> isPropNameVisible = prefs.getBoolean(key, false)
-            }
+    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+        when (key) {
+            "showPropNames" -> (isPropNameVisibleLive as MutableLiveData).value = prefs.getBoolean(key, false)
         }
+    }
+
+    init {
+        (isPropNameVisibleLive as MutableLiveData).value = prefs.getBoolean("showPropNames", false)
+        prefs.registerOnSharedPreferenceChangeListener(prefsListener)
         quantityModels = repo.quantityLives.values.map { quantityLive ->
             QuantityViewModel(
                     quantityLive,
                     repo.getViewUnitLive(quantityLive.value!!.property),
                     context,
-                    isPropNameVisible,
+                    isPropNameVisibleLive,
                     repo)
         }
         repo.firstQuantityLive.observeForever(firstQuantityObserver)

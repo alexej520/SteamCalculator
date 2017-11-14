@@ -2,8 +2,7 @@ package ru.lextop.steamcalculator
 
 import android.app.Activity
 import android.app.Application
-import com.squareup.leakcanary.LeakCanary
-import com.squareup.leakcanary.RefWatcher
+import android.support.v7.preference.PreferenceManager
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -18,6 +17,7 @@ class App : Application(), HasActivityInjector{
 
     override fun onCreate() {
         super.onCreate()
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
         /*if (LeakCanary.isInAnalyzerProcess(this)) {
             return
         }*/

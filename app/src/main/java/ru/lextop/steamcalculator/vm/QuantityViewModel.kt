@@ -12,7 +12,7 @@ open class QuantityViewModel(
         quantityLive: LiveData<Quantity>,
         unitLive: LiveData<UnitPh>,
         context: Context,
-        val isPropNameVisible: Boolean,
+        val isPropNameVisibleLive: LiveData<Boolean>,
         private val repo: SteamRepository)
     : ViewModel() {
     private val prop = quantityLive.value!!.property
