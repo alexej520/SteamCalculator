@@ -1,5 +1,6 @@
 package ru.lextop.steamcalculator.ui
 
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -18,16 +19,20 @@ import ru.lextop.steamcalculator.vm.SteamViewModel
 
 class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
 
-    override fun Binding<SteamViewModel>.createView(ui: AnkoContext<MainActivity>): View = with(ui) {
-        with(ui.owner) {
+    override fun Binding<SteamViewModel>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<MainActivity>): View = with(ui) {
+        with(bindingLo) {
             verticalLayout {
+                val selectPropWidth = dip(48) + sp(32)
+                val smargin = dip(8)
+                val editTextWeight = 1.0f
+                val selectUnitWidth = dip(48) + sp(96)
                 linearLayout {
                     orientation = LinearLayout.HORIZONTAL
                     spinner {
                         bind({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstPropSymbols }
                         bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
-                    }.lparams(0, wrapContent, 1.5f)
+                    }.lparams(selectPropWidth, wrapContent)
                     editText {
                         val listener = object : TextWatcher {
                             override fun afterTextChanged(input: Editable) {
@@ -50,20 +55,22 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         }) { firstValueLive }
                         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                         addTextChangedListener(listener)
-                    }.lparams(0, wrapContent, 1f)
+                    }.lparams(0, wrapContent, editTextWeight)
                     spinner {
                         bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { firstUnitsLive }
                         bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
-                    }.lparams(0, wrapContent, 1.0f)
-                }.lparams(matchParent, wrapContent)
+                    }.lparams(selectUnitWidth, wrapContent)
+                }.lparams(matchParent, wrapContent){
+                    marginStart = smargin
+                }
                 linearLayout {
                     orientation = LinearLayout.HORIZONTAL
                     spinner {
                         bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { secondPropSymbolsLive }
                         bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
-                    }.lparams(0, wrapContent, 1.2f)
+                    }.lparams(selectPropWidth, wrapContent)
                     editText {
                         val listener = object : TextWatcher {
                             override fun afterTextChanged(input: Editable) {
@@ -86,18 +93,20 @@ class MainActivityUI : Binding.Component<SteamViewModel, MainActivity>() {
                         }) { secondValueLive }
                         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                         addTextChangedListener(listener)
-                    }.lparams(0, wrapContent, 1f)
+                    }.lparams(0, wrapContent, editTextWeight)
                     spinner {
                         bindLive({ adapter = HtmlArrayAdapter(ctx, it!!) }) { secondUnitsLive }
                         bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
-                    }.lparams(0, wrapContent, 0.8f)
+                    }.lparams(selectUnitWidth, wrapContent)
+                }.lparams(matchParent, wrapContent){
+                    marginStart = smargin
                 }
                 recyclerView {
                     layoutManager = LinearLayoutManager(ctx)
-                    adapter = SimpleBindingAdapter(owner, QuantityUI())
+                    adapter = SimpleBindingAdapter(bindingLo, QuantityUI())
                     @Suppress("UNCHECKED_CAST")
-                    bind({ (adapter as SimpleBindingAdapter<QuantityViewModel, MainActivity>).viewModels = it!! }) { quantityModels }
+                    bind({ (adapter as SimpleBindingAdapter<QuantityViewModel>).viewModels = it!! }) { quantityModels }
                 }
             }
         }

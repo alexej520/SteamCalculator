@@ -4,18 +4,18 @@ import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
-open class SimpleBindingAdapter<VM : Any, LO : LifecycleOwner>(private val lo: LO, private val bc: Binding.Component<VM, LO>)
-    : RecyclerView.Adapter<BindingHolder<VM, LO>>() {
+open class SimpleBindingAdapter<VM : Any>(private val bindingLo: LifecycleOwner, private val bc: Binding.Component<VM, ViewGroup>)
+    : RecyclerView.Adapter<BindingHolder<VM>>() {
     var viewModels: List<VM> = listOf()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder<VM, LO> {
-        return BindingHolder.create(parent, lo, bc)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder<VM> {
+        return BindingHolder.create(parent, bindingLo, bc)
     }
 
-    override fun onBindViewHolder(holder: BindingHolder<VM, LO>, position: Int) {
+    override fun onBindViewHolder(holder: BindingHolder<VM>, position: Int) {
         holder.bind(viewModels[position])
     }
 
-    override fun onViewRecycled(holder: BindingHolder<VM, LO>) {
+    override fun onViewRecycled(holder: BindingHolder<VM>) {
         holder.unbind()
     }
 

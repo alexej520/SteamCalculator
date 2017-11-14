@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import org.jetbrains.anko.AnkoContext
 
-class BindingHolder<VM : Any, LO : LifecycleOwner> private constructor(view: View, context: AnkoContext<LO>)
+class BindingHolder<VM : Any> private constructor(view: View, bindingLo: LifecycleOwner)
     : RecyclerView.ViewHolder(view), LifecycleOwner {
     init {
-        context.owner.lifecycle.addObserver(GenericLifecycleObserver { _, event ->
+        bindingLo.lifecycle.addObserver(GenericLifecycleObserver { _, event ->
             if (event == Lifecycle.Event.ON_PAUSE || event == Lifecycle.Event.ON_STOP || event == Lifecycle.Event.ON_DESTROY) {
                 _lifecycle.handleLifecycleEvent(event)
             }
@@ -37,11 +37,11 @@ class BindingHolder<VM : Any, LO : LifecycleOwner> private constructor(view: Vie
     }
 
     companion object {
-        fun <VM : Any, LO : LifecycleOwner> create(parent: ViewGroup, parentLO: LO, bc: Binding.Component<VM, LO>)
-                : BindingHolder<VM, LO> {
-            val context = AnkoContext.create(parent.context, parentLO)
-            val binding = bc.createBinding(context)
-            val holder = BindingHolder<VM, LO>(binding.view, context)
+        fun <VM : Any> create(parent: ViewGroup, bindingLO: LifecycleOwner, bc: Binding.Component<VM, ViewGroup>)
+                : BindingHolder<VM> {
+            val context = AnkoContext.create(parent.context, parent)
+            val binding = bc.createBinding(bindingLO, context)
+            val holder = BindingHolder<VM>(binding.view, bindingLO)
             holder.setBinding(binding)
             return holder
         }

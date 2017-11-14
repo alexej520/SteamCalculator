@@ -13,29 +13,14 @@ import ru.lextop.steamcalculator.vm.ViewModelFactory
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), Injectable {
-    var binding: Binding<SteamViewModel>? = null
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*object : AnkoComponent<MainActivity>{
-            override fun createView(ui: AnkoContext<MainActivity>): View {
-             return   ui.linearLayout {
-                    textView("kfjl")
-                }
-            }
-        }.setContentView(this)*/
-        binding = MainActivityUI().createBinding(AnkoContext.create(this, this)).view.getBinding()
-             /*   .setContentView(this)
-                .getBinding<SteamViewModel>()*/
-        binding!!.setViewModel(this, viewModel(viewModelFactory))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //binding!!.setViewModel(null , null)
-        //binding = null
-        //App.refWatcher.watch(this)
+        val binding = MainActivityUI()
+                .createBinding(this, AnkoContext.Companion.create(this, this))
+        binding.setViewModel(this, viewModel(viewModelFactory))
+        setContentView(binding.view)
     }
 }

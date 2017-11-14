@@ -17,6 +17,7 @@ class Binding<VM : Any> private constructor() {
         get() = _view!!
     private val liveViewModel = MutableLiveData<Pair<LifecycleOwner?, VM?>>()
     private val liveBindings = mutableListOf<Pair<LiveData<Any?>, Observer<Any?>>>()
+
     fun setViewModel(viewModelLO: LifecycleOwner?, viewModel: VM?) {
         liveBindings.forEach { (liveData, observer) ->
             liveData.removeObserver(observer)
@@ -74,11 +75,11 @@ class Binding<VM : Any> private constructor() {
         fun <VM : Any> getForView(view: View) = weakBindingSet.first { view == it.view } as Binding<VM>
     }
 
-    abstract class Component<VM : Any, in LO : LifecycleOwner> {
-        abstract fun Binding<VM>.createView(ui: AnkoContext<LO>): View
-        fun createBinding(ui: AnkoContext<LO>): Binding<VM> {
+    abstract class Component<VM : Any, T> {
+        abstract fun Binding<VM>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<T>): View
+        fun createBinding(bindingLo: LifecycleOwner, ui: AnkoContext<T>): Binding<VM> {
             val binding = Binding<VM>()
-            binding.setView(binding.createView(ui))
+            binding.setView(binding.createView(bindingLo, ui))
             return binding
         }
     }
