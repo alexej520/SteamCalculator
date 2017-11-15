@@ -3,5 +3,6 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="showPropNames"
-        android:title="Show Property Names" />
+        android:summary="@string/propertyNamesSummary"
+        android:title="@string/propertyNamesTitle" />
 </PreferenceScreen>

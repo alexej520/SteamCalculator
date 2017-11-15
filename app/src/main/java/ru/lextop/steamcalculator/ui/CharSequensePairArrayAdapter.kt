@@ -8,8 +8,10 @@ import android.widget.TextView
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.linearLayout
 import ru.lextop.steamcalculator.R
+import ru.lextop.steamcalculator.binding.endPadding
 import ru.lextop.steamcalculator.binding.toVisibleOrGone
 
 class CharSequensePairArrayAdapter(context: Context,
@@ -35,7 +37,9 @@ class CharSequensePairArrayAdapter(context: Context,
         val view: View = convertView ?: {
             val ll = LinearLayout(context)
             ll.addView(TextView(context, null, 0, R.style.SpinnerItem))
-            ll.addView(TextView(context, null, 0, R.style.TextCaption))
+            val tw2 = TextView(context, null, 0, R.style.TextCaption)
+            tw2.endPadding = context.dip(8)
+            ll.addView(tw2)
             ll
         }()
         view as LinearLayout
@@ -58,7 +62,9 @@ class CharSequensePairArrayAdapter(context: Context,
         val view: View = convertView ?: {
             val ll = LinearLayout(context)
             ll.addView(TextView(context, null, 0, R.style.DropDownItem_Spinner))
-            ll.addView(TextView(context, null, 0, R.style.TextCaption))
+            val tw2 = TextView(context, null, 0, R.style.TextCaption)
+            tw2.endPadding = context.dip(8)
+            ll.addView(tw2)
             ll
         }()
         view as LinearLayout

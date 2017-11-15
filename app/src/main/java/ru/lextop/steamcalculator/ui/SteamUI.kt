@@ -2,6 +2,8 @@ package ru.lextop.steamcalculator.ui
 
 import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
@@ -9,8 +11,10 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.binding.*
 import ru.lextop.steamcalculator.vm.QuantityViewModel
@@ -113,9 +117,13 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                         }.lparams(0, wrapContent, unitSpinnerWeight)
                     }.lparams(matchParent, wrapContent) { verticalPadding = dip(8) }
                 }
-                recyclerView {
+                view{backgroundDrawable = ctx.getDrawable(android.R.drawable.divider_horizontal_bright)}.lparams(matchParent, dip(2))
+                themedRecyclerView(R.style.ScrollbarRecyclerView) {
+                    scrollBarStyle = View.SCROLLBARS_OUTSIDE_INSET
                     isFocusableInTouchMode = true
-                    layoutManager = LinearLayoutManager(ctx)
+                    val lm = LinearLayoutManager(ctx)
+                    layoutManager = lm
+                    addItemDecoration(DividerItemDecoration(ctx, lm.orientation))
                     adapter = SimpleBindingAdapter(bindingLo, QuantityUI())
                     @Suppress("UNCHECKED_CAST")
                     bind({ (adapter as SimpleBindingAdapter<QuantityViewModel>).viewModels = it!! }) { quantityModels }
