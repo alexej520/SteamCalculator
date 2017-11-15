@@ -57,4 +57,6 @@
     <string name="settings">Настройки</string>
     <string name="propertyNamesSummary">Показывать Названия Свойств</string>
     <string name="propertyNamesTitle">Названия Свойств</string>
+    <string name="hvap">r</string>
+    <string name="SpecificEnthalpyOfVaporization">Удельная Теплота Парообразования</string>
 </resources>

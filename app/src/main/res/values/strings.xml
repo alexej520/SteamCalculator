@@ -88,4 +88,6 @@
     <string name="Pas"><![CDATA[Pa&sdot;s]]></string>
     <string name="propertyNamesSummary">Show Property Names</string>
     <string name="propertyNamesTitle">Property Names</string>
+    <string name="SpecificEnthalpyOfVaporization">Specific Enthalpy of Vaporization</string>
+    <string name="hvap"><![CDATA[&Delta;h<sub><small>vap</small></sub>]]></string>
 </resources>

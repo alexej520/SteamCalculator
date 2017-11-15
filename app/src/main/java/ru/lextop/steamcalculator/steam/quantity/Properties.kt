@@ -65,3 +65,6 @@ val ThermalDiffusivity = Property(
 val SpecificGibbsFreeEnergy = Property(
         "Specific Gibbs Free Energy", "g", Units.SpecificEnergy,
         R.string.SpecificGibbsFreeEnergy, R.string.g)
+val SpecificEnthalpyOfVaporization = Property(
+        "Specific Enthalpy of Vaporization", "hvap", Units.SpecificEnergy,
+        R.string.SpecificEnthalpyOfVaporization, R.string.hvap)

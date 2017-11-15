@@ -117,7 +117,9 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                         }.lparams(0, wrapContent, unitSpinnerWeight)
                     }.lparams(matchParent, wrapContent) { verticalPadding = dip(8) }
                 }
-                view{backgroundDrawable = ctx.getDrawable(android.R.drawable.divider_horizontal_bright)}.lparams(matchParent, dip(2))
+                view {
+                    backgroundDrawable = ctx.getDrawable(android.R.drawable.divider_horizontal_bright)
+                }.lparams(matchParent, dip(2))
                 themedRecyclerView(R.style.ScrollbarRecyclerView) {
                     scrollBarStyle = View.SCROLLBARS_OUTSIDE_INSET
                     isFocusableInTouchMode = true

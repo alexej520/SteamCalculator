@@ -328,9 +328,19 @@ open class Steam private constructor(protected val initQs: Triple<Quantity, Quan
         }
     }
 
+    val hvap: Quantity by lazy {
+        if (x.value.isNaN() || x.value < 0 || x.value > 1) {
+            SpecificEnthalpyOfVaporization(Double.NaN, J_kg)
+        } else {
+            val liq = if97Instance.specificEnthalpySaturatedLiquidP(P.value)
+            val vap = if97Instance.specificEnthalpySaturatedVapourP(P.value)
+            SpecificEnthalpyOfVaporization(vap - liq, J_kg)
+        }
+    }
+
     open protected val quantities: List<Quantity> by lazy {
         listOf(
-               rho, epsilon, eta, av, kT, nu, Pr, P, /*n,*/ h, u, s, cp, cv, v, w, sigma, T, lambda, k, x, g
+                rho, epsilon, eta, av, kT, nu, Pr, P, /*n,*/ h, u, s, cp, cv, v, w, sigma, T, lambda, k, x, g, hvap
         )
     }
 

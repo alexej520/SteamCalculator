@@ -144,10 +144,10 @@ class SteamViewModel @Inject constructor
     }
 
     private fun doubleToInputValue(double: Double): CharSequence =
-            if (double.isNaN()) "" else String.format("%.1f", double)
+            CustomFormat.formatIgnoreNaN(double)
 
     private fun inputValueToDouble(input: CharSequence): Double =
-            input.toString().toDoubleOrNull() ?: Double.NaN
+            CustomFormat.parse(input.toString())
 
     private fun setFirstPropValue(value: Double) {
         repo.setProperties(firstQuantity.copy(value, firstUnitLive.value!!), secondQuantity)

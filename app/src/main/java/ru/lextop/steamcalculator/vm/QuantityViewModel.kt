@@ -28,7 +28,7 @@ open class QuantityViewModel(
     init {
         fun updateLiveValue(unit: UnitPh) {
             valueLive as MutableLiveData
-            valueLive.value = String.format("%.1f", quantityLive.value!![unit].value)
+            valueLive.value = CustomFormat.format(quantityLive.value!![unit].value)
         }
         quantityLive.observeForever {
             updateLiveValue(unitLive.value!!)
