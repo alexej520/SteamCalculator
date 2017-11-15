@@ -10,33 +10,32 @@ import ru.lextop.steamcalculator.binding.*
 class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
     override fun Binding<QuantityViewModel>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<ViewGroup>) = with(ui) {
         with(bindingLo) {
-            ui.verticalLayout {
+            verticalLayout {
+                startPadding = dip(8)
                 lparams(matchParent, wrapContent)
-                textView {
+                val propSpinnerWeight = 0.5f
+                val editTextWeight = 1.0f
+                val unitSpinnerWeight = 1.0f
+                textCaption {
+                    startPadding = dip(8)
                     bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
                     bind(this::setText) { propName }
-                }.lparams(matchParent, wrapContent) {
-                    marginStart = dip(16)
-                }
+                }.lparams(matchParent, wrapContent)
                 linearLayout {
-                    val selectPropWidth = dip(48) + sp(32)
-                    val smargin = dip(16)
-                    val editTextWeight = 1.0f
-                    val selectUnitWidth = dip(48) + sp(96)
-                    textView {
+                    textBody1 {
+                        startPadding = dip(8)
+                        verticalPadding = dip(8)
                         bind(this::setText) { propSymbol }
-                    }.lparams(selectPropWidth, wrapContent) {
-                        marginStart = smargin
-                    }
-                    textView {
+                    }.lparams(0, wrapContent, propSpinnerWeight)
+                    textBody1 {
                         bindLive(this::setText) { valueLive }
-                    }.lparams(0, wrapContent, 1f)
+                    }.lparams(0, wrapContent, editTextWeight)
                     spinner {
                         adapter = CharSequenceArrayAdapter(ctx)
                         bind({ (adapter as CharSequenceArrayAdapter).items = it!! }) { units }
                         bindLive({ setSelection(it!!) }) { unitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectUnit(it) } }
-                    }.lparams(selectUnitWidth, wrapContent)
+                    }.lparams(0, wrapContent, unitSpinnerWeight)
                 }
             }
         }

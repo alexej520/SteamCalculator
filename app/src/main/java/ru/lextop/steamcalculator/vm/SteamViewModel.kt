@@ -26,13 +26,13 @@ class SteamViewModel @Inject constructor
     val firstPropNameLive: LiveData<CharSequence> = MutableLiveData()
     val secondPropNameLive: LiveData<CharSequence> = MutableLiveData()
     val firstPropNameToSymbolList: List<Pair<CharSequence, CharSequence>> = firstProps.map {
-        context.getSpanned(it.nameId) to context.getSpanned(it.symbolId)
+        context.getSpanned(it.symbolId) to context.getSpanned(it.nameId)
     }
     private var secondProps: List<Property> = listOf()
         set(value) {
             field = value
             (secondPropNameToSymbolListLive as MutableLiveData).value = value.map {
-                context.getSpanned(it.nameId) to context.getSpanned(it.symbolId)
+                context.getSpanned(it.symbolId) to context.getSpanned(it.nameId)
             }
         }
     val secondPropNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>> = MutableLiveData()

@@ -2,11 +2,26 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
+    <style name="TextSubhead" parent="TextAppearance.AppCompat.Subhead" />
+
+    <style name="TextBody2" parent="TextAppearance.AppCompat.Body2" />
+
+    <style name="TextBody1" parent="TextAppearance.AppCompat.Body1" />
+
+    <style name="TextCaption" parent="TextAppearance.AppCompat.Caption" />
+
+    <style name="SpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="DropDownItem.Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="EditText" parent="Widget.AppCompat.EditText" />
 </resources>

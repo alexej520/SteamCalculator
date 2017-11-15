@@ -2,6 +2,7 @@ package ru.lextop.steamcalculator
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import org.jetbrains.anko.AnkoContext
 import ru.lextop.steamcalculator.binding.viewModel
@@ -20,6 +21,9 @@ class SteamFragment : Fragment(), Injectable {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val ab = (activity!! as AppCompatActivity).supportActionBar!!
+        ab.setDisplayHomeAsUpEnabled(false)
+        ab.setTitle(R.string.app_name)
         val binding = SteamUI()
                 .createBinding(this, AnkoContext.create(context!!, this))
         binding.setViewModel(this, activity!!.viewModel(viewModelFactory))
