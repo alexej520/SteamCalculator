@@ -189,9 +189,6 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
                             VapourFraction to this::vapourFractionHS
                             //SpecificGibbsFreeEnergy to
                     ),
-                    Temperature to SpecificEntropy to mapOf(
-                            VapourFraction to this::vapourFractionTS
-                    ),
                     Density to Temperature to mapOf(
                             Density to { rho: Double, _: Double -> rho },
                             RelativePermittivity to this::dielectricConstantRhoT,
@@ -206,7 +203,7 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
                             //SpecificEntropy to ,
                             //SpecificIsobaricHeatCapacity to this::isobaricHeatCapacityRhoT,
                             //SpecificIsochoricHeatCapacity to this::isochoricHeatCapacityRhoT,
-                            //SpecificVolume to this::specificVolumeRhoT,
+                            SpecificVolume to { rho: Double, _: Double -> 1 / rho },
                             //SpeedOfSound to this::speedOfSoundRhoT,
                             //SurfaceTension to ,
                             Temperature to { _: Double, t: Double -> t },
@@ -283,16 +280,24 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
             val q2: Quantity
             when (SpecificVolume) {
                 baseArg1.property -> {
-                    q1 = Density(baseArg1.value, Density.baseUnit.alias)
+                    q1 = Density(1 / baseArg1.value, Density.baseUnit.alias)
                     q2 = baseArg2
                 }
                 baseArg2.property -> {
                     q1 = baseArg1
-                    q2 = Density(baseArg2.value, Density.baseUnit.alias)
+                    q2 = Density(1 / baseArg2.value, Density.baseUnit.alias)
                 }
                 else -> {
-                    q1 = baseArg1
-                    q2 = baseArg2
+                    if (baseArg1.property == Temperature && baseArg2.property == SpecificEntropy) {
+                        q1 = baseArg1
+                        q2 = VapourFraction(if97Instance.vapourFractionTS(baseArg1.value, baseArg2.value), VapourFraction.baseUnit.alias)
+                    } else if (baseArg1.property == SpecificEntropy && baseArg2.property == Temperature) {
+                        q1 = baseArg2
+                        q2 = VapourFraction(if97Instance.vapourFractionTS(baseArg2.value, baseArg1.value), VapourFraction.baseUnit.alias)
+                    } else {
+                        q1 = baseArg1
+                        q2 = baseArg2
+                    }
                 }
             }
             return when {
