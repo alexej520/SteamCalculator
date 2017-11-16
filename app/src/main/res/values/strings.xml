@@ -24,7 +24,6 @@
     <string name="mmHg">mm Hg</string>
     <string name="mH2O"><![CDATA[m H<sub><small>2</small></sub>O]]></string>
     <string name="kJ">kJ</string>
-    <string name="MJ">MJ</string>
     <string name="erg" >erg</string>
     <string name="cal">cal</string>
     <string name="calth"><![CDATA[cal<sub><small>th</small></sub>]]></string>
@@ -90,4 +89,21 @@
     <string name="propertyNamesTitle">Property Names</string>
     <string name="SpecificEnthalpyOfVaporization">Specific Enthalpy of Vaporization</string>
     <string name="hvap"><![CDATA[&Delta;h<sub><small>vap</small></sub>]]></string>
+    <string name="kcal">kcal</string>
+    <string name="kcalth"><![CDATA[kcal<sub><small>th</small></sub>]]></string>
+    <string name="kcal15"><![CDATA[kcal<sub><small>15</small></sub>]]></string>
+    <string name="cal_kg">cal/kg</string>
+    <string name="calth_kg"><![CDATA[cal<sub><small>th</small></sub>/kg]]></string>
+    <string name="cal15_kg"><![CDATA[cal<sub><small>15</small></sub>/kg]]></string>
+    <string name="kcal_kg">kcal/kg</string>
+    <string name="kcalth_kg"><![CDATA[kcal<sub><small>th</small></sub>/kg]]></string>
+    <string name="kcal15_kg"><![CDATA[kcal<sub><small>15</small></sub>/kg]]></string>
+    <string name="kJ_kgK"><![CDATA[kJ/(kg&sdot;K)]]></string>
+    <string name="cal_kgK"><![CDATA[cal/(kg&sdot;K)]]></string>
+    <string name="calth_kgK"><![CDATA[cal<sub><small>th</small></sub>/(kg&sdot;K)]]></string>
+    <string name="cal15_kgK"><![CDATA[cal<sub><small>15</small></sub>/(kg&sdot;K)]]></string>
+    <string name="kcal_kgK"><![CDATA[kcal/(kg&sdot;K)]]></string>
+    <string name="kcalth_kgK"><![CDATA[kcal<sub><small>th</small></sub>/(kg&sdot;K)]]></string>
+    <string name="kcal15_kgK"><![CDATA[kcal<sub><small>15</small></sub>/(kg&sdot;K)]]></string>
+    <string name="kgf_cm2"><![CDATA[kg/cm<sup><small>2</small></sup>]]></string>
 </resources>

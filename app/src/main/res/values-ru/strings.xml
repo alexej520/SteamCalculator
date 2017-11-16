@@ -13,7 +13,6 @@
     <string name="at">ат</string>
     <string name="atm">атм</string>
     <string name="kJ">кДж</string>
-    <string name="MJ">МДж</string>
     <string name="erg">эрг</string>
     <string name="cal">кал</string>
     <string name="calth"><![CDATA[кал<sub><small>ТХ</small></sub>]]></string>
@@ -59,4 +58,21 @@
     <string name="propertyNamesTitle">Названия Свойств</string>
     <string name="hvap">r</string>
     <string name="SpecificEnthalpyOfVaporization">Удельная Теплота Парообразования</string>
+    <string name="kcal">ккал</string>
+    <string name="kcalth"><![CDATA[ккал<sub><small>ТХ</small></sub>]]></string>
+    <string name="kcal15"><![CDATA[ккал<sub><small>15</small></sub>]]></string>
+    <string name="cal_kg">кал/кг</string>
+    <string name="calth_kg"><![CDATA[кал<sub><small>ТХ</small></sub>/кг]]></string>
+    <string name="cal15_kg"><![CDATA[кал<sub><small>15</small></sub>/кг]]></string>
+    <string name="kcal_kg">ккал/кг</string>
+    <string name="kcalth_kg"><![CDATA[ккал<sub><small>ТХ</small></sub>/кг]]></string>
+    <string name="kcal15_kg"><![CDATA[ккал<sub><small>15</small></sub>/кг]]></string>
+    <string name="kJ_kgK"><![CDATA[кДж/(кг&sdot;K)]]></string>
+    <string name="cal_kgK"><![CDATA[кал/(кг&sdot;K)]]></string>
+    <string name="calth_kgK"><![CDATA[кал<sub><small>ТХ</small></sub>/(кг&sdot;K)]]></string>
+    <string name="cal15_kgK"><![CDATA[кал<sub><small>15</small></sub>/(кг&sdot;K)]]></string>
+    <string name="kcal_kgK"><![CDATA[ккал/(кг&sdot;K)]]></string>
+    <string name="kcalth_kgK"><![CDATA[ккал<sub><small>ТХ</small></sub>/(кг&sdot;K)]]></string>
+    <string name="kcal15_kgK"><![CDATA[ккал<sub><small>15</small></sub>/(кг&sdot;K)]]></string>
+    <string name="kgf_cm2"><![CDATA[кг/см<sup><small>2</small></sup>]]></string>
 </resources>

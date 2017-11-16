@@ -1,8 +1,22 @@
 package ru.lextop.steamcalculator.steam.quantity
 
 import ru.lextop.steamcalculator.R
+import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.cal
+import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.cal15
+import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.calth
 import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.kJ
+import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.kcal
+import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.kcal15
+import ru.lextop.steamcalculator.steam.quantity.Units.EnergyUnit.kcalth
 import ru.lextop.steamcalculator.steam.quantity.Units.MassUnit.kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.cal15_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.cal_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.calth_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.kJ_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.kcal15_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.kcal_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.kcalth_kg
+import ru.lextop.steamcalculator.steam.quantity.Units.Temperature.K
 
 object Units{
     object MassUnit : BaseUnit(kg = 1) {
@@ -12,11 +26,13 @@ object Units{
     object EnergyUnit : BaseUnit(kg = 1, m = 2, s = -2) {
         val J = createAlias(Pair("J", R.string.J))
         val kJ = k(J) addWith Pair(byDefault, R.string.kJ)
-        val MJ = M(J) addWith Pair(byDefault, R.string.MJ)
         val erg = J / 1e-7 addWith Pair("erg", R.string.erg)
         val cal = J / 4.1868 addWith Pair("cal", R.string.cal)
         val calth = J / 4.184 addWith Pair("calth", R.string.calth)
         val cal15 = J / 1.1855 addWith Pair("cal15", R.string.cal15)
+        val kcal = k(cal) addWith Pair(byDefault, R.string.kcal)
+        val kcalth = k(calth) addWith Pair(byDefault, R.string.kcalth)
+        val kcal15 = k(cal15) addWith Pair(byDefault, R.string.kcal15)
         val BTU = J / 1055.6 addWith Pair("BTU", R.string.BTU)
         val kWh = J / 3.6e6 addWith Pair("kWh", R.string.kWh)
     }
@@ -24,6 +40,23 @@ object Units{
     object SpecificEnergy : BaseUnit(m = 2, s = -2) {
         val J_kg = createAlias(Pair("J/kg", R.string.J_kg))
         val kJ_kg = kJ / kg addWith Pair(byDefault, R.string.kJ_kg)
+        val cal_kg = cal / kg addWith Pair(byDefault, R.string.cal_kg)
+        val calth_kg = calth / kg addWith Pair(byDefault, R.string.calth_kg)
+        val cal15_kg = cal15 / kg addWith Pair(byDefault, R.string.cal15_kg)
+        val kcal_kg = kcal / kg addWith Pair(byDefault, R.string.kcal_kg)
+        val kcalth_kg = kcalth / kg addWith Pair(byDefault, R.string.kcalth_kg)
+        val kcal15_kg = kcal15 / kg addWith Pair(byDefault, R.string.kcal15_kg)
+    }
+
+    object SpecificHeatCapacity : BaseUnit(m = 2, K = -1, s = -2){
+        val J_kgK = createAlias(Pair("J/(kg*K)", R.string.J_kgK))
+        val kJ_kgK = kJ_kg / K addWith Pair("kJ/(kg*K)", R.string.kJ_kgK)
+        val cal_kgK = cal_kg / K addWith Pair("cal/(kg*K)", R.string.cal_kgK)
+        val calth_kgK = calth_kg / K addWith Pair("calth/(kg*K)", R.string.calth_kgK)
+        val cal15_kgK = cal15_kg / K addWith Pair("cal15/(kg*K)", R.string.cal15_kgK)
+        val kcal_kgK = kcal_kg / K addWith Pair("kcal/(kg*K)", R.string.kcal_kgK)
+        val kcalth_kgK = kcalth_kg / K addWith Pair("kcalth/(kg*K)", R.string.kcalth_kgK)
+        val kcal15_kgK = kcal15_kg / K addWith Pair("kcal15/(kg*K)", R.string.kcal15_kgK)
     }
 
     object Pressure : BaseUnit(kg = 1, m = -1, s = -2) {
@@ -32,11 +65,11 @@ object Units{
         val MPa = M(Pa) addWith Pair(byDefault, R.string.MPa)
         val bar = Pa / 1e5 addWith Pair("bar", R.string.bar)
         val at = Pa / 98066.5 addWith Pair("at", R.string.at)
+        val kgf_cm2 = at addWith Pair("kgf/cm2", R.string.kgf_cm2)
         val atm = Pa / 101325.0 addWith Pair("atm", R.string.atm)
         val psi = Pa / 6894.76 addWith Pair("psi", R.string.psi)
         val mmHg = Pa / 133.322 addWith Pair("mmHg", R.string.mmHg)
         val mH2O = Pa / 9806.65 addWith Pair("mH2O", R.string.mH2O)
-
     }
 
     object Temperature : BaseUnit(K = 1) {
@@ -75,10 +108,6 @@ object Units{
 
     object KinematicViscosity : BaseUnit(m = 2, s = -1){
         val m2_s = createAlias(Pair("m2/s", R.string.m2_s))
-    }
-
-    object SpecificHeatCapacity : BaseUnit(m = 2, K = -1, s = -2){
-        val J_kgK = createAlias(Pair("J/(kg*K)", R.string.J_kgK))
     }
 
     object SpecificVolume: BaseUnit(m = 3, kg = -1){
