@@ -13,7 +13,7 @@ class BindingHolder<VM : Any> private constructor(view: View, bindingLo: Lifecyc
     : RecyclerView.ViewHolder(view), LifecycleOwner {
     init {
         bindingLo.lifecycle.addObserver(GenericLifecycleObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE || event == Lifecycle.Event.ON_STOP || event == Lifecycle.Event.ON_DESTROY) {
+            if (isBinded) {
                 _lifecycle.handleLifecycleEvent(event)
             }
         })
@@ -21,6 +21,7 @@ class BindingHolder<VM : Any> private constructor(view: View, bindingLo: Lifecyc
 
     private val _lifecycle = LifecycleRegistry(this)
     private lateinit var _binding: Binding<VM>
+    private var isBinded: Boolean = false
     override fun getLifecycle() = _lifecycle
 
     private fun setBinding(binding: Binding<VM>) {
@@ -28,11 +29,13 @@ class BindingHolder<VM : Any> private constructor(view: View, bindingLo: Lifecyc
     }
 
     fun bind(vm: VM) {
+        isBinded = true
         _lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         _binding.setViewModel(this, vm)
     }
 
     fun unbind() {
+        isBinded = false
         _lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     }
 
