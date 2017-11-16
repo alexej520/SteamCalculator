@@ -1,6 +1,7 @@
 package ru.lextop.steamcalculator.steam
 
 import com.hummeling.if97.IF97
+import com.hummeling.if97.OutOfRangeException
 import ru.lextop.steamcalculator.steam.quantity.*
 import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.J_kg
 
@@ -73,9 +74,13 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
         if (x.value.isNaN() || x.value < 0 || x.value > 1) {
             SpecificEnthalpyOfVaporization(Double.NaN, J_kg)
         } else {
-            val liq = if97Instance.specificEnthalpySaturatedLiquidP(P.value)
-            val vap = if97Instance.specificEnthalpySaturatedVapourP(P.value)
-            SpecificEnthalpyOfVaporization(vap - liq, J_kg)
+            try {
+                val liq = if97Instance.specificEnthalpySaturatedLiquidP(P.value)
+                val vap = if97Instance.specificEnthalpySaturatedVapourP(P.value)
+                SpecificEnthalpyOfVaporization(vap - liq, J_kg)
+            } catch (e: OutOfRangeException) {
+                SpecificEnthalpyOfVaporization(Double.NaN, J_kg)
+            }
         }
     }
 

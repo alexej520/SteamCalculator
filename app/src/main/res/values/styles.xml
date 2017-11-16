@@ -1,9 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-    </style>
+    <style name="AppTheme" parent="PreferenceFixTheme.Light.DarkActionBar" />
 
     <style name="TextSubhead" parent="TextAppearance.AppCompat.Subhead" />
 

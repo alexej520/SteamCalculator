@@ -2,19 +2,15 @@ package ru.lextop.steamcalculator.ui
 
 import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
-import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.binding.*
@@ -48,7 +44,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
                             }.lparams(0, wrapContent, propSpinnerWeight)
-                            editTextCompat {
+                            editTextMaterial {
                                 val listener = object : TextWatcher {
                                     override fun afterTextChanged(input: Editable) {
                                         notify { inputFirstPropValue(input) }
@@ -58,9 +54,11 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                                 }
                                 bindLive({
-                                    requestFocus()
-                                    (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                                            .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                                    if (it!!) {
+                                        requestFocus()
+                                        (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                                                .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                                    }
                                 }) { firstInputFocusLive }
                                 bindLive({
                                     removeTextChangedListener(listener)
@@ -91,7 +89,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
                             }.lparams(0, wrapContent, propSpinnerWeight)
-                            editTextCompat {
+                            editTextMaterial {
                                 val listener = object : TextWatcher {
                                     override fun afterTextChanged(input: Editable) {
                                         notify { inputSecondPropValue(input) }
@@ -101,9 +99,11 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                                 }
                                 bindLive({
-                                    requestFocus()
-                                    (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                                            .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                                    if (it!!) {
+                                        requestFocus()
+                                        (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                                                .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                                    }
                                 }) { secondInputFocusLive }
                                 bindLive({
                                     removeTextChangedListener(listener)

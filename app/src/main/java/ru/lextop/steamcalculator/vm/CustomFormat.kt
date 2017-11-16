@@ -8,6 +8,25 @@ import java.text.ParseException
 import java.util.*
 
 object CustomFormat {
+    var scientificFormatOnly: Boolean = false
+    private var maxFormat1: Double = 1e5
+    var maxSymbols: Int = 5
+        set(value) {
+            field = value
+            maxFormat1 = Math.pow(10.0, value.toDouble())
+            val sb = StringBuilder()
+            for (i in 1 until value) {
+                sb.append('#')
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                (format1 as DecimalFormat).applyLocalizedPattern("@$sb")
+                (format2 as DecimalFormat).applyLocalizedPattern("0.${sb}E0")
+            } else {
+                (format1 as java.text.DecimalFormat).applyLocalizedPattern("@$sb")
+                (format2 as java.text.DecimalFormat).applyLocalizedPattern("0.${sb}E0")
+            }
+        }
+
     private val format1: Format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         (DecimalFormat.getInstance(ULocale.US) as DecimalFormat).apply {
             applyLocalizedPattern("@####")
@@ -29,16 +48,24 @@ object CustomFormat {
     }
 
     fun formatIgnoreNaN(double: Double): String =
-            when {
-                double.isNaN() -> ""
-                double < 1e5 && double > 1e-2 -> format1.format(double)
-                else -> format2.format(double)
+            if (scientificFormatOnly) {
+                format2.format(double)
+            } else {
+                when {
+                    double.isNaN() -> ""
+                    double < maxFormat1 && double >= 1e-3 -> format1.format(double)
+                    else -> format2.format(double)
+                }
             }
 
     fun format(double: Double): String =
-            when {
-                double < 1e5 && double > 1e-2 -> format1.format(double)
-                else -> format2.format(double)
+            if (scientificFormatOnly) {
+                format2.format(double)
+            } else {
+                when {
+                    double < maxFormat1 && double >= 1e-3 -> format1.format(double)
+                    else -> format2.format(double)
+                }
             }
 
     fun parse(string: String): Double = try {

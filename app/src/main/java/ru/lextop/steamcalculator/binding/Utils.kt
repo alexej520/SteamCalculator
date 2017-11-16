@@ -77,12 +77,11 @@ inline fun ViewManager.textCaption(init: TextView.() -> Unit): TextView =
 
 inline fun ViewManager.textBody1(init: TextView.() -> Unit): TextView =
         ankoView({ TextView(it, null, 0, R.style.TextBody1) }, 0, init)
-inline fun ViewManager.textBody1() = textBody1 {  }
 
 inline fun ViewManager.textBody2(init: TextView.() -> Unit): TextView =
         ankoView({ TextView(it, null, 0, R.style.TextBody2) }, 0, init)
 
-inline fun ViewManager.editTextCompat(init: EditText.() -> Unit): EditText =
+inline fun ViewManager.editTextMaterial(init: EditText.() -> Unit): EditText =
         ankoView({ EditText(it, null, 0, R.style.EditText) }, 0, init)
 
 var View.startPadding: Int

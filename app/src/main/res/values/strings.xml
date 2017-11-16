@@ -8,11 +8,11 @@
     <string name="K" translatable="false">K</string>
     <string name="ratio" translatable="false">_</string>
     <string name="percent" translatable="false">%</string>
-    <string name="Ro" translatable="false">Rø</string>
-    <string name="Re" translatable="false"><![CDATA[&deg;R]]></string>
+    <string name="Ro" translatable="false"><![CDATA[&deg;Rø]]></string>
+    <string name="Re" translatable="false"><![CDATA[&deg;Re]]></string>
     <string name="N" translatable="false"><![CDATA[&deg;N]]></string>
     <string name="D" translatable="false"><![CDATA[&deg;D]]></string>
-    <string name="Ra" translatable="false"><![CDATA[&deg;Ra]]></string>
+    <string name="Ra" translatable="false">R</string>
     <string name="F" translatable="false"><![CDATA[&deg;F]]></string>
     <string name="C" translatable="false"><![CDATA[&deg;C]]></string>
     <string name="kPa">kPa</string>
@@ -40,7 +40,7 @@
     <string name="m3_kg"><![CDATA[m<sup><small>3</small></sup>/kg]]></string>
     <string name="m_s">m/s</string>
     <string name="N_m">N/m</string>
-    <string name="W_mK"><![CDATA[W/m&sdot;K]]></string>
+    <string name="W_mK"><![CDATA[W/(m&sdot;K)]]></string>
     <string name="SpecificEnthalpy">Specific Enthalpy</string>
     <string name="h" translatable="false">h</string>
     <string name="Pressure">Pressure</string>
@@ -85,8 +85,8 @@
     <string name="g" translatable="false">g</string>
     <string name="settings">Settings</string>
     <string name="Pas"><![CDATA[Pa&sdot;s]]></string>
-    <string name="propertyNamesSummary">Show Property Names</string>
-    <string name="propertyNamesTitle">Property Names</string>
+    <string name="preferenceSummaryPropertyNames">Show Property Names</string>
+    <string name="preferenceTitlePropertyNames">Property Names</string>
     <string name="SpecificEnthalpyOfVaporization">Specific Enthalpy of Vaporization</string>
     <string name="hvap"><![CDATA[&Delta;h<sub><small>vap</small></sub>]]></string>
     <string name="kcal">kcal</string>
@@ -106,4 +106,25 @@
     <string name="kcalth_kgK"><![CDATA[kcal<sub><small>th</small></sub>/(kg&sdot;K)]]></string>
     <string name="kcal15_kgK"><![CDATA[kcal<sub><small>15</small></sub>/(kg&sdot;K)]]></string>
     <string name="kgf_cm2"><![CDATA[kg/cm<sup><small>2</small></sup>]]></string>
+    <string name="preferenceKeyShowPropertyNames" translatable="false">showPropertyNames</string>
+    <string name="preferenceKeyScientificFormatOnly" translatable="false">scientificFormatOnly</string>
+    <string name="preferenceKeyDecimals" translatable="false">decimals</string>
+    <string name="preferenceSummaryDecimals" translatable="false">Number of Decimals</string>
+    <string name="preferenceTitleDecimals" translatable="false">Decimals</string>
+    <string name="preferenceSummaryScientificFormatOnly" translatable="false">Show Values With Scientific Format Only</string>
+    <string name="preferenceTitleScientificFormatOnly" translatable="false">Scientific Format Only</string>
+    <string name="lb" translatable="false">lb</string>
+    <string name="ft3_lb" translatable="false"><![CDATA[ft<sup><small>3</small></sup>/lb]]></string>
+    <string name="cP" translatable="false">cP</string>
+    <string name="lb_in2" translatable="false"><![CDATA[lb/in<sup><small>2</small></sup>]]></string>
+    <string name="cSt" translatable="false">cSt</string>
+    <string name="in2_lb" translatable="false"><![CDATA[in<sup><small>2</small></sup>/lb]]></string>
+    <string name="R_1" translatable="false">1/R</string>
+    <string name="BTU_lb" translatable="false">BTU/lb</string>
+    <string name="BTU_lbR" translatable="false"><![CDATA[BTU/(lb&sdot;R)]]></string>
+    <string name="lb_ft3"><![CDATA[lb/ft<sup><small>3</small></sup>]]></string>
+    <string name="ft_s" translatable="false">ft/s</string>
+    <string name="kg_s2"><![CDATA[kg/s<sup><small>2</small></sup>]]></string>
+    <string name="lbf_ft" translatable="false">lbf/ft</string>
+    <string name="BTU_hrftR" translatable="false"><![CDATA[BTU/(hr&sdot;ft&sdot;R)]]></string>
 </resources>

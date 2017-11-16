@@ -28,7 +28,8 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$app_compat_version"
     implementation "com.android.support:cardview-v7:$app_compat_version"
     //implementation "com.android.support:design:$app_compat_version"
-    implementation "com.android.support:preference-v7:$app_compat_version"
+    implementation 'com.takisoft.fix:preference-v7:27.0.1.0'
+    //implementation "com.android.support:preference-v7:$app_compat_version"
     //implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
@@ -38,6 +39,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$anko_version"
     implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-support-v4:$anko_version"
     //implementation "org.jetbrains.anko:anko-design:$anko_version"
     //implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
     implementation 'com.hummeling:if97:1.0.5'

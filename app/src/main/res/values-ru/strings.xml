@@ -54,8 +54,8 @@
     <string name="k">а</string>
     <string name="SpecificGibbsFreeEnergy">Удельная Энергия Гиббса</string>
     <string name="settings">Настройки</string>
-    <string name="propertyNamesSummary">Показывать Названия Свойств</string>
-    <string name="propertyNamesTitle">Названия Свойств</string>
+    <string name="preferenceSummaryPropertyNames">Показывать Названия Свойств</string>
+    <string name="preferenceTitlePropertyNames">Названия Свойств</string>
     <string name="hvap">r</string>
     <string name="SpecificEnthalpyOfVaporization">Удельная Теплота Парообразования</string>
     <string name="kcal">ккал</string>
@@ -75,4 +75,5 @@
     <string name="kcalth_kgK"><![CDATA[ккал<sub><small>ТХ</small></sub>/(кг&sdot;K)]]></string>
     <string name="kcal15_kgK"><![CDATA[ккал<sub><small>15</small></sub>/(кг&sdot;K)]]></string>
     <string name="kgf_cm2"><![CDATA[кг/см<sup><small>2</small></sup>]]></string>
+    <string name="kg_s2"><![CDATA[кг/с<sup><small>2</small></sup>]]></string>
 </resources>

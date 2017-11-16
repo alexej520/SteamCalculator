@@ -19,6 +19,11 @@ open class QuantityViewModel(
     val propName = context.getSpanned(prop.nameId)
     val propSymbol = context.getSpanned(prop.symbolId)
     val valueLive: LiveData<CharSequence> = MutableLiveData()
+    var value = Double.NaN
+        set(value) {
+            field = value
+            (valueLive as MutableLiveData).value = CustomFormat.format(value)
+        }
     private val _units = quantityLive.value!!.property.unitList
     val units = _units.map {
         context.getSpanned(it.id)
@@ -26,17 +31,13 @@ open class QuantityViewModel(
     val unitSelectionLive: LiveData<Int> = MutableLiveData()
 
     init {
-        fun updateLiveValue(unit: UnitPh) {
-            valueLive as MutableLiveData
-            valueLive.value = CustomFormat.format(quantityLive.value!![unit].value)
-        }
         quantityLive.observeForever {
-            updateLiveValue(unitLive.value!!)
+            value = it!![unitLive.value!!].value
         }
         unitLive.observeForever { unit ->
             unitSelectionLive as MutableLiveData
             unitSelectionLive.value = _units.indexOf(unit!!)
-            updateLiveValue(unit)
+            value = quantityLive.value!![unit].value
         }
     }
 

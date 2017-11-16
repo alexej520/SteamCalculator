@@ -1,7 +1,6 @@
 package ru.lextop.steamcalculator.ui
 
 import android.arch.lifecycle.LifecycleOwner
-import android.view.View
 import android.view.ViewGroup
 import org.jetbrains.anko.*
 import ru.lextop.steamcalculator.vm.QuantityViewModel
