@@ -4,7 +4,7 @@ abstract class BaseUnit private constructor(private val id: List<Int>) {
     val unitList: List<UnitPh> = mutableListOf()
     val unitMap: Map<String, UnitPh> = mutableMapOf()
     val defaultProperty = Property(toString(), "", this, 0, 0)
-    var _alias: UnitPh? = null
+    private var _alias: UnitPh? = null
     val alias: UnitPh get() = _alias!!
 
     operator fun div(unit: BaseUnit): BaseUnit {
