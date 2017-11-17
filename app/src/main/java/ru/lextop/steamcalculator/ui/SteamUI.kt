@@ -9,6 +9,8 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
@@ -23,6 +25,11 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
         with(bindingLo) {
             verticalLayout {
                 lparams(matchParent, matchParent)
+                adView {
+                    adSize = AdSize.SMART_BANNER
+                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    loadAd(AdRequest.Builder().build())
+                }.lparams(matchParent, wrapContent)
                 cardView {
                     radius = 0f
                     elevation = dip(4).toFloat()
@@ -38,9 +45,9 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                         }.lparams(matchParent, wrapContent)
                         linearLayout {
                             spinner {
-                                adapter = CharSequensePairArrayAdapter(ctx, isSecondVisible = false)
-                                bind({ (adapter as CharSequensePairArrayAdapter).items = it!! }) { firstPropNameToSymbolList }
-                                bindLive({ (adapter as CharSequensePairArrayAdapter).isSecondInDropdownVisible = it!! }) { isPropNameVisibleLive }
+                                adapter = DropdownHintArrayAdapter(ctx)
+                                bind({ (adapter as DropdownHintArrayAdapter).items = it!! }) { firstPropNameToSymbolList }
+                                bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isPropNameVisibleLive }
                                 bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
                             }.lparams(0, wrapContent, propSpinnerWeight)
@@ -70,8 +77,8 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 addTextChangedListener(listener)
                             }.lparams(0, wrapContent, editTextWeight)
                             spinner {
-                                adapter = CharSequenceArrayAdapter(ctx)
-                                bindLive({ (adapter as CharSequenceArrayAdapter).items = it!! }) { firstUnitsLive }
+                                adapter = SimpleArrayAdapter(ctx)
+                                bindLive({ (adapter as SimpleArrayAdapter).items = it!! }) { firstUnitsLive }
                                 bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
                             }.lparams(0, wrapContent, unitSpinnerWeight)
@@ -83,9 +90,9 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                         }.lparams(matchParent, wrapContent)
                         linearLayout {
                             spinner {
-                                adapter = CharSequensePairArrayAdapter(ctx, isSecondVisible = false)
-                                bindLive({ (adapter as CharSequensePairArrayAdapter).items = it!! }) { secondPropNameToSymbolListLive }
-                                bindLive({ (adapter as CharSequensePairArrayAdapter).isSecondInDropdownVisible = it!! }) { isPropNameVisibleLive }
+                                adapter = DropdownHintArrayAdapter(ctx)
+                                bindLive({ (adapter as DropdownHintArrayAdapter).items = it!! }) { secondPropNameToSymbolListLive }
+                                bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isPropNameVisibleLive }
                                 bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
                             }.lparams(0, wrapContent, propSpinnerWeight)
@@ -115,8 +122,8 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 addTextChangedListener(listener)
                             }.lparams(0, wrapContent, editTextWeight)
                             spinner {
-                                adapter = CharSequenceArrayAdapter(ctx)
-                                bindLive({ (adapter as CharSequenceArrayAdapter).items = it!! }) { secondUnitsLive }
+                                adapter = SimpleArrayAdapter(ctx)
+                                bindLive({ (adapter as SimpleArrayAdapter).items = it!! }) { secondUnitsLive }
                                 bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
                             }.lparams(0, wrapContent, unitSpinnerWeight)

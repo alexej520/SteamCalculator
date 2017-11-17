@@ -3,8 +3,8 @@ package ru.lextop.steamcalculator.ui
 import android.arch.lifecycle.LifecycleOwner
 import android.view.ViewGroup
 import org.jetbrains.anko.*
-import ru.lextop.steamcalculator.vm.QuantityViewModel
 import ru.lextop.steamcalculator.binding.*
+import ru.lextop.steamcalculator.vm.QuantityViewModel
 
 class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
     override fun Binding<QuantityViewModel>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<ViewGroup>) = with(ui) {
@@ -30,8 +30,8 @@ class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
                         bindLive(this::setText) { valueLive }
                     }.lparams(0, wrapContent, editTextWeight)
                     spinner {
-                        adapter = CharSequenceArrayAdapter(ctx)
-                        bind({ (adapter as CharSequenceArrayAdapter).items = it!! }) { units }
+                        adapter = SimpleArrayAdapter(ctx)
+                        bind({ (adapter as SimpleArrayAdapter).items = it!! }) { units }
                         bindLive({ setSelection(it!!) }) { unitSelectionLive }
                         onItemSelectedListener = OnItemSelectedListener { notify { selectUnit(it) } }
                     }.lparams(0, wrapContent, unitSpinnerWeight)

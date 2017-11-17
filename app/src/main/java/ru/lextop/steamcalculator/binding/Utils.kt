@@ -12,7 +12,9 @@ import android.view.ViewManager
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.TextView
+import com.google.android.gms.ads.AdView
 import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.textAppearance
 import ru.lextop.steamcalculator.R
 
 inline fun <reified VM : ViewModel> FragmentActivity.viewModel(factory: ViewModelProvider.Factory) =
@@ -62,27 +64,20 @@ fun Context.getSpanned(resId: Int): Spanned {
 
 inline fun Boolean.toVisibleOrGone() = if (this) View.VISIBLE else View.GONE
 
-inline fun ViewManager.textSubhead(init: TextView.() -> Unit): TextView {
-    return ankoView({
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TextView(it, null, 0, R.style.TextBody1)
-        } else {
-            TextView(ContextThemeWrapper(it, R.style.TextBody1))
-        }
-    }, 0, init)
-}
-
 inline fun ViewManager.textCaption(init: TextView.() -> Unit): TextView =
-        ankoView({ TextView(it, null, 0, R.style.TextCaption) }, 0, init)
+        ankoView({ TextView(it).apply { textAppearance = R.style.TextAppearance_AppCompat_Caption } }, 0, init)
 
 inline fun ViewManager.textBody1(init: TextView.() -> Unit): TextView =
-        ankoView({ TextView(it, null, 0, R.style.TextBody1) }, 0, init)
+        ankoView({ TextView(it).apply { textAppearance = R.style.TextAppearance_AppCompat_Body1 } }, 0, init)
 
 inline fun ViewManager.textBody2(init: TextView.() -> Unit): TextView =
-        ankoView({ TextView(it, null, 0, R.style.TextBody2) }, 0, init)
+        ankoView({ TextView(it).apply { textAppearance = R.style.TextAppearance_AppCompat_Body2 } }, 0, init)
 
 inline fun ViewManager.editTextMaterial(init: EditText.() -> Unit): EditText =
-        ankoView({ EditText(it, null, 0, R.style.EditText) }, 0, init)
+        ankoView({ EditText(it, null, R.attr.editTextStyle) }, 0, init)
+
+inline fun ViewManager.adView(init: AdView.() -> Unit): AdView =
+        ankoView({ AdView(it) }, 0, init)
 
 var View.startPadding: Int
     inline get() = paddingStart

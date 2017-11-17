@@ -2,26 +2,6 @@
 
     <style name="AppTheme" parent="PreferenceFixTheme.Light.DarkActionBar" />
 
-    <style name="TextSubhead" parent="TextAppearance.AppCompat.Subhead" />
-
-    <style name="TextBody2" parent="TextAppearance.AppCompat.Body2" />
-
-    <style name="TextBody1" parent="TextAppearance.AppCompat.Body1" />
-
-    <style name="TextCaption" parent="TextAppearance.AppCompat.Caption" />
-
-    <style name="SpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-    </style>
-
-    <style name="DropDownItem.Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-    </style>
-
-    <style name="EditText" parent="Widget.AppCompat.EditText" />
-
     <style name="ScrollbarRecyclerView" parent="android:Widget">
         <item name="android:scrollbars">vertical</item>
     </style>
