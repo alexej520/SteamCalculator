@@ -4,6 +4,7 @@ import android.arch.lifecycle.*
 import android.content.Context
 import android.os.Build
 import android.support.v4.app.FragmentActivity
+import android.support.v7.widget.CardView
 import android.text.Html
 import android.text.Spanned
 import android.view.ContextThemeWrapper
@@ -86,3 +87,17 @@ var View.startPadding: Int
 var View.endPadding: Int
     inline get() = paddingStart
     set(value) = setPaddingRelative(paddingStart, paddingTop, value, paddingBottom)
+
+var CardView.elevationCompat
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        elevation
+    } else {
+        cardElevation
+    }
+    set(value) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            elevation = value
+        } else {
+            cardElevation = value
+        }
+    }

@@ -19,7 +19,7 @@ class App : Application(), HasActivityInjector{
     override fun onCreate() {
         super.onCreate()
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713")
+        MobileAds.initialize(this, getString(R.string.adAppId))
         AppInjector.init(this)
     }
 }

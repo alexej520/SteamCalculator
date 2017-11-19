@@ -109,10 +109,10 @@
     <string name="preferenceKeyShowPropertyNames" translatable="false">showPropertyNames</string>
     <string name="preferenceKeyScientificFormatOnly" translatable="false">scientificFormatOnly</string>
     <string name="preferenceKeyDecimals" translatable="false">decimals</string>
-    <string name="preferenceSummaryDecimals" translatable="false">Number of Decimals</string>
-    <string name="preferenceTitleDecimals" translatable="false">Decimals</string>
-    <string name="preferenceSummaryScientificFormatOnly" translatable="false">Show Values With Scientific Format Only</string>
-    <string name="preferenceTitleScientificFormatOnly" translatable="false">Scientific Format Only</string>
+    <string name="preferenceSummaryDecimals">Number of Decimals</string>
+    <string name="preferenceTitleDecimals">Decimals</string>
+    <string name="preferenceSummaryScientificFormatOnly">Show Values With Scientific Format Only</string>
+    <string name="preferenceTitleScientificFormatOnly">Scientific Format Only</string>
     <string name="lb" translatable="false">lb</string>
     <string name="ft3_lb" translatable="false"><![CDATA[ft<sup><small>3</small></sup>/lb]]></string>
     <string name="cP" translatable="false">cP</string>
@@ -122,9 +122,11 @@
     <string name="R_1" translatable="false">1/R</string>
     <string name="BTU_lb" translatable="false">BTU/lb</string>
     <string name="BTU_lbR" translatable="false"><![CDATA[BTU/(lb&sdot;R)]]></string>
-    <string name="lb_ft3"><![CDATA[lb/ft<sup><small>3</small></sup>]]></string>
+    <string name="lb_ft3" translatable="false"><![CDATA[lb/ft<sup><small>3</small></sup>]]></string>
     <string name="ft_s" translatable="false">ft/s</string>
     <string name="kg_s2"><![CDATA[kg/s<sup><small>2</small></sup>]]></string>
     <string name="lbf_ft" translatable="false">lbf/ft</string>
     <string name="BTU_hrftR" translatable="false"><![CDATA[BTU/(hr&sdot;ft&sdot;R)]]></string>
+    <string name="adAppId">ca-app-pub-2256461421910631~6805693188</string>
+    <string name="adUnitIdBanner" translatable="false">ca-app-pub-2256461421910631/1553366503</string>
 </resources>

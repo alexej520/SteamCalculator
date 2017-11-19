@@ -41,12 +41,16 @@ class DropdownHintArrayAdapter(context: Context)
                         endPadding = context.dip(8)
                     }
                 }
+
+        val (item, hint) = items[position]
         view as LinearLayout
-        val hint = view.getChildAt(1) as TextView
+        val itemView = view.getChildAt(0).findViewById<TextView>(android.R.id.text1)
+        itemView.text = item
+        val hintView = view.getChildAt(1) as TextView
         if (isHintVisible) {
-            hint.text = items[position].second
+            hintView.text = hint
         }
-        hint.visibility = isHintVisible.toVisibleOrGone()
+        hintView.visibility = isHintVisible.toVisibleOrGone()
         view.baselineAlignedChildIndex = 0
         return view
     }

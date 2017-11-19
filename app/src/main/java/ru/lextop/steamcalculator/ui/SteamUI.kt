@@ -27,12 +27,12 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                 lparams(matchParent, matchParent)
                 adView {
                     adSize = AdSize.SMART_BANNER
-                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    adUnitId = ctx.getString(R.string.adUnitIdBanner)
                     loadAd(AdRequest.Builder().build())
                 }.lparams(matchParent, wrapContent)
                 cardView {
                     radius = 0f
-                    elevation = dip(4).toFloat()
+                    elevationCompat = dip(4).toFloat()
                     verticalLayout {
                         startPadding = dip(8)
                         val propSpinnerWeight = 0.5f
@@ -127,7 +127,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
                             }.lparams(0, wrapContent, unitSpinnerWeight)
-                        }.lparams(matchParent, wrapContent) { verticalPadding = dip(8) }
+                        }.lparams(matchParent, wrapContent)
                     }
                 }.lparams(matchParent, wrapContent)
                 themedRecyclerView(R.style.ScrollbarRecyclerView) {

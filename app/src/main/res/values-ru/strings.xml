@@ -76,4 +76,8 @@
     <string name="kcal15_kgK"><![CDATA[ккал<sub><small>15</small></sub>/(кг&sdot;K)]]></string>
     <string name="kgf_cm2"><![CDATA[кг/см<sup><small>2</small></sup>]]></string>
     <string name="kg_s2"><![CDATA[кг/с<sup><small>2</small></sup>]]></string>
+    <string name="preferenceSummaryDecimals" translatable="false">Количество Знаков После Запятой</string>
+    <string name="preferenceTitleDecimals">Количество Знаков</string>
+    <string name="preferenceSummaryScientificFormatOnly">Показывать Значения Только в Научной Нотации</string>
+    <string name="preferenceTitleScientificFormatOnly" translatable="false">Научная Нотация</string>
 </resources>

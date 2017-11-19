@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.matchParent
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -18,7 +21,10 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(AnkoContext.create(this, this).frameLayout {
+            lparams(matchParent, matchParent)
+            id = R.id.fragmentContainer
+        })
         if (supportFragmentManager.backStackEntryCount == 0) {
             supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, SteamFragment()).commit()
         }
