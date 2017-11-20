@@ -9,6 +9,7 @@ import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.ankoView
 import ru.lextop.steamcalculator.binding.endPadding
+import ru.lextop.steamcalculator.binding.startPadding
 import ru.lextop.steamcalculator.binding.textCaption
 import ru.lextop.steamcalculator.binding.toVisibleOrGone
 
@@ -29,17 +30,40 @@ class DropdownHintArrayAdapter(context: Context)
         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
     }
 
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view: View = convertView ?:
+                ui.linearLayout {
+                    var padding = 0
+                    ankoView({ super.getView(position, convertView, parent) as TextView }, 0) {
+                        setEms(1)
+                        padding = startPadding
+                        horizontalPadding = 0
+                    }.lparams{
+                        horizontalMargin = padding
+                    }
+                    baselineAlignedChildIndex = 0
+                }
+        val textView = (view as LinearLayout).getChildAt(0) as TextView
+        textView.text = getItem(position)
+        return view
+    }
+
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = convertView ?:
                 ui.linearLayout {
-                    orientation = LinearLayout.HORIZONTAL
-                    ankoView(
-                            { super.getDropDownView(position, convertView, parent) }, 0,
-                            { layoutParams = LinearLayout.LayoutParams(wrapContent, layoutParams.height) })
+                    var padding = 0
+                    ankoView({ super.getView(position, convertView, parent) as TextView }, 0) {
+                        setEms(1)
+                        padding = startPadding
+                        horizontalPadding = 0
+                    }.lparams{
+                        horizontalMargin = padding
+                    }
                     textCaption {
                         verticalPadding = context.dip(8)
                         endPadding = context.dip(8)
                     }
+                    baselineAlignedChildIndex = 0
                 }
 
         val (item, hint) = items[position]

@@ -12,7 +12,6 @@ class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
             verticalLayout {
                 startPadding = dip(8)
                 lparams(matchParent, wrapContent)
-                val propSpinnerWeight = 0.5f
                 val editTextWeight = 1.0f
                 val unitSpinnerWeight = 1.0f
                 textCaption {
@@ -21,12 +20,14 @@ class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
                     bind(this::setText) { propName }
                 }.lparams(matchParent, wrapContent)
                 linearLayout {
-                    textBody1 {
-                        startPadding = dip(8)
-                        verticalPadding = dip(8)
+                    textSubheading {
+                        setEms(2)
                         bind(this::setText) { propSymbol }
-                    }.lparams(0, wrapContent, propSpinnerWeight)
+                    }.lparams(wrapContent, wrapContent) {
+                        horizontalMargin = dip(8)
+                    }
                     textBody1 {
+                        horizontalPadding = dip(8)
                         bindLive(this::setText) { valueLive }
                     }.lparams(0, wrapContent, editTextWeight)
                     spinner {

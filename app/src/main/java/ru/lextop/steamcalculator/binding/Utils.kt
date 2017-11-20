@@ -68,6 +68,9 @@ inline fun Boolean.toVisibleOrGone() = if (this) View.VISIBLE else View.GONE
 inline fun ViewManager.textCaption(init: TextView.() -> Unit): TextView =
         ankoView({ TextView(it).apply { textAppearance = R.style.TextAppearance_AppCompat_Caption } }, 0, init)
 
+inline fun ViewManager.textSubheading(init: TextView.() -> Unit): TextView =
+        ankoView({ TextView(it).apply { textAppearance = R.style.TextAppearance_AppCompat_Subhead } }, 0, init)
+
 inline fun ViewManager.textBody1(init: TextView.() -> Unit): TextView =
         ankoView({ TextView(it).apply { textAppearance = R.style.TextAppearance_AppCompat_Body1 } }, 0, init)
 

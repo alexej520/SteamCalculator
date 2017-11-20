@@ -50,7 +50,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isPropNameVisibleLive }
                                 bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectFirstProp(it) } }
-                            }.lparams(0, wrapContent, propSpinnerWeight)
+                            }.lparams(wrapContent, wrapContent)
                             editTextMaterial {
                                 val listener = object : TextWatcher {
                                     override fun afterTextChanged(input: Editable) {
@@ -95,7 +95,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isPropNameVisibleLive }
                                 bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectSecondProp(it) } }
-                            }.lparams(0, wrapContent, propSpinnerWeight)
+                            }.lparams(wrapContent, wrapContent)
                             editTextMaterial {
                                 val listener = object : TextWatcher {
                                     override fun afterTextChanged(input: Editable) {
