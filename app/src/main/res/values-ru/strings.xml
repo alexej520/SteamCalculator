@@ -53,7 +53,7 @@
     <string name="ThermalDiffusivity">Температуропроводность</string>
     <string name="k">а</string>
     <string name="SpecificGibbsFreeEnergy">Удельная Энергия Гиббса</string>
-    <string name="settings">Настройки</string>
+    <string name="menu_title_preferences">Настройки</string>
     <string name="preferenceSummaryPropertyNames">Показывать Названия Свойств</string>
     <string name="preferenceTitlePropertyNames">Названия Свойств</string>
     <string name="hvap">r</string>
@@ -76,8 +76,14 @@
     <string name="kcal15_kgK"><![CDATA[ккал<sub><small>15</small></sub>/(кг&sdot;K)]]></string>
     <string name="kgf_cm2"><![CDATA[кг/см<sup><small>2</small></sup>]]></string>
     <string name="kg_s2"><![CDATA[кг/с<sup><small>2</small></sup>]]></string>
-    <string name="preferenceSummaryDecimals" translatable="false">Количество Знаков После Запятой</string>
+    <string name="preferenceSummaryDecimals">Количество Знаков После Запятой</string>
     <string name="preferenceTitleDecimals">Количество Знаков</string>
     <string name="preferenceSummaryScientificFormatOnly">Показывать Значения Только в Научной Нотации</string>
-    <string name="preferenceTitleScientificFormatOnly" translatable="false">Научная Нотация</string>
+    <string name="preferenceTitleScientificFormatOnly">Научная Нотация</string>
+    <string name="menu_title_info_details">О Программе</string>
+    <string name="info_details"><![CDATA[
+    В приложении используется библиотека <a href="http://www.hummeling.com/IF97">Java IAPWS-IF97 Steam Tables</a>
+    с открытым <a href="https://sourceforge.net/projects/if97/">исходным кодом</a>.
+]]></string>
+    <string name="contact_developer">"Связаться с разработчиком: "</string>
 </resources>

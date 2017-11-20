@@ -9,7 +9,7 @@
     <SeekBarPreference
         android:defaultValue="5"
         android:key="@string/preferenceKeyDecimals"
-        android:max="9"
+        android:max="10"
         android:summary="@string/preferenceSummaryDecimals"
         android:title="@string/preferenceTitleDecimals"
         app:min="3" />

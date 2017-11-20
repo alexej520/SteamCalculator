@@ -37,9 +37,13 @@ class SteamFragment : Fragment(), Injectable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.settings -> activity!!.supportFragmentManager.beginTransaction()
+            R.id.menu_preferences -> activity!!.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, SettingsFragment())
                     .addToBackStack("settings")
+                    .commit()
+            R.id.menu_info_details -> activity!!.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, InfoDetailsFragment())
+                    .addToBackStack("info_details")
                     .commit()
             else -> return super.onOptionsItemSelected(item)
         }

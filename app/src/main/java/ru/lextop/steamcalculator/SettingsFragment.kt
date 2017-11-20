@@ -21,7 +21,7 @@ class SettingsFragment : PreferenceFragmentCompatDividers() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ab = (activity!! as AppCompatActivity).supportActionBar!!
         ab.setDisplayHomeAsUpEnabled(true)
-        ab.setTitle(R.string.settings)
+        ab.setTitle(R.string.menu_title_preferences)
         return try {
             super.onCreateView(inflater, container, savedInstanceState)
         } finally {
