@@ -42,9 +42,7 @@ class SteamViewModel @Inject constructor
     var isPropNameVisibleLive: LiveData<Boolean> = MutableLiveData()
     private lateinit var firstQuantity: Quantity
     private lateinit var secondQuantity: Quantity
-    //set lateinit if Kotlin 1.2
     private var firstUnitLive: LiveData<UnitPh> = MutableLiveData()
-    //set lateinit if Kotlin 1.2
     private var secondUnitLive: LiveData<UnitPh> = MutableLiveData()
     val firstUnitsLive: LiveData<List<CharSequence>> = MutableLiveData()
     val secondUnitsLive: LiveData<List<CharSequence>> = MutableLiveData()
@@ -132,6 +130,8 @@ class SteamViewModel @Inject constructor
     init {
         (isPropNameVisibleLive as MutableLiveData).value =
                 prefs.getBoolean(context.getString(R.string.preferenceKeyShowPropertyNames), false)
+        CustomFormat.maxSymbols = prefs.getInt(context.getString(R.string.preferenceKeyDecimals), 5)
+        CustomFormat.scientificFormatOnly = prefs.getBoolean(context.getString(R.string.preferenceKeyScientificFormatOnly), false)
         quantityModels = repo.quantityLives.values.map { quantityLive ->
             QuantityViewModel(
                     quantityLive,

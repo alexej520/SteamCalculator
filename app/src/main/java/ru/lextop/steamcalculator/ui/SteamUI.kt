@@ -13,6 +13,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.binding.*
@@ -35,9 +36,6 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                     elevationCompat = dip(4).toFloat()
                     verticalLayout {
                         startPadding = dip(8)
-                        val propSpinnerWeight = 0.5f
-                        val editTextWeight = 1.0f
-                        val unitSpinnerWeight = 1.0f
                         textCaption {
                             bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
                             bindLive(this::setText) { firstPropNameLive }
@@ -75,13 +73,13 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 }) { firstValueLive }
                                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                                 addTextChangedListener(listener)
-                            }.lparams(0, wrapContent, editTextWeight)
+                            }.lparams(0, wrapContent, 1f)
                             spinner {
                                 adapter = SimpleArrayAdapter(ctx)
                                 bindLive({ (adapter as SimpleArrayAdapter).items = it!! }) { firstUnitsLive }
                                 bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectFirstUnit(it) } }
-                            }.lparams(0, wrapContent, unitSpinnerWeight)
+                            }.lparams(wrapContent, wrapContent)
                         }.lparams(matchParent, wrapContent)
                         textCaption {
                             startPadding = dip(8)
@@ -120,19 +118,18 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 }) { secondValueLive }
                                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                                 addTextChangedListener(listener)
-                            }.lparams(0, wrapContent, editTextWeight)
+                            }.lparams(0, wrapContent, 1f)
                             spinner {
                                 adapter = SimpleArrayAdapter(ctx)
                                 bindLive({ (adapter as SimpleArrayAdapter).items = it!! }) { secondUnitsLive }
                                 bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { notify { selectSecondUnit(it) } }
-                            }.lparams(0, wrapContent, unitSpinnerWeight)
+                            }.lparams(wrapContent, wrapContent)
                         }.lparams(matchParent, wrapContent)
                     }
                 }.lparams(matchParent, wrapContent)
-                themedRecyclerView(R.style.ScrollbarRecyclerView) {
+                recyclerView {
                     scrollBarStyle = View.SCROLLBARS_OUTSIDE_INSET
-                    isFocusableInTouchMode = true
                     val lm = LinearLayoutManager(ctx)
                     layoutManager = lm
                     addItemDecoration(DividerItemDecoration(ctx, lm.orientation))

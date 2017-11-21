@@ -2,7 +2,4 @@
 
     <style name="AppTheme" parent="PreferenceFixTheme.Light.DarkActionBar" />
 
-    <style name="ScrollbarRecyclerView" parent="android:Widget">
-        <item name="android:scrollbars">vertical</item>
-    </style>
 </resources>

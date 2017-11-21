@@ -33,13 +33,17 @@ class DropdownHintArrayAdapter(context: Context)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = convertView ?:
                 ui.linearLayout {
-                    var padding = 0
+                    var startPad = 0
+                    var endPad = 0
                     ankoView({ super.getView(position, convertView, parent) as TextView }, 0) {
-                        setEms(1)
-                        padding = startPadding
+                        startPad = startPadding
+                        endPad = endPadding
                         horizontalPadding = 0
-                    }.lparams{
-                        horizontalMargin = padding
+                        verticalPadding = (textSize / 4).toInt()
+                        setEms(1)
+                    }.lparams {
+                        marginStart = startPad
+                        marginEnd = endPad
                     }
                     baselineAlignedChildIndex = 0
                 }
@@ -51,13 +55,18 @@ class DropdownHintArrayAdapter(context: Context)
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = convertView ?:
                 ui.linearLayout {
-                    var padding = 0
-                    ankoView({ super.getView(position, convertView, parent) as TextView }, 0) {
+                    var startPad = 0
+                    var endPad = 0
+                    var height = wrapContent
+                    ankoView({ (super.getDropDownView(position, convertView, parent) as TextView) }, 0) {
+                        startPad = startPadding
+                        endPad = endPadding
+                        height = layoutParams.height
                         setEms(1)
-                        padding = startPadding
                         horizontalPadding = 0
-                    }.lparams{
-                        horizontalMargin = padding
+                    }.lparams(wrapContent, height) {
+                        marginStart = startPad
+                        marginEnd = endPad
                     }
                     textCaption {
                         verticalPadding = context.dip(8)
