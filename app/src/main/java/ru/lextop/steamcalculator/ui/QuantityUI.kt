@@ -3,7 +3,6 @@ package ru.lextop.steamcalculator.ui
 import android.arch.lifecycle.LifecycleOwner
 import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import org.jetbrains.anko.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.binding.*

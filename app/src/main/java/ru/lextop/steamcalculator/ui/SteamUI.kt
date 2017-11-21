@@ -14,8 +14,8 @@ import com.google.android.gms.ads.AdSize
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.recyclerview.v7.themedRecyclerView
-import ru.lextop.steamcalculator.*
+import ru.lextop.steamcalculator.R
+import ru.lextop.steamcalculator.SteamFragment
 import ru.lextop.steamcalculator.binding.*
 import ru.lextop.steamcalculator.vm.QuantityViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel

@@ -36,7 +36,7 @@ class SimpleArrayAdapter(context: Context) :
                         endPad = endPadding
                         horizontalPadding = 0
                         verticalPadding = (textSize / 4).toInt()
-                        setEms(5)
+                        setEms(4)
                     }.lparams{
                         marginStart = startPad
                         marginEnd = endPad
