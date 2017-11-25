@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unitSets">
+        <item>@string/unitSetDefault</item>
+        <item>@string/unitSetEngineering</item>
+        <item>@string/unitSetSI</item>
+        <item>@string/unitSetImperial</item>
+        <item>@string/unitSetCustom</item>
+    </string-array>
+    <string-array name="unitSetsValues">
+        <item>@string/unitSetDefaultValue</item>
+        <item>@string/unitSetEngineeringValue</item>
+        <item>@string/unitSetSIValue</item>
+        <item>@string/unitSetImperialValue</item>
+        <item>@string/unitSetCustomValue</item>
+    </string-array>
+</resources>

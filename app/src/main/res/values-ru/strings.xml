@@ -86,4 +86,13 @@
     с открытым <a href="https://sourceforge.net/projects/if97/">исходным кодом</a>.
 ]]></string>
     <string name="contact_developer">"Связаться с разработчиком: "</string>
+    <string name="app_name">Свойства Пара</string>
+    <string name="kW_mK"><![CDATA[кВт/(м&sdot;K)]]></string>
+    <string name="unitSetDefault">По Умолчанию</string>
+    <string name="unitSetEngineering">Инженерные</string>
+    <string name="unitSetSI">СИ</string>
+    <string name="unitSetImperial">Имперские</string>
+    <string name="unitSetCustom">Пользовательские</string>
+    <string name="preferenceSummaryUnitSet">Выбрать Набор Единиц Измерения</string>
+    <string name="preferenceTitleUnitSet">Единицы Измерения</string>
 </resources>

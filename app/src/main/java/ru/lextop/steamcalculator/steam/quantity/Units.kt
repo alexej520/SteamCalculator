@@ -144,6 +144,7 @@ object Units{
 
     object ThermalConductivity: BaseUnit(kg = 1, m = 1, s = -3, K = -1){
         val W_mK = createAlias(Pair("W/(m*K)", R.string.W_mK))
+        val kW_mK = k(W_mK) addWith Pair(byDefault, R.string.kW_mK)
         val BTU_hrftR = W_mK / 1.7295772056 addWith Pair("BTU/(hr*ft*R)", R.string.BTU_hrftR)
     }
 }

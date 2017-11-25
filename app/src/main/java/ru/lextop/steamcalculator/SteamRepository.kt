@@ -2,6 +2,8 @@ package ru.lextop.steamcalculator
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.content.Context
+import android.content.SharedPreferences
 import org.jetbrains.anko.doAsync
 import ru.lextop.steamcalculator.binding.setValueIfNotSame
 import ru.lextop.steamcalculator.db.*
@@ -15,12 +17,12 @@ import javax.inject.Singleton
 @Singleton
 class SteamRepository @Inject constructor
 (private val steamDao: SteamDao) {
-    private val viewUnits: Map<Property, LiveData<UnitPh>> = allProps.associate {
+     val viewUnits: Map<Property, LiveData<UnitPh>> = allProps.associate {
         val live = MutableLiveData<UnitPh>()
         live.value = it.baseUnit.alias
         it to live
     }
-    private val editUnits: Map<Property, LiveData<UnitPh>> = computableProps.associate {
+     val editUnits: Map<Property, LiveData<UnitPh>> = computableProps.associate {
         val live = MutableLiveData<UnitPh>()
         live.value = it.baseUnit.alias
         it to live
@@ -66,14 +68,18 @@ class SteamRepository @Inject constructor
             editUnits[type]!!
 
     fun setEditUnit(type: Property, unit: UnitPh) {
-        doAsync { steamDao.insertEditUnit(EditUnit(type.symbol, unit.name)) }
+        doAsync {
+            steamDao.insertEditUnit(EditUnit(type.symbol, unit.name))
+        }
     }
 
     fun getViewUnitLive(type: Property): LiveData<UnitPh> =
             viewUnits[type]!!
 
     fun setViewUnit(type: Property, unit: UnitPh) {
-        doAsync { steamDao.insertViewUnit(ViewUnit(type.symbol, unit.name)) }
+        doAsync {
+            steamDao.insertViewUnit(ViewUnit(type.symbol, unit.name))
+        }
     }
 
     fun setProperties(first: Quantity, second: Quantity) {

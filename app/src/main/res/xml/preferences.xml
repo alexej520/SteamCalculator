@@ -18,4 +18,12 @@
         android:key="@string/preferenceKeyScientificFormatOnly"
         android:summary="@string/preferenceSummaryScientificFormatOnly"
         android:title="@string/preferenceTitleScientificFormatOnly" />
+
+    <ListPreference
+        android:defaultValue="@string/unitSetDefaultValue"
+        android:key="@string/preferenceKeyUnitSet"
+        android:title="@string/preferenceTitleUnitSet"
+        android:summary="@string/preferenceSummaryUnitSet"
+        android:entries="@array/unitSets"
+        android:entryValues="@array/unitSetsValues"/>
 </PreferenceScreen>

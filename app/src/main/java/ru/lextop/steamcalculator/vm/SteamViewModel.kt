@@ -6,15 +6,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.SharedPreferences
-import ru.lextop.steamcalculator.R
-import ru.lextop.steamcalculator.SteamRepository
+import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.binding.nullIfNotInitialized
-import ru.lextop.steamcalculator.computablePropMap
 import ru.lextop.steamcalculator.steam.quantity.UnitPh
 import ru.lextop.steamcalculator.steam.quantity.Property
 import ru.lextop.steamcalculator.steam.quantity.Quantity
-import ru.lextop.steamcalculator.unitList
 import javax.inject.Inject
 
 class SteamViewModel @Inject constructor
@@ -159,6 +156,18 @@ class SteamViewModel @Inject constructor
                 firstValue = firstValue
                 secondValue = secondValue
                 quantityModels.forEach { it.value = it.value }
+            }
+            context.getString(R.string.preferenceKeyUnitSet) -> {
+                val unitSet = unitSetMap.mapKeys { context.getString(it.key) }.get(
+                        prefs.getString(key, context.getString(R.string.unitSetDefaultValue)))
+                if (unitSet != null){
+                    computableProps.forEach {
+                        repo.setEditUnit(it, unitSet[it.baseUnit]!!)
+                    }
+                    allProps.forEach{
+                        repo.setViewUnit(it, unitSet[it.baseUnit]!!)
+                    }
+                }
             }
         }
     }

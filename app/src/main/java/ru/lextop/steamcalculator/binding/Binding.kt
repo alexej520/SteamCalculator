@@ -13,53 +13,55 @@ class Binding<VM : Any> private constructor() {
         Companion.addBinding(this)
     }
 
+    var viewModel: VM? = null
+        private set
+
+    var viewModelLO: LifecycleOwner? = null
+        private set
+
     val view
         get() = _view!!
-    private val liveViewModel = MutableLiveData<Pair<LifecycleOwner?, VM?>>()
-    private val liveBindings = mutableListOf<Pair<LiveData<Any?>, Observer<Any?>>>()
+
+    private val liveDataObservers = mutableListOf<Pair<LiveData<Any?>, Observer<Any?>>>()
+
+    private val bindings = mutableListOf<(VM?) -> Unit>()
+    private val liveBindings = mutableListOf<(VM?, LifecycleOwner?) -> Unit>()
 
     fun setViewModel(viewModelLO: LifecycleOwner?, viewModel: VM?) {
-        liveBindings.forEach { (liveData, observer) ->
+        this.viewModel = viewModel
+        this.viewModelLO = viewModelLO
+        liveDataObservers.forEach { (liveData, observer) ->
             liveData.removeObserver(observer)
         }
-        liveViewModel.value = viewModelLO to viewModel
+        liveDataObservers.clear()
+        liveBindings.forEach { it(viewModel, viewModelLO) }
+        bindings.forEach { it(viewModel) }
     }
 
-    fun LifecycleOwner.notify(receive: VM.() -> Unit) {
-        val pair = liveViewModel.value
-        if (pair != null) {
-            val (lo, vm) = pair
-            if (vm == null) {
-            } else {
-                vm.receive()
-            }
-        }
+    fun callback(receive: VM.() -> Unit) {
+        viewModel?.receive()
     }
 
-    fun <T> LifecycleOwner.bind(receive: (T?) -> Unit, send: VM.() -> T) {
-        liveViewModel.observe(this) {
-            val (lo, vm) = it!!
-            if (vm == null) {
-                receive(null)
-            } else {
-                receive(vm.send())
-            }
+    fun <T> bind(receive: (T?) -> Unit, send: VM.() -> T) {
+        bindings += { vm: VM? ->
+            receive(vm?.send())
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> LifecycleOwner.bindLive(receive: (T?) -> Unit, send: VM.() -> LiveData<T>) {
-        liveViewModel.observe(this) {
-            val (lo, vm) = it!!
-            if (vm == null || lo == null) {
-                receive(null)
+    fun <T> bindLive(receive: (T?) -> Unit, send: VM.() -> LiveData<T>) {
+        liveBindings += { vm: VM?, lo: LifecycleOwner? ->
+            if (lo == null) {
+                throw IllegalStateException("cannot bindLive if lifecycleOwner == null")
             } else {
-                val liveData = vm.send() as LiveData<Any?>
-                val observer = Observer<Any?> {
-                    if (it != null) receive(it as T)
+                if (vm != null) {
+                    val liveData = vm.send() as LiveData<Any?>
+                    val observer = Observer<Any?> {
+                        receive(it as T?)
+                    }
+                    liveData.observe(lo, observer)
+                    liveDataObservers.add(liveData to observer)
                 }
-                liveData.observe(lo, observer)
-                liveBindings.add(liveData to observer)
             }
         }
     }
@@ -75,11 +77,11 @@ class Binding<VM : Any> private constructor() {
         fun <VM : Any> getForView(view: View) = weakBindingSet.first { view == it.view } as Binding<VM>
     }
 
-    abstract class Component<VM : Any, T> {
-        abstract fun Binding<VM>.createView(bindingLo: LifecycleOwner, ui: AnkoContext<T>): View
-        fun createBinding(bindingLo: LifecycleOwner, ui: AnkoContext<T>): Binding<VM> {
+    abstract class  Component<VM : Any, T> {
+        protected abstract fun Binding<VM>.createView(ui: AnkoContext<T>): View
+        fun createBinding(ui: AnkoContext<T>): Binding<VM> {
             val binding = Binding<VM>()
-            binding.setView(binding.createView(bindingLo, ui))
+            binding.setView(binding.createView(ui))
             return binding
         }
     }

@@ -7,6 +7,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.preference.PreferenceManager
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import ru.lextop.steamcalculator.*
@@ -58,7 +59,7 @@ abstract class AppModule {
                                 values = computableProps.map { prop ->
                                     listOf(
                                             prop.symbol,
-                                            prop.baseUnit.alias.name)
+                                            defaultUnits[prop.baseUnit]!!.name)
                                 })
                         db.fillTable(
                                 tableName = ViewUnit.TABLE_NAME,
@@ -68,7 +69,7 @@ abstract class AppModule {
                                 values = allProps.map { prop ->
                                     listOf(
                                             prop.symbol,
-                                            prop.baseUnit.alias.name)
+                                            defaultUnits[prop.baseUnit]!!.name)
                                 })
                         val first = computablePropMap.keys.first()
                         val second = computablePropMap[first]!!.first()

@@ -43,7 +43,7 @@ class BindingHolder<VM : Any> private constructor(view: View, bindingLo: Lifecyc
         fun <VM : Any> create(parent: ViewGroup, bindingLO: LifecycleOwner, bc: Binding.Component<VM, ViewGroup>)
                 : BindingHolder<VM> {
             val context = AnkoContext.create(parent.context, parent)
-            val binding = bc.createBinding(bindingLO, context)
+            val binding = bc.createBinding(context)
             val holder = BindingHolder<VM>(binding.view, bindingLO)
             holder.setBinding(binding)
             return holder

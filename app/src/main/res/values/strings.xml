@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Steam Calculator</string>
+    <string name="app_name">Steam Calculator</string>
 
     <string name="kg">kg</string>
     <string name="J">J</string>
@@ -137,4 +137,18 @@
     <string name="contact_developer">Contact Developer: </string>
     <string name="contact_developer_twitter" translatable="false"><![CDATA[     Twitter: <a href="https://twitter.com/alexej520">@alexej520</a>     ]]></string>
     <string name="contact_developer_email" translatable="false">E-mail: lextop.games@gmail.com</string>
+    <string name="kW_mK"><![CDATA[kW/(m&sdot;K)]]></string>
+    <string name="unitSetDefault">Default</string>
+    <string name="unitSetEngineering">Engineering</string>
+    <string name="unitSetSI">SI</string>
+    <string name="unitSetImperial">Imperial</string>
+    <string name="unitSetCustom">Custom</string>
+    <string name="preferenceKeyUnitSet" translatable="false">unitSet</string>
+    <string name="preferenceSummaryUnitSet">Select Set of Units</string>
+    <string name="preferenceTitleUnitSet">Units</string>
+    <string name="unitSetDefaultValue" translatable="false">default</string>
+    <string name="unitSetEngineeringValue" translatable="false">engineering</string>
+    <string name="unitSetSIValue" translatable="false">SI</string>
+    <string name="unitSetImperialValue" translatable="false">imperial</string>
+    <string name="unitSetCustomValue" translatable="false">custom</string>
 </resources>
