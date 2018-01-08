@@ -295,10 +295,18 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
                 else -> {
                     if (baseArg1.property == Temperature && baseArg2.property == SpecificEntropy) {
                         q1 = baseArg1
-                        q2 = VapourFraction(if97Instance.vapourFractionTS(baseArg1.value, baseArg2.value), VapourFraction.baseUnit.alias)
+                        q2 = VapourFraction(try {
+                            if97Instance.vapourFractionTS(baseArg1.value, baseArg2.value)
+                        } catch (e: OutOfRangeException) {
+                            Double.NaN
+                        }, VapourFraction.baseUnit.alias)
                     } else if (baseArg1.property == SpecificEntropy && baseArg2.property == Temperature) {
                         q1 = baseArg2
-                        q2 = VapourFraction(if97Instance.vapourFractionTS(baseArg2.value, baseArg1.value), VapourFraction.baseUnit.alias)
+                        q2 = VapourFraction(try {
+                            if97Instance.vapourFractionTS(baseArg2.value, baseArg1.value)
+                        } catch (e: OutOfRangeException){
+                            Double.NaN
+                        }, VapourFraction.baseUnit.alias)
                     } else {
                         q1 = baseArg1
                         q2 = baseArg2
