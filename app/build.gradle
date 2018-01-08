@@ -9,8 +9,8 @@ android {
         applicationId "ru.lextop.steamcalculator"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -51,7 +51,7 @@ dependencies {
     //implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
     implementation 'com.hummeling:if97:1.0.5'
     implementation 'android.arch.lifecycle:extensions:1.0.0'
-    implementation 'android.arch.paging:runtime:1.0.0-alpha3'
+    //implementation 'android.arch.paging:runtime:1.0.0-alpha4-1'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt "android.arch.persistence.room:compiler:1.0.0"
     implementation "com.google.dagger:dagger:$dagger_version"
@@ -61,5 +61,5 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     //implementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    implementation 'com.google.android.gms:play-services-ads:11.6.0'
+    implementation 'com.google.android.gms:play-services-ads:11.8.0'
 }

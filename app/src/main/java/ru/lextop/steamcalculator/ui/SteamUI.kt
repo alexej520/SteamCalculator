@@ -8,6 +8,7 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import org.jetbrains.anko.*
@@ -22,13 +23,35 @@ import ru.lextop.steamcalculator.vm.SteamViewModel
 class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
 
     override fun Binding<SteamViewModel>.createView(ui: AnkoContext<SteamFragment>): View = with(ui) {
-        verticalLayout {
+        verticalLayout root@ {
             lparams(matchParent, matchParent)
-            adView {
-                adSize = AdSize.SMART_BANNER
-                adUnitId = ctx.getString(R.string.adUnitIdBanner)
-                loadAd(AdRequest.Builder().build())
-            }.lparams(matchParent, wrapContent)
+            val bannerSize = AdSize.SMART_BANNER
+            if (false) {
+                adView {
+                    adSize = bannerSize
+                    adUnitId = ctx.getString(R.string.adUnitIdBanner)
+                    loadAd(AdRequest.Builder().build())
+                }.lparams(matchParent, wrapContent)
+            } else {
+                rateView {
+                    onRatedListener = { success, positive ->
+                        if (success) {
+                            if (positive) {
+                                browse(ctx.getString(R.string.contactUsGooglePlay))
+                            } else {
+                                email(ctx.getString(R.string.contactUsEmail), subject = ctx.getString(R.string.app_name))
+                            }
+                        }
+                        val index = (this@root as LinearLayout).indexOfChild(this)
+                        this@root.removeViewAt(index)
+                        this@root.addView(com.google.android.gms.ads.AdView(this@root.context).apply {
+                            adSize = bannerSize
+                            adUnitId = ctx.getString(R.string.adUnitIdBanner)
+                            loadAd(AdRequest.Builder().build())
+                        }, index, android.widget.LinearLayout.LayoutParams(matchParent, wrapContent))
+                    }
+                }.lparams(bannerSize.getWidthInPixels(ctx), maxOf(bannerSize.getHeightInPixels(ctx), dip(48)))
+            }
             cardView {
                 radius = 0f
                 elevationCompat = dip(4).toFloat()

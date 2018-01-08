@@ -3,6 +3,7 @@ package ru.lextop.steamcalculator.binding
 import android.arch.lifecycle.*
 import android.content.Context
 import android.os.Build
+import android.support.annotation.IdRes
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.CardView
 import android.text.Html
@@ -10,13 +11,12 @@ import android.text.Spanned
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewManager
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import com.google.android.gms.ads.AdView
 import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.textAppearance
 import ru.lextop.steamcalculator.R
+import ru.lextop.steamcalculator.ui.RateView
 
 inline fun <reified VM : ViewModel> FragmentActivity.viewModel(factory: ViewModelProvider.Factory) =
         ViewModelProviders.of(this, factory).get(VM::class.java)
@@ -63,6 +63,16 @@ fun Context.getSpanned(resId: Int): Spanned {
     }
 }
 
+fun Context.getSpanned(resId: Int, vararg formatArgs: Any): Spanned {
+    val string = getString(resId, *formatArgs)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(string, Html.FROM_HTML_MODE_COMPACT)
+    } else {
+        @Suppress("DEPRECATION")
+        Html.fromHtml(string)
+    }
+}
+
 inline fun Boolean.toVisibleOrGone() = if (this) View.VISIBLE else View.GONE
 
 inline fun ViewManager.textCaption(init: TextView.() -> Unit): TextView =
@@ -82,6 +92,16 @@ inline fun ViewManager.editTextMaterial(init: EditText.() -> Unit): EditText =
 
 inline fun ViewManager.adView(init: AdView.() -> Unit): AdView =
         ankoView({ AdView(it) }, 0, init)
+
+inline fun ViewManager.rateView(init: RateView.() -> Unit): RateView =
+        ankoView({ RateView(it) }, 0, init)
+
+// because Button(context: Context) does not apply the style
+inline fun ViewManager.borderlessButton(textRes: Int = 0, init: Button.() -> Unit) =
+        ankoView({ Button(ContextThemeWrapper(it, R.style.Widget_AppCompat_Button_Borderless_Colored), null, 0) }, 0) {
+            if (textRes != 0) setText(textRes)
+            init()
+        }
 
 var View.startPadding: Int
     inline get() = paddingStart
@@ -104,3 +124,6 @@ var CardView.elevationCompat
             cardElevation = value
         }
     }
+
+inline fun RelativeLayout.LayoutParams.startOf(@IdRes id: Int) = addRule(RelativeLayout.START_OF, id)
+inline fun RelativeLayout.LayoutParams.endOf(@IdRes id: Int) = addRule(RelativeLayout.END_OF, id)

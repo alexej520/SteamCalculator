@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="adAppId" translatable="false">ca-app-pub-2256461421910631~6805693188</string>
+    <string name="adUnitIdBanner" translatable="false">ca-app-pub-2256461421910631/1553366503</string>
+    <string name="contactUsEmail" translatable="false">lextop.games@gmail.com</string>
+    <string name="contactUsGooglePlay" translatable="false">https://play.google.com/store/apps/details?id=ru.lextop.steamcalculator</string>
+    <string name="contactUsTwitter" translatable="false">alexej520</string>
+</resources>

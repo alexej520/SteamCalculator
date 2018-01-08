@@ -81,11 +81,11 @@
     <string name="preferenceSummaryScientificFormatOnly">Показывать Значения Только в Научной Нотации</string>
     <string name="preferenceTitleScientificFormatOnly">Научная Нотация</string>
     <string name="menu_title_info_details">О Программе</string>
-    <string name="info_details"><![CDATA[
+    <string name="sourcesInfo"><![CDATA[
     В приложении используется библиотека <a href="http://www.hummeling.com/IF97">Java IAPWS-IF97 Steam Tables</a>
     с открытым <a href="https://sourceforge.net/projects/if97/">исходным кодом</a>.
 ]]></string>
-    <string name="contact_developer">"Связаться с разработчиком: "</string>
+    <string name="contactUs">"Связаться с разработчиком: "</string>
     <string name="app_name">Свойства Пара</string>
     <string name="kW_mK"><![CDATA[кВт/(м&sdot;K)]]></string>
     <string name="unitSetDefault">По Умолчанию</string>
@@ -95,4 +95,5 @@
     <string name="unitSetCustom">Пользовательские</string>
     <string name="preferenceSummaryUnitSet">Выбрать Набор Единиц Измерения</string>
     <string name="preferenceTitleUnitSet">Единицы Измерения</string>
+    <string name="rateViewAskLike">Вам нравится \"%s\"?</string>
 </resources>

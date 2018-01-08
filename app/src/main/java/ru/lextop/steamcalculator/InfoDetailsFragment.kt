@@ -29,23 +29,29 @@ class InfoDetailsFragment : Fragment() {
                     lparams(matchParent, matchParent)
                     verticalPadding = dip(16)
                     textBody1 {
-                        text = ctx.getSpanned(R.string.info_details)
+                        text = ctx.getSpanned(R.string.sourcesInfo)
                         movementMethod = LinkMovementMethod.getInstance()
                         horizontalPadding = dip(16)
                     }.lparams(matchParent, wrapContent)
                     textBody2 {
-                        text = getString(R.string.contact_developer)
+                        text = getString(R.string.contactUs)
                         horizontalPadding = dip(16)
                     }.lparams(matchParent, wrapContent){
                         topMargin = dip(16)
                     }
                     textBody1 {
-                        text = ctx.getSpanned(R.string.contact_developer_twitter)
+                        text = ctx.getSpanned(R.string.contactUsByTwitter, getString(R.string.contactUsTwitter))
                         movementMethod = LinkMovementMethod.getInstance()
                         horizontalPadding = dip(32)
                     }
                     textBody1 {
-                        text = getString(R.string.contact_developer_email)
+                        text = ctx.getSpanned(R.string.contactUsByEmail, getString(R.string.contactUsEmail))
+                        movementMethod = LinkMovementMethod.getInstance()
+                        horizontalPadding = dip(32)
+                    }
+                    textBody1 {
+                        text = ctx.getSpanned(R.string.contactUsByGooglePlay, getString(R.string.contactUsGooglePlay), getString(R.string.app_name))
+                        movementMethod = LinkMovementMethod.getInstance()
                         horizontalPadding = dip(32)
                     }
                 }

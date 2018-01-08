@@ -127,16 +127,14 @@
     <string name="kg_s2"><![CDATA[kg/s<sup><small>2</small></sup>]]></string>
     <string name="lbf_ft" translatable="false">lbf/ft</string>
     <string name="BTU_hrftR" translatable="false"><![CDATA[BTU/(hr&sdot;ft&sdot;R)]]></string>
-    <string name="adAppId" translatable="false">ca-app-pub-2256461421910631~6805693188</string>
-    <string name="adUnitIdBanner" translatable="false">ca-app-pub-2256461421910631/1553366503</string>
     <string name="menu_title_info_details">Info Details</string>
-    <string name="info_details"><![CDATA[
+    <string name="sourcesInfo"><![CDATA[
     This app uses <a href="http://www.hummeling.com/IF97">Java IAPWS-IF97 Steam Tables</a> library
     with open <a href="https://sourceforge.net/projects/if97/">source code</a>.
 ]]></string>
-    <string name="contact_developer">Contact Developer: </string>
-    <string name="contact_developer_twitter" translatable="false"><![CDATA[     Twitter: <a href="https://twitter.com/alexej520">@alexej520</a>     ]]></string>
-    <string name="contact_developer_email" translatable="false">E-mail: lextop.games@gmail.com</string>
+    <string name="contactUs">Contact Us: </string>
+    <string name="contactUsByTwitter" translatable="false"><![CDATA[Twitter: <a href="https://twitter.com/%1$s">@%1$s</a>]]></string>
+    <string name="contactUsByEmail" translatable="false"><![CDATA[E-mail: <a href="mailto:%1$s">%1$s</a>]]></string>
     <string name="kW_mK"><![CDATA[kW/(m&sdot;K)]]></string>
     <string name="unitSetDefault">Default</string>
     <string name="unitSetEngineering">Engineering</string>
@@ -151,4 +149,10 @@
     <string name="unitSetSIValue" translatable="false">SI</string>
     <string name="unitSetImperialValue" translatable="false">imperial</string>
     <string name="unitSetCustomValue" translatable="false">custom</string>
+    <string name="rateViewAskLike">Do you like \"%1$s\"?</string>
+    <string name="rateViewAskGPFeedback">Rate this app!</string>
+    <string name="rateViewAskEmailFeedback">Tell what\'s wrong?</string>
+    <string name="rateViewYes">Yes</string>
+    <string name="rateViewNo">No</string>
+    <string name="contactUsByGooglePlay"><![CDATA[Google Play: <a href="%1$s">%2$s</a>]]></string>
 </resources>
