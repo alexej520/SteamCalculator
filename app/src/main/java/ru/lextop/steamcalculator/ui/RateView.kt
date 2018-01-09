@@ -3,6 +3,7 @@ package ru.lextop.steamcalculator.ui
 import android.animation.LayoutTransition
 import android.content.Context
 import android.text.TextUtils
+import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
@@ -13,7 +14,7 @@ import ru.lextop.steamcalculator.binding.borderlessButton
 import ru.lextop.steamcalculator.binding.startOf
 import ru.lextop.steamcalculator.binding.textBody1
 
-class RateView(context: Context) : LinearLayout(context) {
+class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
     var onRatedListener: ((success: Boolean, positive: Boolean) -> Unit)? = null
     private var positive = true
     private var success = true

@@ -154,5 +154,5 @@
     <string name="rateViewAskEmailFeedback">Tell what\'s wrong?</string>
     <string name="rateViewYes">Yes</string>
     <string name="rateViewNo">No</string>
-    <string name="contactUsByGooglePlay"><![CDATA[Google Play: <a href="%1$s">%2$s</a>]]></string>
+    <string name="contactUsByGooglePlay" translatable="false"><![CDATA[Google Play: <a href="%1$s">%2$s</a>]]></string>
 </resources>

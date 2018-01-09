@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -34,6 +35,8 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                 }.lparams(matchParent, wrapContent)
             } else {
                 rateView {
+                    // by default LinearLayout has transparent background
+                    backgroundColor = TypedValue().also { context.theme.resolveAttribute(android.R.attr.windowBackground, it, true) }.data
                     onRatedListener = { success, positive ->
                         if (success) {
                             if (positive) {

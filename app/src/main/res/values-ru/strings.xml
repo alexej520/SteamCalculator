@@ -96,4 +96,8 @@
     <string name="preferenceSummaryUnitSet">Выбрать Набор Единиц Измерения</string>
     <string name="preferenceTitleUnitSet">Единицы Измерения</string>
     <string name="rateViewAskLike">Вам нравится \"%s\"?</string>
+    <string name="rateViewAskGPFeedback">Тогда поставьте нам оценку!</string>
+    <string name="rateViewAskEmailFeedback">Расскажете, что не так?</string>
+    <string name="rateViewYes">Да</string>
+    <string name="rateViewNo">Нет</string>
 </resources>
