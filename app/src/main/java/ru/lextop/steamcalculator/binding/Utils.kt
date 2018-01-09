@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package ru.lextop.steamcalculator.binding
 
 import android.arch.lifecycle.*
@@ -17,6 +19,7 @@ import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.textAppearance
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.ui.RateView
+import ru.lextop.steamcalculator.ui.TickerView
 
 inline fun <reified VM : ViewModel> FragmentActivity.viewModel(factory: ViewModelProvider.Factory) =
         ViewModelProviders.of(this, factory).get(VM::class.java)
@@ -99,6 +102,12 @@ inline fun ViewManager.rateView(init: RateView.() -> Unit): RateView =
 // because Button(context: Context) does not apply the style
 inline fun ViewManager.borderlessButton(textRes: Int = 0, init: Button.() -> Unit) =
         ankoView({ Button(ContextThemeWrapper(it, R.style.Widget_AppCompat_Button_Borderless_Colored), null, 0) }, 0) {
+            if (textRes != 0) setText(textRes)
+            init()
+        }
+
+inline fun ViewManager.tickerView(textRes: Int = 0, init: TickerView.() -> Unit) =
+        ankoView({ TickerView(it) }, 0) {
             if (textRes != 0) setText(textRes)
             init()
         }

@@ -2,8 +2,8 @@ package ru.lextop.steamcalculator.ui
 
 import android.animation.LayoutTransition
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
@@ -12,7 +12,7 @@ import org.jetbrains.anko.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.binding.borderlessButton
 import ru.lextop.steamcalculator.binding.startOf
-import ru.lextop.steamcalculator.binding.textBody1
+import ru.lextop.steamcalculator.binding.tickerView
 
 class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
     var onRatedListener: ((success: Boolean, positive: Boolean) -> Unit)? = null
@@ -29,8 +29,15 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Line
     }
 
     init {
-        layoutTransition = LayoutTransition().apply { addTransitionListener(transitionListener) }
-        imageView(R.mipmap.ic_launcher)
+        // by default LinearLayout has transparent background
+        backgroundColor = TypedValue().also { context.theme.resolveAttribute(android.R.attr.windowBackground, it, true) }.data
+        layoutTransition = LayoutTransition().apply {
+            R.style.Widget_Design_Snackbar
+            addTransitionListener(transitionListener)
+        }
+        imageView(R.mipmap.ic_launcher_round) {
+            setPadding(dip(8), dip(8), 0, dip(8))
+        }
         setContent(ASK_LIKE)
     }
 
@@ -48,13 +55,10 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Line
 
     private fun ViewManager.yesNo(string: String, yes: (View) -> Unit, no: (View) -> Unit) {
         relativeLayout {
-            textBody1 {
-                text = string
-                singleLine = true
-                ellipsize = TextUtils.TruncateAt.MARQUEE
-                marqueeRepeatLimit = -1
-                isSelected = true
-            }.lparams {
+            tickerView {
+                text = addAppearanceIndent(string)
+                textAppearance = R.style.TextAppearance_AppCompat_Body2
+            }.lparams(matchParent, matchParent).lparams {
                 alignParentStart()
                 baselineOf(R.id.rateViewYesButton)
                 startOf(R.id.rateViewNoButton)

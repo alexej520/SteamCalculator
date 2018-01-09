@@ -19,6 +19,7 @@ import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.SteamFragment
 import ru.lextop.steamcalculator.binding.*
 import ru.lextop.steamcalculator.vm.QuantityViewModel
+import ru.lextop.steamcalculator.vm.RateViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
 class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
@@ -27,7 +28,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
         verticalLayout root@ {
             lparams(matchParent, matchParent)
             val bannerSize = AdSize.SMART_BANNER
-            if (false) {
+            if (!RateViewModel.mustRate(ctx)) {
                 adView {
                     adSize = bannerSize
                     adUnitId = ctx.getString(R.string.adUnitIdBanner)
@@ -35,8 +36,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                 }.lparams(matchParent, wrapContent)
             } else {
                 rateView {
-                    // by default LinearLayout has transparent background
-                    backgroundColor = TypedValue().also { context.theme.resolveAttribute(android.R.attr.windowBackground, it, true) }.data
+                    RateViewModel.onRateDialogStarted(ctx)
                     onRatedListener = { success, positive ->
                         if (success) {
                             if (positive) {
@@ -52,6 +52,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                             adUnitId = ctx.getString(R.string.adUnitIdBanner)
                             loadAd(AdRequest.Builder().build())
                         }, index, android.widget.LinearLayout.LayoutParams(matchParent, wrapContent))
+                        RateViewModel.onRateDialogCompleted(ctx, success, positive)
                     }
                 }.lparams(bannerSize.getWidthInPixels(ctx), maxOf(bannerSize.getHeightInPixels(ctx), dip(48)))
             }

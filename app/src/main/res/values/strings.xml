@@ -155,4 +155,11 @@
     <string name="rateViewYes">Yes</string>
     <string name="rateViewNo">No</string>
     <string name="contactUsByGooglePlay" translatable="false"><![CDATA[Google Play: <a href="%1$s">%2$s</a>]]></string>
+    <string name="preferenceKeyRatePositive" translatable="false">rateLiked</string>
+    <string name="preferenceKeyRateSuccess" translatable="false">rateIgnored</string>
+    <string name="preferenceKeyRateCompleted" translatable="false">rateCompleted</string>
+    <string name="preferenceKeyRateLastRequestTime" translatable="false">rateLastRequestTime</string>
+    <string name="preferenceKeyRateLastRequestLaunch" translatable="false">rateLastRequestLaunch</string>
+    <string name="preferenceKeyAppLastLaunchTime" translatable="false">appLastLaunchTime</string>
+    <string name="preferenceKeyAppLaunchCounter" translatable="false">appLaunchCounter</string>
 </resources>

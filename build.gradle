@@ -4,7 +4,7 @@ buildscript {
     ext.kotlin_version = '1.2.10'
     ext.kotlin_std_version = '1.2.10'
     ext.anko_version = '0.10.2'
-    ext.app_compat_version = '27.0.1'
+    ext.app_compat_version = '27.0.2'
     ext.dagger_version = '2.12'
     repositories {
         google()
