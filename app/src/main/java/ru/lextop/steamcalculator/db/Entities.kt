@@ -3,9 +3,9 @@ package ru.lextop.steamcalculator.db
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import ru.lextop.steamcalculator.steam.quantity.UnitPh
-import ru.lextop.steamcalculator.steam.quantity.Property
-import ru.lextop.steamcalculator.steam.quantity.Quantity
+import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
+import ru.lextop.steamcalculator.steam.quantity.DerivedQuantity
+import ru.lextop.steamcalculator.steam.quantity.QuantityValue
 import ru.lextop.steamcalculator.toProperty
 import ru.lextop.steamcalculator.toUnit
 
@@ -25,7 +25,7 @@ data class ViewUnit(
 }
 
 @JvmName("viewUnitToUnitMap")
-fun List<ViewUnit>.toPropUnitList(): List<Pair<Property, UnitPh>> =
+fun List<ViewUnit>.toPropUnitList(): List<Pair<DerivedQuantity, DerivedUnit>> =
         map {
             val propType = it.propSymbol.toProperty()
             propType to it.unitName.toUnit(propType)
@@ -47,7 +47,7 @@ data class EditUnit(
 }
 
 @JvmName("editUnitToUnitMap")
-fun List<EditUnit>.toPropUnitList(): List<Pair<Property, UnitPh>> =
+fun List<EditUnit>.toPropUnitList(): List<Pair<DerivedQuantity, DerivedUnit>> =
         map {
             val propType = it.propSymbol.toProperty()
             propType to it.unitName.toUnit(propType)
@@ -63,8 +63,8 @@ data class SelectedQuantity(
         @ColumnInfo(name = VALUE)
         val value: Double?
 ) {
-    constructor(key: String, quantity: Quantity)
-            : this(key, quantity.property.symbol, quantity[quantity.property.baseUnit.alias].value)
+    constructor(key: String, quantityValue: QuantityValue)
+            : this(key, quantityValue.derivedQuantity.symbol, quantityValue[quantityValue.derivedQuantity.coherentUnit.derived].value)
 
     companion object {
         const val TABLE_NAME = "selected_property"
@@ -77,11 +77,11 @@ data class SelectedQuantity(
 const val KEY_FIRST_PROP = "first"
 const val KEY_SECOND_PROP = "second"
 
-fun SelectedQuantity.toQuantity(): Quantity {
+fun SelectedQuantity.toQuantity(): QuantityValue {
     val prop = propSymbol.toProperty()
-    return prop(value ?: Double.NaN, prop.baseUnit.alias)
+    return prop(value ?: Double.NaN, prop.coherentUnit.derived)
 }
 
 @Suppress("UNCHECKED_CAST")
-fun List<SelectedQuantity>.toQuantityMap(): Map<String, Quantity> =
+fun List<SelectedQuantity>.toQuantityMap(): Map<String, QuantityValue> =
         map { it.key to it.toQuantity() }.toMap()

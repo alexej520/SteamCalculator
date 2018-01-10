@@ -64,9 +64,9 @@ class SteamFragment : Fragment(), Injectable {
         var unitSetValue: String? = null
         for ((unitSetRes, unitSetMap) in unitSetMap) {
             if (repo.editUnits.all { (p, u) ->
-                u.value == unitSetMap[p.baseUnit]
+                u.value == unitSetMap[p.coherentUnit]
             } && repo.viewUnits.all { (p, u) ->
-                u.value == unitSetMap[p.baseUnit]
+                u.value == unitSetMap[p.coherentUnit]
             }) {
                 unitSetValue = context.getString(unitSetRes)
                 break

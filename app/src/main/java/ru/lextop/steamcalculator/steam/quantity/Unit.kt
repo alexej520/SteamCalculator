@@ -1,20 +1,20 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-abstract class BaseUnit private constructor(private val id: List<Int>) {
-    val unitList: List<UnitPh> = mutableListOf()
-    val unitMap: Map<String, UnitPh> = mutableMapOf()
-    val defaultProperty = Property(toString(), "", this, 0, 0)
-    private var _alias: UnitPh? = null
-    val alias: UnitPh get() = _alias!!
+abstract class CoherentUnit private constructor(private val id: List<Int>) {
+    val unitList: List<DerivedUnit> = mutableListOf()
+    val unitMap: Map<String, DerivedUnit> = mutableMapOf()
+    val defaultProperty = DerivedQuantity(toString(), "", this, 0, 0)
+    private var _derived: DerivedUnit? = null
+    val derived: DerivedUnit get() = _derived!!
 
-    operator fun div(unit: BaseUnit): BaseUnit {
+    operator fun div(unit: CoherentUnit): CoherentUnit {
         val resultId = id.zip(unit.id).map { (i1, i2) -> i1 - i2 }
-        return baseUnits.getOrPut(resultId) { object : BaseUnit(resultId){} }
+        return baseUnits.getOrPut(resultId) { object : CoherentUnit(resultId){} }
     }
 
-    operator fun times(unit: BaseUnit): BaseUnit {
+    operator fun times(unit: CoherentUnit): CoherentUnit {
         val resultId = id.zip(unit.id).map { (i1, i2) -> i1 + i2 }
-        return baseUnits.getOrPut(resultId) { object : BaseUnit(resultId){} }
+        return baseUnits.getOrPut(resultId) { object : CoherentUnit(resultId){} }
     }
 
     protected constructor(m: Int = 0,
@@ -26,18 +26,18 @@ abstract class BaseUnit private constructor(private val id: List<Int>) {
                           cd: Int = 0) : this(listOf(m, kg, s, A, K, mol, cd))
 
     companion object {
-        private val baseUnits: MutableMap<List<Int>, BaseUnit> = mutableMapOf()
+        private val baseUnits: MutableMap<List<Int>, CoherentUnit> = mutableMapOf()
     }
 
     override fun toString(): String {
-        return id.joinToString(prefix = "BaseUnit[", separator = ",", postfix = "]")
+        return id.joinToString(prefix = "CoherentUnit[", separator = ",", postfix = "]")
     }
 
-    protected infix fun UnitPh.addWith(pair: Pair<String, Int>): UnitPh {
-        if (this@BaseUnit != baseUnit) throw RuntimeException("Incorporable BaseUnit: $baseUnit")
+    protected infix fun DerivedUnit.addWith(pair: Pair<String, Int>): DerivedUnit {
+        if (this@CoherentUnit != coherentUnit) throw RuntimeException("Incorporable CoherentUnit: ${coherentUnit}")
         val unitWithNewName = copy(name = pair.first, id = pair.second)
         return if ((unitMap as MutableMap).put(unitWithNewName.name, unitWithNewName) != null) {
-            throw RuntimeException("$baseUnit already has unitName: $name")
+            throw RuntimeException("${coherentUnit} already has unitName: $name")
         } else {
             (unitList as MutableList).add(unitWithNewName)
             unitWithNewName
@@ -47,22 +47,22 @@ abstract class BaseUnit private constructor(private val id: List<Int>) {
     protected object byDefault
 
     @JvmName("addWithDefaultName")
-    protected infix fun UnitPh.addWith(pair: Pair<byDefault, Int>) =
+    protected infix fun DerivedUnit.addWith(pair: Pair<byDefault, Int>) =
             this addWith (name to pair.second)
 
-    protected fun createAlias(pair: Pair<String, Int>? = null): UnitPh {
-        val unit = UnitPh(this, toString(), 1.0, 0.0, 0)
+    protected fun createCoherentUnit(pair: Pair<String, Int>? = null): DerivedUnit {
+        val unit = DerivedUnit(this, toString(), 1.0, 0.0, 0)
         val alias = if (pair == null) unit else unit addWith pair
-        _alias = alias
+        _derived = alias
         if (baseUnits.put(id, this) != null) {
-            throw RuntimeException("BaseUnit with same parameters already created")
+            throw RuntimeException("CoherentUnit with same parameters already created")
         }
         return alias
     }
 }
 
-data class UnitPh(
-        val baseUnit: BaseUnit,
+data class DerivedUnit(
+        val coherentUnit: CoherentUnit,
         val name: String,
         val factor: Double,
         val addition: Double,
@@ -70,65 +70,65 @@ data class UnitPh(
 ) {
     fun convertFromBasic(basicValue: Double): Double = basicValue * factor + addition
     fun convertToBasic(value: Double): Double = (value - addition) / factor
-    operator fun times(unit: UnitPh) = UnitPh(
-            baseUnit * unit.baseUnit,
+    operator fun times(unit: DerivedUnit) = DerivedUnit(
+            coherentUnit * unit.coherentUnit,
             "$name*${unit.name}",
             factor * unit.factor,
             0.0, 0)
 
-    operator fun div(unit: UnitPh) = UnitPh(
-            baseUnit / unit.baseUnit,
+    operator fun div(unit: DerivedUnit) = DerivedUnit(
+            coherentUnit / unit.coherentUnit,
             "$name/${unit.name}",
             factor / unit.factor,
             0.0, 0)
 
 }
 
-operator fun UnitPh.times(times: Double) =
+operator fun DerivedUnit.times(times: Double) =
         copy(factor = factor * times, addition = addition * times)
 
-operator fun Double.times(unit: UnitPh) =
+operator fun Double.times(unit: DerivedUnit) =
         unit.copy(factor = unit.factor * this, addition = unit.addition * this)
 
-operator fun UnitPh.div(div: Double) =
+operator fun DerivedUnit.div(div: Double) =
         copy(factor = factor / div, addition = addition / div)
 
-operator fun Double.div(unit: UnitPh) =
+operator fun Double.div(unit: DerivedUnit) =
         unit.copy(factor = unit.factor / this, addition = unit.addition / this)
 
-operator fun UnitPh.plus(plus: Double) =
+operator fun DerivedUnit.plus(plus: Double) =
         copy(addition = addition + plus)
 
-operator fun Double.plus(unit: UnitPh) =
+operator fun Double.plus(unit: DerivedUnit) =
         unit.copy(addition = unit.addition + this)
 
-operator fun UnitPh.minus(minus: Double) =
+operator fun DerivedUnit.minus(minus: Double) =
         copy(addition = addition - minus)
 
-operator fun Double.minus(unit: UnitPh) =
+operator fun Double.minus(unit: DerivedUnit) =
         unit.copy(addition = this - unit.addition)
 
-inline fun UnitPh.withPrefix(prefix: String, times: Double) =
+inline fun DerivedUnit.withPrefix(prefix: String, times: Double) =
         copy(factor = factor * times, name = "$prefix$name")
 
-fun da(unit: UnitPh) = unit.withPrefix("da", 1e-1)
-fun h(unit: UnitPh) = unit.withPrefix("h", 1e-2)
-fun k(unit: UnitPh) = unit.withPrefix("k", 1e-3)
-fun M(unit: UnitPh) = unit.withPrefix("M", 1e-6)
-fun G(unit: UnitPh) = unit.withPrefix("G", 1e-9)
-fun T(unit: UnitPh) = unit.withPrefix("T", 1e-12)
-fun P(unit: UnitPh) = unit.withPrefix("P", 1e-15)
-fun E(unit: UnitPh) = unit.withPrefix("E", 1e-18)
-fun Z(unit: UnitPh) = unit.withPrefix("Z", 1e-21)
-fun Y(unit: UnitPh) = unit.withPrefix("Y", 1e-24)
+fun da(unit: DerivedUnit) = unit.withPrefix("da", 1e-1)
+fun h(unit: DerivedUnit) = unit.withPrefix("h", 1e-2)
+fun k(unit: DerivedUnit) = unit.withPrefix("k", 1e-3)
+fun M(unit: DerivedUnit) = unit.withPrefix("M", 1e-6)
+fun G(unit: DerivedUnit) = unit.withPrefix("G", 1e-9)
+fun T(unit: DerivedUnit) = unit.withPrefix("T", 1e-12)
+fun P(unit: DerivedUnit) = unit.withPrefix("P", 1e-15)
+fun E(unit: DerivedUnit) = unit.withPrefix("E", 1e-18)
+fun Z(unit: DerivedUnit) = unit.withPrefix("Z", 1e-21)
+fun Y(unit: DerivedUnit) = unit.withPrefix("Y", 1e-24)
 
-fun d(unit: UnitPh) = unit.withPrefix("d", 1e1)
-fun c(unit: UnitPh) = unit.withPrefix("c", 1e2)
-fun m(unit: UnitPh) = unit.withPrefix("m", 1e3)
-fun mc(unit: UnitPh) = unit.withPrefix("µ", 1e6)
-fun n(unit: UnitPh) = unit.withPrefix("n", 1e9)
-fun p(unit: UnitPh) = unit.withPrefix("p", 1e12)
-fun f(unit: UnitPh) = unit.withPrefix("f", 1e15)
-fun a(unit: UnitPh) = unit.withPrefix("a", 1e18)
-fun z(unit: UnitPh) = unit.withPrefix("z", 1e21)
-fun y(unit: UnitPh) = unit.withPrefix("y", 1e24)
+fun d(unit: DerivedUnit) = unit.withPrefix("d", 1e1)
+fun c(unit: DerivedUnit) = unit.withPrefix("c", 1e2)
+fun m(unit: DerivedUnit) = unit.withPrefix("m", 1e3)
+fun mc(unit: DerivedUnit) = unit.withPrefix("µ", 1e6)
+fun n(unit: DerivedUnit) = unit.withPrefix("n", 1e9)
+fun p(unit: DerivedUnit) = unit.withPrefix("p", 1e12)
+fun f(unit: DerivedUnit) = unit.withPrefix("f", 1e15)
+fun a(unit: DerivedUnit) = unit.withPrefix("a", 1e18)
+fun z(unit: DerivedUnit) = unit.withPrefix("z", 1e21)
+fun y(unit: DerivedUnit) = unit.withPrefix("y", 1e24)

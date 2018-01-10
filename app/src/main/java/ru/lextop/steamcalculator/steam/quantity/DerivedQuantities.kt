@@ -2,69 +2,69 @@ package ru.lextop.steamcalculator.steam.quantity
 
 import ru.lextop.steamcalculator.R
 
-val Pressure = Property(
+val Pressure = DerivedQuantity(
         "Pressure", "P", Units.Pressure,
         R.string.Pressure, R.string.P)
-val Temperature = Property(
+val Temperature = DerivedQuantity(
         "Temperature", "T", Units.Temperature,
         R.string.Temperature, R.string.T)
-val SpecificEnthalpy = Property(
+val SpecificEnthalpy = DerivedQuantity(
         "Specific Enthalpy", "h", Units.SpecificEnergy,
         R.string.SpecificEnthalpy, R.string.h)
-val SpecificEntropy = Property(
+val SpecificEntropy = DerivedQuantity(
         "Specific Entropy", "s", Units.SpecificHeatCapacity,
         R.string.SpecificEntropy, R.string.s)
-val VapourFraction = Property(
+val VapourFraction = DerivedQuantity(
         "Vapour Fraction", "x", Units.Ratio,
         R.string.VapourFraction, R.string.x)
-val SpecificVolume = Property(
+val SpecificVolume = DerivedQuantity(
         "Specific Volume", "v", Units.SpecificVolume,
         R.string.SpecificVolume, R.string.v)
-val Density = Property(
+val Density = DerivedQuantity(
         "Density", "rho", Units.Density,
         R.string.Density, R.string.rho)
-val SpeedOfSound = Property(
+val SpeedOfSound = DerivedQuantity(
         "Speed of Sound", "w", Units.Speed,
         R.string.SpeedOfSound, R.string.w)
-val SpecificIsobaricHeatCapacity = Property(
+val SpecificIsobaricHeatCapacity = DerivedQuantity(
         "Specific Isobaric Heat Capacity", "cp", Units.SpecificHeatCapacity,
         R.string.SpecificIsobaricHeatCapacity, R.string.cp)
-val SpecificIsochoricHeatCapacity = Property(
+val SpecificIsochoricHeatCapacity = DerivedQuantity(
         "Specific Isochoric Heat Capacity", "cv", Units.SpecificHeatCapacity,
         R.string.SpecificIsochoricHeatCapacity , R.string.cv)
-val SpecificEnthalpyOfVaporization = Property(
+val SpecificEnthalpyOfVaporization = DerivedQuantity(
         "Specific Enthalpy of Vaporization", "hvap", Units.SpecificEnergy,
         R.string.SpecificEnthalpyOfVaporization, R.string.hvap)
-val ThermalConductivity = Property(
+val ThermalConductivity = DerivedQuantity(
         "Thermal Conductivity", "lambda", Units.ThermalConductivity,
         R.string.ThermalConductivity, R.string.lambda)
-val ThermalDiffusivity = Property(
+val ThermalDiffusivity = DerivedQuantity(
         "Thermal Diffusivity", "k", Units.KinematicViscosity,
         R.string.ThermalDiffusivity, R.string.k)
-val PrandtlNumber = Property(
+val PrandtlNumber = DerivedQuantity(
         "Prandtl Number", "Pr", Units.Ratio,
         R.string.PrandtlNumber, R.string.Pr)
-val DynamicViscosity = Property(
+val DynamicViscosity = DerivedQuantity(
         "Dynamic Viscosity", "eta", Units.DynamicViscosity,
         R.string.DynamicViscosity, R.string.eta)
-val KinematicViscosity = Property(
+val KinematicViscosity = DerivedQuantity(
         "Kinematic Viscosity", "nu", Units.KinematicViscosity,
         R.string.KinematicViscosity, R.string.nu)
-val SurfaceTension = Property(
+val SurfaceTension = DerivedQuantity(
         "Surface Tension", "sigma", Units.SurfaceTension,
         R.string.SurfaceTension, R.string.sigma)
-val IsobaricCubicExpansionCoefficient = Property(
+val IsobaricCubicExpansionCoefficient = DerivedQuantity(
         "Isobaric Cubic Expansion Coefficient", "av", Units.Temperature_1,
         R.string.IsobaricCubicExpansionCoefficient, R.string.av)
-val IsothermalCompressibility = Property(
+val IsothermalCompressibility = DerivedQuantity(
         "Isothermal Compressibility", "kT", Units.Compressibility,
         R.string.IsothermalCompressibility, R.string.kT)
-val RelativePermittivity = Property(
+val RelativePermittivity = DerivedQuantity(
         "Relative Permittivity", "epsilon", Units.Ratio,
         R.string.RelativePermittivity, R.string.epsilon)
-val SpecificInternalEnergy = Property(
+val SpecificInternalEnergy = DerivedQuantity(
         "Specific Internal Energy", "u", Units.SpecificEnergy,
         R.string.SpecificInternalEnergy, R.string.u)
-val SpecificGibbsFreeEnergy = Property(
+val SpecificGibbsFreeEnergy = DerivedQuantity(
         "Specific Gibbs Free Energy", "g", Units.SpecificEnergy,
         R.string.SpecificGibbsFreeEnergy, R.string.g)

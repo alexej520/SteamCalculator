@@ -2,6 +2,7 @@ package ru.lextop.steamcalculator.ui
 
 import android.animation.LayoutTransition
 import android.content.Context
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -12,7 +13,6 @@ import org.jetbrains.anko.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.binding.borderlessButton
 import ru.lextop.steamcalculator.binding.startOf
-import ru.lextop.steamcalculator.binding.tickerView
 
 class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
     var onRatedListener: ((success: Boolean, positive: Boolean) -> Unit)? = null
@@ -55,9 +55,12 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Line
 
     private fun ViewManager.yesNo(string: String, yes: (View) -> Unit, no: (View) -> Unit) {
         relativeLayout {
-            tickerView {
-                text = addAppearanceIndent(string)
+            textView(string) {
+                singleLine = true
+                ellipsize = TextUtils.TruncateAt.MARQUEE
+                marqueeRepeatLimit = -1
                 textAppearance = R.style.TextAppearance_AppCompat_Body2
+                isSelected = true
             }.lparams(matchParent, matchParent).lparams {
                 alignParentStart()
                 baselineOf(R.id.rateViewYesButton)

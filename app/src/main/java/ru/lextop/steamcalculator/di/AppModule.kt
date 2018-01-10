@@ -7,7 +7,6 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.preference.PreferenceManager
-import android.util.Log
 import dagger.Module
 import dagger.Provides
 import ru.lextop.steamcalculator.*
@@ -59,7 +58,7 @@ abstract class AppModule {
                                 values = computableProps.map { prop ->
                                     listOf(
                                             prop.symbol,
-                                            defaultUnits[prop.baseUnit]!!.name)
+                                            defaultUnits[prop.coherentUnit]!!.name)
                                 })
                         db.fillTable(
                                 tableName = ViewUnit.TABLE_NAME,
@@ -69,10 +68,10 @@ abstract class AppModule {
                                 values = allProps.map { prop ->
                                     listOf(
                                             prop.symbol,
-                                            defaultUnits[prop.baseUnit]!!.name)
+                                            defaultUnits[prop.coherentUnit]!!.name)
                                 })
-                        val first = computablePropMap.keys.first()
-                        val second = computablePropMap[first]!!.first()
+                        val first = COMPUTABLE_PROP_MAP.keys.first()
+                        val second = COMPUTABLE_PROP_MAP[first]!!.first()
                         db.fillTable(
                                 tableName = SelectedQuantity.TABLE_NAME,
                                 columns = listOf(
@@ -80,8 +79,8 @@ abstract class AppModule {
                                         SelectedQuantity.PROP_SYMBOL,
                                         SelectedQuantity.VALUE),
                                 values = listOf(
-                                        SelectedQuantity(KEY_FIRST_PROP, first(Double.NaN, first.baseUnit.alias)),
-                                        SelectedQuantity(KEY_SECOND_PROP, second(Double.NaN, second.baseUnit.alias))).map {
+                                        SelectedQuantity(KEY_FIRST_PROP, first(Double.NaN, first.coherentUnit.derived)),
+                                        SelectedQuantity(KEY_SECOND_PROP, second(Double.NaN, second.coherentUnit.derived))).map {
                                     listOf(
                                             it.key,
                                             it.propSymbol,

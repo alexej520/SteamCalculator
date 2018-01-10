@@ -4,79 +4,80 @@ import com.hummeling.if97.IF97
 import com.hummeling.if97.OutOfRangeException
 import ru.lextop.steamcalculator.steam.quantity.*
 import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.J_kg
+import java.util.*
 
-class Steam private constructor(pair: Pair<Quantity, Quantity>)
-    : Iterable<Quantity> {
+class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
+    : Iterable<QuantityValue> {
     private val value1: Double
     private val value2: Double
-    private val computablePairProps: Pair<Property, Property>
+    private val computablePairProps: Pair<DerivedQuantity, DerivedQuantity>
 
     init {
         val computablePair = getComputablePair(pair)
         value1 = computablePair.first.value
         value2 = computablePair.second.value
-        computablePairProps = computablePair.first.property to computablePair.second.property
+        computablePairProps = computablePair.first.derivedQuantity to computablePair.second.derivedQuantity
     }
 
-    private fun if97(p: Property): Lazy<Quantity> = lazy {
+    private fun if97(p: DerivedQuantity): Lazy<QuantityValue> = lazy {
         p(try {
-            calcMap[computablePairProps]!![p]!!(value1, value2)
+            CALC_MAP[computablePairProps]!![p]!!(value1, value2)
         } catch (e: Exception) {
             if (computablePairProps.second == VapourFraction) {
                 try {
-                    calcMap[SpecificEnthalpy to SpecificEntropy]!![p]!!(h.value, s.value)
+                    CALC_MAP[SpecificEnthalpy to SpecificEntropy]!![p]!!(h.value, s.value)
                 } catch (e: Exception) {
                     Double.NaN
                 }
             } else {
                 Double.NaN
             }
-        }, p.baseUnit.alias)
+        }, p.coherentUnit.derived)
     }
 
-    constructor(arg1: Quantity, arg2: Quantity) : this(arg1 to arg2)
+    constructor(arg1: QuantityValue, arg2: QuantityValue) : this(arg1 to arg2)
 
-    constructor(rho: Quantity?,
-                v: Quantity?,
-                P: Quantity?,
-                T: Quantity?,
-                h: Quantity?,
-                s: Quantity?,
-                x: Quantity?) : this(getPairOrThrowException(rho, v, P, T, h, s, x))
+    constructor(rho: QuantityValue?,
+                v: QuantityValue?,
+                P: QuantityValue?,
+                T: QuantityValue?,
+                h: QuantityValue?,
+                s: QuantityValue?,
+                x: QuantityValue?) : this(getPairOrThrowException(rho, v, P, T, h, s, x))
 
-    operator fun get(p: Property): Quantity = if97(p).value
+    operator fun get(p: DerivedQuantity): QuantityValue = if97(p).value
 
-    val rho: Quantity by if97(Density)
-    val epsilon: Quantity by if97(RelativePermittivity)
-    val eta: Quantity by if97(DynamicViscosity)
-    val av: Quantity by if97(IsobaricCubicExpansionCoefficient)
-    val kT: Quantity by if97(IsothermalCompressibility)
-    val nu: Quantity by if97(KinematicViscosity)
-    val Pr: Quantity by if97(IsothermalCompressibility)
-    val P: Quantity by if97(Pressure)
+    val rho: QuantityValue by if97(Density)
+    val epsilon: QuantityValue by if97(RelativePermittivity)
+    val eta: QuantityValue by if97(DynamicViscosity)
+    val av: QuantityValue by if97(IsobaricCubicExpansionCoefficient)
+    val kT: QuantityValue by if97(IsothermalCompressibility)
+    val nu: QuantityValue by if97(KinematicViscosity)
+    val Pr: QuantityValue by if97(IsothermalCompressibility)
+    val P: QuantityValue by if97(Pressure)
     /*
-        val n: Quantity by if97(KinematicViscosity)
+        val n: QuantityValue by if97(KinematicViscosity)
     */
-    val h: Quantity by if97(SpecificEnthalpy)
-    val u: Quantity by if97(SpecificInternalEnergy)
-    val s: Quantity by if97(SpecificEntropy)
-    val cp: Quantity by if97(SpecificIsobaricHeatCapacity)
-    val cv: Quantity by if97(SpecificIsochoricHeatCapacity)
-    val v: Quantity by if97(SpecificVolume)
-    val w: Quantity by if97(SpeedOfSound)
-    val sigma: Quantity by if97(SurfaceTension)
-    val T: Quantity by if97(Temperature)
-    val lambda: Quantity by if97(ThermalConductivity)
-    val k: Quantity by if97(ThermalDiffusivity)
-    val x: Quantity by if97(VapourFraction)
-    val g: Quantity by if97(SpecificGibbsFreeEnergy)
-    val hvap: Quantity by lazy {
+    val h: QuantityValue by if97(SpecificEnthalpy)
+    val u: QuantityValue by if97(SpecificInternalEnergy)
+    val s: QuantityValue by if97(SpecificEntropy)
+    val cp: QuantityValue by if97(SpecificIsobaricHeatCapacity)
+    val cv: QuantityValue by if97(SpecificIsochoricHeatCapacity)
+    val v: QuantityValue by if97(SpecificVolume)
+    val w: QuantityValue by if97(SpeedOfSound)
+    val sigma: QuantityValue by if97(SurfaceTension)
+    val T: QuantityValue by if97(Temperature)
+    val lambda: QuantityValue by if97(ThermalConductivity)
+    val k: QuantityValue by if97(ThermalDiffusivity)
+    val x: QuantityValue by if97(VapourFraction)
+    val g: QuantityValue by if97(SpecificGibbsFreeEnergy)
+    val hvap: QuantityValue by lazy {
         if (x.value.isNaN() || x.value < 0 || x.value > 1) {
             SpecificEnthalpyOfVaporization(Double.NaN, J_kg)
         } else {
             try {
-                val liq = if97Instance.specificEnthalpySaturatedLiquidP(P.value)
-                val vap = if97Instance.specificEnthalpySaturatedVapourP(P.value)
+                val liq = IF97_INSTANCE.specificEnthalpySaturatedLiquidP(P.value)
+                val vap = IF97_INSTANCE.specificEnthalpySaturatedVapourP(P.value)
                 SpecificEnthalpyOfVaporization(vap - liq, J_kg)
             } catch (e: OutOfRangeException) {
                 SpecificEnthalpyOfVaporization(Double.NaN, J_kg)
@@ -84,23 +85,37 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
         }
     }
 
-    private val quantities: List<Quantity> by lazy {
+    private val quantityValues: List<QuantityValue> by lazy {
         listOf(
                 rho, epsilon, eta, av, kT, nu, Pr, P, /*n,*/ h, u, s, cp, cv, v, w, sigma, T, lambda, k, x, g, hvap
         )
     }
 
-    override fun toString(): String = quantities.toString()
-    override fun iterator(): Iterator<Quantity> = object : Iterator<Quantity> {
-        val iterator = quantities.iterator()
+    override fun toString(): String = quantityValues.toString()
+    override fun iterator(): Iterator<QuantityValue> = object : Iterator<QuantityValue> {
+        val iterator = quantityValues.iterator()
         override fun hasNext(): Boolean = iterator.hasNext()
-        override fun next(): Quantity = iterator.next()
+        override fun next(): QuantityValue = iterator.next()
     }
 
     private companion object {
-        private val if97Instance = IF97(IF97.UnitSystem.SI)
+        private val IF97_INSTANCE = IF97(IF97.UnitSystem.SI)
+        private val IF97_QUANTITY_MAP: Map<com.hummeling.if97.IF97.Quantity, DerivedQuantity> =
+                EnumMap<com.hummeling.if97.IF97.Quantity, DerivedQuantity>(com.hummeling.if97.IF97.Quantity::class.java).apply {
+                    put(com.hummeling.if97.IF97.Quantity.p, Pressure)
+                    put(com.hummeling.if97.IF97.Quantity.T, Temperature)
+                    put(com.hummeling.if97.IF97.Quantity.v, SpecificVolume)
+                    put(com.hummeling.if97.IF97.Quantity.rho, Density)
+                    put(com.hummeling.if97.IF97.Quantity.u, SpecificInternalEnergy)
+                    put(com.hummeling.if97.IF97.Quantity.h, SpecificEnthalpy)
+                    put(com.hummeling.if97.IF97.Quantity.s, SpecificEntropy)
+                    //put(com.hummeling.if97.IF97.Quantity.lambda, Wavelength)
+                    put(com.hummeling.if97.IF97.Quantity.g, SpecificGibbsFreeEnergy)
+                    //put(com.hummeling.if97.IF97.Quantity.f, SpecificHelmholtzFreeEnergy)
+                    put(com.hummeling.if97.IF97.Quantity.x, VapourFraction)
+                }
 
-        private val calcMap: Map<Pair<Property, Property>, Map<Property, (Double, Double) -> Double>> = with(if97Instance) {
+        private val CALC_MAP: Map<Pair<DerivedQuantity, DerivedQuantity>, Map<DerivedQuantity, (Double, Double) -> Double>> = with(IF97_INSTANCE) {
             mapOf(
                     Pressure to Temperature to mapOf(
                             Density to this::densityPT,
@@ -266,7 +281,7 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
             )
         }
 
-        private val computablePairs: Set<Pair<Property, Property>> = setOf(
+        private val COMPUTABLE_PAIRS: Set<Pair<DerivedQuantity, DerivedQuantity>> = setOf(
                 Pressure to Temperature,
                 Pressure to SpecificEnthalpy,
                 Pressure to SpecificEntropy,
@@ -277,36 +292,36 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
                 Temperature to VapourFraction
         )
 
-        private fun getComputablePair(pair: Pair<Quantity, Quantity>): Pair<Quantity, Quantity> {
+        private fun getComputablePair(pair: Pair<QuantityValue, QuantityValue>): Pair<QuantityValue, QuantityValue> {
             val (arg1, arg2) = pair
-            val baseArg1 = arg1[arg1.property.baseUnit.alias]
-            val baseArg2 = arg2[arg2.property.baseUnit.alias]
-            val q1: Quantity
-            val q2: Quantity
+            val baseArg1 = arg1[arg1.derivedQuantity.coherentUnit.derived]
+            val baseArg2 = arg2[arg2.derivedQuantity.coherentUnit.derived]
+            val q1: QuantityValue
+            val q2: QuantityValue
             when (SpecificVolume) {
-                baseArg1.property -> {
-                    q1 = Density(1 / baseArg1.value, Density.baseUnit.alias)
+                baseArg1.derivedQuantity -> {
+                    q1 = Density(1 / baseArg1.value, Density.coherentUnit.derived)
                     q2 = baseArg2
                 }
-                baseArg2.property -> {
+                baseArg2.derivedQuantity -> {
                     q1 = baseArg1
-                    q2 = Density(1 / baseArg2.value, Density.baseUnit.alias)
+                    q2 = Density(1 / baseArg2.value, Density.coherentUnit.derived)
                 }
                 else -> {
-                    if (baseArg1.property == Temperature && baseArg2.property == SpecificEntropy) {
+                    if (baseArg1.derivedQuantity == Temperature && baseArg2.derivedQuantity == SpecificEntropy) {
                         q1 = baseArg1
                         q2 = VapourFraction(try {
-                            if97Instance.vapourFractionTS(baseArg1.value, baseArg2.value)
+                            IF97_INSTANCE.vapourFractionTS(baseArg1.value, baseArg2.value)
                         } catch (e: OutOfRangeException) {
                             Double.NaN
-                        }, VapourFraction.baseUnit.alias)
-                    } else if (baseArg1.property == SpecificEntropy && baseArg2.property == Temperature) {
+                        }, VapourFraction.coherentUnit.derived)
+                    } else if (baseArg1.derivedQuantity == SpecificEntropy && baseArg2.derivedQuantity == Temperature) {
                         q1 = baseArg2
                         q2 = VapourFraction(try {
-                            if97Instance.vapourFractionTS(baseArg2.value, baseArg1.value)
-                        } catch (e: OutOfRangeException){
+                            IF97_INSTANCE.vapourFractionTS(baseArg2.value, baseArg1.value)
+                        } catch (e: OutOfRangeException) {
                             Double.NaN
-                        }, VapourFraction.baseUnit.alias)
+                        }, VapourFraction.coherentUnit.derived)
                     } else {
                         q1 = baseArg1
                         q2 = baseArg2
@@ -314,69 +329,69 @@ class Steam private constructor(pair: Pair<Quantity, Quantity>)
                 }
             }
             return when {
-                q1.property to q2.property in computablePairs -> q1 to q2
-                q2.property to q1.property in computablePairs -> q2 to q1
+                q1.derivedQuantity to q2.derivedQuantity in COMPUTABLE_PAIRS -> q1 to q2
+                q2.derivedQuantity to q1.derivedQuantity in COMPUTABLE_PAIRS -> q2 to q1
                 else -> throw IllegalArgumentException()
             }
         }
 
         private fun getPairOrThrowException(
-                rho: Quantity?,
-                v: Quantity?,
-                P: Quantity?,
-                T: Quantity?,
-                h: Quantity?,
-                s: Quantity?,
-                x: Quantity?
-        ): Pair<Quantity, Quantity> {
-            var q1: Quantity? = null
-            var q2: Quantity? = null
-            var quantity: Quantity
+                rho: QuantityValue?,
+                v: QuantityValue?,
+                P: QuantityValue?,
+                T: QuantityValue?,
+                h: QuantityValue?,
+                s: QuantityValue?,
+                x: QuantityValue?
+        ): Pair<QuantityValue, QuantityValue> {
+            var q1: QuantityValue? = null
+            var q2: QuantityValue? = null
+            var quantityValue: QuantityValue
             if (rho != null) q1 = Density(rho.value, rho.unit)
             if (v != null) {
-                quantity = SpecificVolume(v.value, v.unit)
+                quantityValue = SpecificVolume(v.value, v.unit)
                 when {
-                    q1 == null -> q1 = quantity
-                    else -> q2 = quantity
+                    q1 == null -> q1 = quantityValue
+                    else -> q2 = quantityValue
                 }
             }
             if (P != null) {
-                quantity = Pressure(P.value, P.unit)
+                quantityValue = Pressure(P.value, P.unit)
                 when {
-                    q1 == null -> q1 = quantity
-                    q2 == null -> q2 = quantity
+                    q1 == null -> q1 = quantityValue
+                    q2 == null -> q2 = quantityValue
                     else -> throw IllegalArgumentException()
                 }
             }
             if (T != null) {
-                quantity = Temperature(T.value, T.unit)
+                quantityValue = Temperature(T.value, T.unit)
                 when {
-                    q1 == null -> q1 = quantity
-                    q2 == null -> q2 = quantity
+                    q1 == null -> q1 = quantityValue
+                    q2 == null -> q2 = quantityValue
                     else -> throw IllegalArgumentException()
                 }
             }
             if (h != null) {
-                quantity = SpecificEnthalpy(h.value, h.unit)
+                quantityValue = SpecificEnthalpy(h.value, h.unit)
                 when {
-                    q1 == null -> q1 = quantity
-                    q2 == null -> q2 = quantity
+                    q1 == null -> q1 = quantityValue
+                    q2 == null -> q2 = quantityValue
                     else -> throw IllegalArgumentException()
                 }
             }
             if (s != null) {
-                quantity = SpecificEntropy(s.value, s.unit)
+                quantityValue = SpecificEntropy(s.value, s.unit)
                 when {
-                    q1 == null -> q1 = quantity
-                    q2 == null -> q2 = quantity
+                    q1 == null -> q1 = quantityValue
+                    q2 == null -> q2 = quantityValue
                     else -> throw IllegalArgumentException()
                 }
             }
             if (x != null) {
-                quantity = VapourFraction(x.value, x.unit)
+                quantityValue = VapourFraction(x.value, x.unit)
                 when {
-                    q1 == null -> q1 = quantity
-                    q2 == null -> q2 = quantity
+                    q1 == null -> q1 = quantityValue
+                    q2 == null -> q2 = quantityValue
                     else -> throw IllegalArgumentException()
                 }
             }

@@ -4,18 +4,18 @@ import android.arch.lifecycle.*
 import android.content.Context
 import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.getSpanned
-import ru.lextop.steamcalculator.steam.quantity.UnitPh
-import ru.lextop.steamcalculator.steam.quantity.Quantity
+import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
+import ru.lextop.steamcalculator.steam.quantity.QuantityValue
 import ru.lextop.steamcalculator.unitList
 
 open class QuantityViewModel(
-        quantityLive: LiveData<Quantity>,
-        unitLive: LiveData<UnitPh>,
+        quantityValueLive: LiveData<QuantityValue>,
+        unitLive: LiveData<DerivedUnit>,
         context: Context,
         val isPropNameVisibleLive: LiveData<Boolean>,
         private val repo: SteamRepository)
     : ViewModel() {
-    private val prop = quantityLive.value!!.property
+    private val prop = quantityValueLive.value!!.derivedQuantity
     val propName = context.getSpanned(prop.nameId)
     val propSymbol = context.getSpanned(prop.symbolId)
     val valueLive: LiveData<CharSequence> = MutableLiveData()
@@ -24,20 +24,20 @@ open class QuantityViewModel(
             field = value
             (valueLive as MutableLiveData).value = CustomFormat.format(value)
         }
-    private val _units = quantityLive.value!!.property.unitList
+    private val _units = quantityValueLive.value!!.derivedQuantity.unitList
     val units = _units.map {
         context.getSpanned(it.id)
     }
     val unitSelectionLive: LiveData<Int> = MutableLiveData()
 
     init {
-        quantityLive.observeForever {
+        quantityValueLive.observeForever {
             value = it!![unitLive.value!!].value
         }
         unitLive.observeForever { unit ->
             unitSelectionLive as MutableLiveData
             unitSelectionLive.value = _units.indexOf(unit!!)
-            value = quantityLive.value!![unit].value
+            value = quantityValueLive.value!![unit].value
         }
     }
 

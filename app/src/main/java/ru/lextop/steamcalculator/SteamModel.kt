@@ -36,11 +36,11 @@ import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.BTU_hr
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.W_mK
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.kW_mK
 
-val Property.unitList get() = baseUnit.unitList
+val DerivedQuantity.unitList get() = coherentUnit.unitList
 
 val units = Units
 
-private val computablePairs: List<Pair<Property, Property>> = listOf(
+private val COMPUTABLE_PAIRS: List<Pair<DerivedQuantity, DerivedQuantity>> = listOf(
         Pressure to Temperature,
         Pressure to SpecificEnthalpy,
         Pressure to SpecificEntropy,
@@ -52,9 +52,9 @@ private val computablePairs: List<Pair<Property, Property>> = listOf(
         Temperature to VapourFraction
 )
 
-val computablePropMap: Map<Property, List<Property>> = with(computablePairs.unzip()){
+val COMPUTABLE_PROP_MAP: Map<DerivedQuantity, List<DerivedQuantity>> = with(COMPUTABLE_PAIRS.unzip()){
     first.union(second).associate { prop ->
-        prop to computablePairs.mapNotNull { (p1, p2) ->
+        prop to COMPUTABLE_PAIRS.mapNotNull { (p1, p2) ->
             when (prop) {
                 p1 -> p2
                 p2 -> p1
@@ -64,31 +64,31 @@ val computablePropMap: Map<Property, List<Property>> = with(computablePairs.unzi
     }
 }
 
-val computableProps = computablePropMap.keys.toList()
+val computableProps = COMPUTABLE_PROP_MAP.keys.toList()
 
-val allProps = Property.symbolPropMap.values
+val allProps = DerivedQuantity.SYMBOL_PROP_MAP.values
 
-fun String.toProperty(): Property =
-        Property.symbolPropMap[this]!!
+fun String.toProperty(): DerivedQuantity =
+        DerivedQuantity.SYMBOL_PROP_MAP[this]!!
 
-fun String.toUnit(prop: Property): UnitPh =
-        prop.baseUnit.unitMap[this]!!
+fun String.toUnit(prop: DerivedQuantity): DerivedUnit =
+        prop.coherentUnit.unitMap[this]!!
 
 val defaultUnits = listOf(
         kg_m3, ratio, Pas, K_1, MPa_1, m2_s, MPa, kJ_kg, kJ_kgK, m3_kg, m_s, N_m, K, W_mK
-).associate { it.baseUnit to it }
+).associate { it.coherentUnit to it }
 
 val engineeringUnits = listOf(
         kg_m3, ratio, Pas, K_1, MPa_1, m2_s, bar, kJ_kg, kJ_kgK, m3_kg, m_s, N_m, C, kW_mK
-).associate { it.baseUnit to it }
+).associate { it.coherentUnit to it }
 
 val siUnits = listOf(
         kg_m3, ratio, Pas, K_1, Pa_1, m2_s, Pa, J_kg, J_kgK, m3_kg, m_s, N_m, K, W_mK
-).associate { it.baseUnit to it }
+).associate { it.coherentUnit to it }
 
 val imperialUnits = listOf(
         lb_ft3, ratio, cP, R_1, in2_lb, cSt, psi, BTU_lb, BTU_lbR, ft3_lb, ft_s, lbf_ft, F, BTU_hrftR
-).associate { it.baseUnit to it }
+).associate { it.coherentUnit to it }
 
 val unitSetMap = mapOf(
          R.string.unitSetDefaultValue to defaultUnits,
