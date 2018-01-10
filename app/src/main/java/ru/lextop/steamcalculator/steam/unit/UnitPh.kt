@@ -3,17 +3,16 @@ package ru.lextop.steamcalculator.steam.unit
 import ru.lextop.steamcalculator.steam.quantity.Dimension
 import java.util.*
 
-open class UnitPh constructor(
+class UnitPh constructor(
         val dimension: Dimension,
         val converter: Converter? = null,
         val factor: Double = converter?.factor ?: UNDEFINED,
         val name: String = "AnonymousUnit",
-        val symbol: String = defaultSymbol(factor, dimension))
-    : UnitPh.Converter{
-    open fun convertToCoherent(value: Double): Double =
+        val symbol: String = defaultSymbol(factor, dimension)) {
+    fun convertToCoherent(value: Double): Double =
             converter?.convertToCoherent(value) ?: factor / value
 
-    open fun convertFromCoherent(value: Double): Double =
+    fun convertFromCoherent(value: Double): Double =
             converter?.convertFromCoherent(value) ?: factor * value
 
     interface Converter {
@@ -43,17 +42,10 @@ open class UnitPh constructor(
 
 // for Temperature units
 
-class OffsetDerivedUnit(
-        dimension: Dimension,
-        factor: Double,
-        val offset: Double,
-        name: String = "AnonymousUnit",
-        symbol: String = defaultSymbol(factor, dimension)
-) : UnitPh(
-        dimension = dimension,
-        name = name,
-        symbol = symbol,
-        factor = factor) {
+class OffsetUnitConverter(
+        override val factor: Double,
+        val offset: Double)
+    : UnitPh.Converter {
     override fun convertToCoherent(value: Double): Double = (value - offset) / factor
     override fun convertFromCoherent(value: Double): Double = value * factor + offset
 }
@@ -83,17 +75,25 @@ operator fun UnitPh.div(div: Double): UnitPh =
 operator fun Double.div(unit: UnitPh): UnitPh =
         UnitPh(dimension = unit.dimension, factor = unit.factor / this)
 
-operator fun UnitPh.plus(plus: Double): UnitPh =
-        OffsetDerivedUnit(dimension = dimension, factor = factor, offset = ((this as? OffsetDerivedUnit)?.offset ?: 0.0) + plus)
+operator fun UnitPh.plus(plus: Double): UnitPh {
+    val newConverter = OffsetUnitConverter(factor, ((converter as? OffsetUnitConverter)?.factor ?: 0.0) + plus)
+    return UnitPh(dimension = dimension, factor = factor, converter = newConverter)
+}
 
-operator fun Double.plus(unit: UnitPh): UnitPh =
-        OffsetDerivedUnit(dimension = unit.dimension, factor = unit.factor, offset = ((unit as? OffsetDerivedUnit)?.offset ?: 0.0) + this)
+operator fun Double.plus(unit: UnitPh): UnitPh {
+    val newConverter = OffsetUnitConverter(unit.factor, ((unit.converter as? OffsetUnitConverter)?.factor ?: 0.0) + this)
+    return UnitPh(dimension = unit.dimension, factor = unit.factor, converter = newConverter)
+}
 
-operator fun UnitPh.minus(minus: Double) =
-        OffsetDerivedUnit(dimension = dimension, factor = factor, offset = ((this as? OffsetDerivedUnit)?.offset ?: 0.0) - minus)
+operator fun UnitPh.minus(minus: Double): UnitPh {
+    val newConverter = OffsetUnitConverter(factor, ((converter as? OffsetUnitConverter)?.factor ?: 0.0) - minus)
+    return UnitPh(dimension = dimension, factor = factor, converter = newConverter)
+}
 
-operator fun Double.minus(unit: UnitPh): UnitPh =
-        OffsetDerivedUnit(dimension = unit.dimension, factor = unit.factor, offset = this - ((unit as? OffsetDerivedUnit)?.offset ?: 0.0))
+operator fun Double.minus(unit: UnitPh): UnitPh {
+    val newConverter = OffsetUnitConverter(unit.factor, this - ((unit.converter as? OffsetUnitConverter)?.factor ?: 0.0))
+    return UnitPh(dimension = unit.dimension, factor = unit.factor, converter = newConverter)
+}
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun UnitPh.withPrefix(prefix: String, times: Double): UnitPh =

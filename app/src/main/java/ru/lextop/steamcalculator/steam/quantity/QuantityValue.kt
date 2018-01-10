@@ -17,7 +17,7 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
             if (unit.dimension != quantity.dimension) {
                 throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
             } else {
-                QuantityValue(quantity, unit.convertToCoherent(basicValue), unit)
+                QuantityValue(quantity, unit.convertFromCoherent(basicValue), unit)
             }
 
     override fun toString(): String =

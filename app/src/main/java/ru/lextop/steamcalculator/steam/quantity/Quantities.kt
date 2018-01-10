@@ -1,70 +1,27 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-import ru.lextop.steamcalculator.R
+import ru.lextop.steamcalculator.steam.unit.base.*
+import ru.lextop.steamcalculator.steam.units.*
 
-val Pressure = DerivedQuantity(
-        "Pressure", "P", Unit,
-        R.string.Pressure, R.string.P)
-val Temperature = Quantity(
-        "Temperature", "T", Units.Temperature,
-        R.string.Temperature, R.string.T)
-val SpecificEnthalpy = DerivedQuantity(
-        "Specific Enthalpy", "h", Units.SpecificEnergy,
-        R.string.SpecificEnthalpy, R.string.h)
-val SpecificEntropy = DerivedQuantity(
-        "Specific Entropy", "T", Units.SpecificHeatCapacity,
-        R.string.SpecificEntropy, R.string.s)
-val VapourFraction = DerivedQuantity(
-        "Vapour Fraction", "x", Units.Ratio,
-        R.string.VapourFraction, R.string.x)
-val SpecificVolume = DerivedQuantity(
-        "Specific Volume", "v", Units.SpecificVolume,
-        R.string.SpecificVolume, R.string.v)
-val Density = DerivedQuantity(
-        "Density", "rho", Units.Density,
-        R.string.Density, R.string.rho)
-val SpeedOfSound = DerivedQuantity(
-        "Speed of Sound", "w", Units.Speed,
-        R.string.SpeedOfSound, R.string.w)
-val SpecificIsobaricHeatCapacity = DerivedQuantity(
-        "Specific Isobaric Heat Capacity", "cp", Units.SpecificHeatCapacity,
-        R.string.SpecificIsobaricHeatCapacity, R.string.cp)
-val SpecificIsochoricHeatCapacity = DerivedQuantity(
-        "Specific Isochoric Heat Capacity", "cv", Units.SpecificHeatCapacity,
-        R.string.SpecificIsochoricHeatCapacity , R.string.cv)
-val SpecificEnthalpyOfVaporization = DerivedQuantity(
-        "Specific Enthalpy of Vaporization", "hvap", Units.SpecificEnergy,
-        R.string.SpecificEnthalpyOfVaporization, R.string.hvap)
-val ThermalConductivity = DerivedQuantity(
-        "Thermal Conductivity", "lambda", Units.ThermalConductivity,
-        R.string.ThermalConductivity, R.string.lambda)
-val ThermalDiffusivity = DerivedQuantity(
-        "Thermal Diffusivity", "k", Units.KinematicViscosity,
-        R.string.ThermalDiffusivity, R.string.k)
-val PrandtlNumber = DerivedQuantity(
-        "Prandtl Number", "Pr", Units.Ratio,
-        R.string.PrandtlNumber, R.string.Pr)
-val DynamicViscosity = DerivedQuantity(
-        "Dynamic Viscosity", "eta", Units.DynamicViscosity,
-        R.string.DynamicViscosity, R.string.eta)
-val KinematicViscosity = DerivedQuantity(
-        "Kinematic Viscosity", "nu", Units.KinematicViscosity,
-        R.string.KinematicViscosity, R.string.nu)
-val SurfaceTension = DerivedQuantity(
-        "Surface Tension", "sigma", Units.SurfaceTension,
-        R.string.SurfaceTension, R.string.sigma)
-val IsobaricCubicExpansionCoefficient = DerivedQuantity(
-        "Isobaric Cubic Expansion Coefficient", "av", Units.Temperature_1,
-        R.string.IsobaricCubicExpansionCoefficient, R.string.av)
-val IsothermalCompressibility = DerivedQuantity(
-        "Isothermal Compressibility", "kT", Units.Compressibility,
-        R.string.IsothermalCompressibility, R.string.kT)
-val RelativePermittivity = DerivedQuantity(
-        "Relative Permittivity", "epsilon", Units.Ratio,
-        R.string.RelativePermittivity, R.string.epsilon)
-val SpecificInternalEnergy = DerivedQuantity(
-        "Specific Internal Energy", "u", Units.SpecificEnergy,
-        R.string.SpecificInternalEnergy, R.string.u)
-val SpecificGibbsFreeEnergy = DerivedQuantity(
-        "Specific Gibbs Free Energy", "g", Units.SpecificEnergy,
-        R.string.SpecificGibbsFreeEnergy, R.string.g)
+val Pressure = Quantity("Pressure", "P", Pa.dimension)
+val Temperature = Quantity("Temperature", "T", K.dimension)
+val SpecificEnthalpy = Quantity("Specific Enthalpy", "h", kJ_kg.dimension)
+val SpecificEntropy = Quantity("Specific Entropy", "T", kJ_kgK.dimension)
+val VapourFraction = Quantity("Vapour Fraction", "x", ratio.dimension)
+val SpecificVolume = Quantity("Specific Volume", "v", m3_kg.dimension)
+val Density = Quantity("Density", "rho", kg_m3.dimension)
+val SpeedOfSound = Quantity("Speed of Sound", "w", m_s.dimension)
+val SpecificIsobaricHeatCapacity = Quantity("Specific Isobaric Heat Capacity", "cp", kJ_kgK.dimension)
+val SpecificIsochoricHeatCapacity = Quantity("Specific Isochoric Heat Capacity", "cv", kJ_kgK.dimension)
+val SpecificEnthalpyOfVaporization = Quantity("Specific Enthalpy of Vaporization", "hvap", kJ_kg.dimension)
+val ThermalConductivity = Quantity("Thermal Conductivity", "lambda", W_mK.dimension)
+val ThermalDiffusivity = Quantity("Thermal Diffusivity", "k", m2_s.dimension)
+val PrandtlNumber = Quantity("Prandtl Number", "Pr", ratio.dimension)
+val DynamicViscosity = Quantity("Dynamic Viscosity", "eta", Pas.dimension)
+val KinematicViscosity = Quantity("Kinematic Viscosity", "nu", m2_s.dimension)
+val SurfaceTension = Quantity("Surface Tension", "sigma", N_m.dimension)
+val IsobaricCubicExpansionCoefficient = Quantity("Isobaric Cubic Expansion Coefficient", "av", K_1.dimension)
+val IsothermalCompressibility = Quantity("Isothermal Compressibility", "kT", Pa_1.dimension)
+val RelativePermittivity = Quantity("Relative Permittivity", "epsilon", ratio.dimension)
+val SpecificInternalEnergy = Quantity("Specific Internal Energy", "u", kJ_kg.dimension)
+val SpecificGibbsFreeEnergy = Quantity("Specific Gibbs Free Energy", "g", kJ_kg.dimension)

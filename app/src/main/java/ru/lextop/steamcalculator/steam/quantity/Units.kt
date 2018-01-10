@@ -139,7 +139,7 @@ object Units{
     }
 
     object SurfaceTension: CoherentUnit(kg = 1, s = -2){
-        val N_m = createCoherentUnit(Pair("N/L", R.string.N_m))
+        val N_m = createCoherentUnit(Pair("N/m", R.string.N_m))
         val kg_s2 = N_m addWith Pair("M/s2", R.string.kg_s2)
         val lbf_ft = kg_s2 / 14.5939029 addWith Pair("lbf/ft", R.string.lbf_ft)
     }
