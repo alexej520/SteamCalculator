@@ -1,7 +1,15 @@
 package ru.lextop.steamcalculator.steam.unit.base
 
-import ru.lextop.steamcalculator.steam.unit.BaseUnit
 import ru.lextop.steamcalculator.steam.quantity.Dimension
+import ru.lextop.steamcalculator.steam.quantity.checkBaseDimension
+import ru.lextop.steamcalculator.steam.unit.CoherentUnit
+import ru.lextop.steamcalculator.steam.unit.UnitPh
+
+internal fun BaseUnit(dimension: Dimension, name: String, symbol: String): UnitPh {
+    if (!checkBaseDimension(dimension))
+        throw IllegalArgumentException("BaseUnit must have only one dimension that == 1, other dimensions must be == 0")
+    return CoherentUnit(dimension, name, symbol)
+}
 
 val m = BaseUnit(Dimension(L = 1), "Metre", "m")
 val kg = BaseUnit(Dimension(M = 1), "Kilogram", "kg")

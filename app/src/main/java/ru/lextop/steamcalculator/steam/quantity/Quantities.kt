@@ -5,7 +5,7 @@ import ru.lextop.steamcalculator.R
 val Pressure = DerivedQuantity(
         "Pressure", "P", Unit,
         R.string.Pressure, R.string.P)
-val Temperature = BaseQuantity(
+val Temperature = Quantity(
         "Temperature", "T", Units.Temperature,
         R.string.Temperature, R.string.T)
 val SpecificEnthalpy = DerivedQuantity(

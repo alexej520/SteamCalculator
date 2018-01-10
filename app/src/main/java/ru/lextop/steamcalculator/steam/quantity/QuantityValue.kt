@@ -1,33 +1,24 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-class QuantityValue(val quantity: Quantity, val value: Double, val unit: DerivedUnit) {
-    constructor(quantity: Quantity, value: Number, unit: DerivedUnit) : this(quantity, value.toDouble(), unit)
+import ru.lextop.steamcalculator.steam.unit.UnitPh
+import ru.lextop.steamcalculator.steam.unit.CoherentUnit
 
-    private val basicValue = unit.convertToBasic(value)
+data class QuantityValue constructor(val quantity: Quantity, val value: Double, val unit: UnitPh) {
+    constructor(quantity: Quantity, value: Number, unit: UnitPh) : this(quantity, value.toDouble(), unit)
 
-    operator fun get(unit: DerivedUnit): QuantityValue =
-            if (unit.coherentUnit != quantity.coherentUnit) {
-                throw RuntimeException("Incompatible CoherentUnit: ${unit.coherentUnit}")
+    init {
+        if (quantity.dimension != unit.dimension)
+            throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
+    }
+
+    private val basicValue = unit.convertToCoherent(value)
+
+    operator fun get(unit: UnitPh): QuantityValue =
+            if (unit.dimension != quantity.dimension) {
+                throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
             } else {
-                QuantityValue(quantity, unit.convertFromBasic(basicValue), unit)
+                QuantityValue(quantity, unit.convertToCoherent(basicValue), unit)
             }
-
-    fun copy(value: Number, unit: DerivedUnit): QuantityValue =
-            QuantityValue(quantity, value, unit)
-
-    override fun hashCode(): Int {
-        var result = quantity.hashCode()
-        result = 31 * result + value.hashCode()
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is QuantityValue) return false
-        if (quantity != other.quantity) return false
-        if (basicValue != other.basicValue) return false
-        return true
-    }
 
     override fun toString(): String =
             if (value.isNaN())
@@ -36,31 +27,43 @@ class QuantityValue(val quantity: Quantity, val value: Double, val unit: Derived
                 "${quantity.symbol}=${String.format("%.4g", value)}[${unit.name}]"
 
     operator fun plus(other: QuantityValue): QuantityValue =
-            if (quantity.coherentUnit != other.quantity.coherentUnit) {
-                throw RuntimeException("Incompatible CoherentUnit: ${other.quantity.coherentUnit}")
+            if (quantity.dimension != other.quantity.dimension) {
+                throw RuntimeException("Incompatible Dimension: ${other.quantity.dimension}")
             } else {
-                QuantityValue(quantity.coherentUnit.defaultProperty, basicValue + other.basicValue, quantity.coherentUnit.derived)
+                QuantityValue(
+                        quantity = Quantity(dimension = quantity.dimension),
+                        value = basicValue + other.basicValue,
+                        unit = CoherentUnit(quantity.dimension))
             }
 
     operator fun minus(other: QuantityValue): QuantityValue =
-            if (quantity.coherentUnit != other.quantity.coherentUnit) {
-                throw RuntimeException("Incompatible CoherentUnit: ${other.quantity.coherentUnit}")
+            if (quantity.dimension != other.quantity.dimension) {
+                throw RuntimeException("Incompatible Dimension: ${other.quantity.dimension}")
             } else {
-                QuantityValue(quantity.coherentUnit.defaultProperty, basicValue - other.basicValue, quantity.coherentUnit.derived)
+                QuantityValue(
+                        quantity = Quantity(dimension = quantity.dimension),
+                        value = basicValue - other.basicValue,
+                        unit = CoherentUnit(quantity.dimension))
             }
 
     operator fun times(other: QuantityValue): QuantityValue {
-        val newBaseUnit = quantity.coherentUnit * other.quantity.coherentUnit
-        return QuantityValue(newBaseUnit.defaultProperty, basicValue * other.basicValue, newBaseUnit.derived)
+        val newDimension = quantity.dimension * other.quantity.dimension
+        return QuantityValue(
+                quantity = Quantity(dimension = newDimension),
+                value = basicValue * other.basicValue,
+                unit = CoherentUnit(newDimension))
     }
 
     operator fun div(other: QuantityValue): QuantityValue {
-        val newBaseUnit = quantity.coherentUnit / other.quantity.coherentUnit
-        return QuantityValue(newBaseUnit.defaultProperty, basicValue / other.basicValue, newBaseUnit.derived)
+        val newDimension = quantity.dimension * other.quantity.dimension
+        return QuantityValue(
+                quantity = Quantity(dimension = newDimension),
+                value = basicValue / other.basicValue,
+                unit = CoherentUnit(newDimension))
     }
 }
 
-operator fun Double.invoke(unit: DerivedUnit) = QuantityValue(unit.coherentUnit.defaultProperty, this, unit)
-operator fun Number.invoke(unit: DerivedUnit) = QuantityValue(unit.coherentUnit.defaultProperty, this, unit)
-operator fun Quantity.invoke(value: Number, unit: DerivedUnit) = QuantityValue(this, value, unit)
-operator fun Quantity.invoke(value: Double, unit: DerivedUnit) = QuantityValue(this, value, unit)
+operator fun Double.invoke(unit: UnitPh) = QuantityValue(Quantity(dimension = unit.dimension), this, unit)
+operator fun Number.invoke(unit: UnitPh) = QuantityValue(Quantity(dimension = unit.dimension), this, unit)
+operator fun Quantity.invoke(value: Number, unit: UnitPh) = QuantityValue(this, value, unit)
+operator fun Quantity.invoke(value: Double, unit: UnitPh) = QuantityValue(this, value, unit)
