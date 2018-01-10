@@ -1,4 +1,6 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-class BaseQuantity(name: String, symbol: String, coherentUnit: CoherentUnit, nameId: Int, symbolId: Int) :
-        Quantity(name, symbol, coherentUnit, nameId, symbolId)
+import ru.lextop.steamcalculator.steam.unit.CoherentUnt
+
+class BaseQuantity internal constructor(name: String, symbol: String, coherentUnit: CoherentUnt) :
+        Quantity(name, symbol, coherentUnit)

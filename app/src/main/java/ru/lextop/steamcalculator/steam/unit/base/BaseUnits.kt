@@ -3,9 +3,9 @@ package ru.lextop.steamcalculator.steam.unit.base
 import ru.lextop.steamcalculator.steam.unit.BaseUnit
 import ru.lextop.steamcalculator.steam.quantity.Dimension
 
-val kg = BaseUnit(Dimension(kg = 1), "Kilogram", "kg")
-val m = BaseUnit(Dimension(m = 1), "Metre", "m")
-val s = BaseUnit(Dimension(s = 1), "Second", "s")
+val kg = BaseUnit(Dimension(M = 1), "Kilogram", "M")
+val m = BaseUnit(Dimension(L = 1), "Metre", "L")
+val s = BaseUnit(Dimension(T = 1), "Second", "T")
 val A = BaseUnit(Dimension(A = 1), "Ampere", "A")
 val K = BaseUnit(Dimension(K = 1), "Kelvin", "K")
 val mol = BaseUnit(Dimension(mol = 1), "Molar", "mol")

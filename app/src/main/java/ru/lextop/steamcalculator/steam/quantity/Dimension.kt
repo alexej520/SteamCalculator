@@ -1,17 +1,19 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-class Dimension(val m: Int = 0,
-                val kg: Int = 0,
-                val s: Int = 0,
+// The International System of Units (SI) [8th edition, 2006; updated in 2014]
+
+class Dimension(val L: Int = 0,
+                val M: Int = 0,
+                val T: Int = 0,
                 val A: Int = 0,
                 val K: Int = 0,
                 val mol: Int = 0,
                 val cd: Int = 0) {
     operator fun div(other: Dimension): Dimension {
         return Dimension(
-                m = m - other.m,
-                kg = kg - other.kg,
-                s = s - other.s,
+                L = L - other.L,
+                M = M - other.M,
+                T = T - other.T,
                 A = A - other.A,
                 K = K - other.K,
                 mol = mol - other.mol,
@@ -20,9 +22,9 @@ class Dimension(val m: Int = 0,
 
     operator fun times(other: Dimension): Dimension {
         return Dimension(
-                m = m + other.m,
-                kg = kg + other.kg,
-                s = s + other.s,
+                L = L + other.L,
+                M = M + other.M,
+                T = T + other.T,
                 A = A + other.A,
                 K = K + other.K,
                 mol = mol + other.mol,

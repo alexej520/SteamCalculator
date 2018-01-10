@@ -1,11 +1,11 @@
 package ru.lextop.steamcalculator.steam.quantity
 
+import ru.lextop.steamcalculator.steam.unit.CoherentUnt
+
 abstract class Quantity(
         val name: String,
         val symbol: String,
-        val coherentUnit: CoherentUnit,
-        val nameId: Int,
-        val symbolId: Int) {
+        val coherentUnit: CoherentUnt) {
 
     override fun toString(): String = name
     override fun equals(other: Any?): Boolean {
@@ -15,8 +15,6 @@ abstract class Quantity(
         if (name != other.name) return false
         if (symbol != other.symbol) return false
         if (coherentUnit != other.coherentUnit) return false
-        if (nameId != other.nameId) return false
-        if (symbolId != other.symbolId) return false
 
         return true
     }
@@ -25,8 +23,6 @@ abstract class Quantity(
         var result = name.hashCode()
         result = 31 * result + symbol.hashCode()
         result = 31 * result + coherentUnit.hashCode()
-        result = 31 * result + nameId
-        result = 31 * result + symbolId
         return result
     }
 }

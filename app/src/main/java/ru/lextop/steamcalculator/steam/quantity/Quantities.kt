@@ -12,7 +12,7 @@ val SpecificEnthalpy = DerivedQuantity(
         "Specific Enthalpy", "h", Units.SpecificEnergy,
         R.string.SpecificEnthalpy, R.string.h)
 val SpecificEntropy = DerivedQuantity(
-        "Specific Entropy", "s", Units.SpecificHeatCapacity,
+        "Specific Entropy", "T", Units.SpecificHeatCapacity,
         R.string.SpecificEntropy, R.string.s)
 val VapourFraction = DerivedQuantity(
         "Vapour Fraction", "x", Units.Ratio,

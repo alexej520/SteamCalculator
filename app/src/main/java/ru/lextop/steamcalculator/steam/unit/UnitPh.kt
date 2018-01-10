@@ -60,9 +60,9 @@ open class CoherentUnt internal constructor(
     companion object {
         fun defaultSymbol(factor: Double, dimension: Dimension): String = with(dimension) {
             StringBuilder().apply {
-                if (m != 0) append("m^").append(m)
-                if (kg != 0) append("kg^").append(kg)
-                if (s != 0) append("s^").append(s)
+                if (L != 0) append("L^").append(L)
+                if (M != 0) append("M^").append(M)
+                if (T != 0) append("T^").append(T)
                 if (A != 0) append("A^").append(A)
                 if (K != 0) append("K^").append(K)
                 if (mol != 0) append("mol^").append(mol)
@@ -92,12 +92,12 @@ class BaseUnit internal constructor(
         private fun checkDimension(dimension: Dimension): Boolean {
             with(dimension) {
                 var dimCounter = 0
-                if (m == 1) dimCounter++
-                else if (m != 0) return false
-                if (kg == 1) dimCounter++
-                else if (kg != 0) return false
-                if (s == 1) dimCounter++
-                else if (s != 0) return false
+                if (L == 1) dimCounter++
+                else if (L != 0) return false
+                if (M == 1) dimCounter++
+                else if (M != 0) return false
+                if (T == 1) dimCounter++
+                else if (T != 0) return false
                 if (A == 1) dimCounter++
                 else if (A != 0) return false
                 if (K == 1) dimCounter++

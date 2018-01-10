@@ -29,7 +29,7 @@ open class CoherentUnit private constructor(val dimension: Dimension) {
     }
 
     override fun toString(): String {
-        return with(dimension) { "CoherentUnit[m = $m, kg = $kg, s = $s, A = $A, K = $K, mol = $mol, cd = $cd]" }
+        return with(dimension) { "CoherentUnit[L = $L, M = $M, T = $T, A = $A, K = $K, mol = $mol, cd = $cd]" }
     }
 
     protected infix fun DerivedUnit.addWith(pair: Pair<String, Int>): DerivedUnit {
@@ -123,7 +123,7 @@ fun Y(unit: DerivedUnit) = unit.withPrefix("Y", 1e-24)
 
 fun d(unit: DerivedUnit) = unit.withPrefix("d", 1e1)
 fun c(unit: DerivedUnit) = unit.withPrefix("c", 1e2)
-fun m(unit: DerivedUnit) = unit.withPrefix("m", 1e3)
+fun m(unit: DerivedUnit) = unit.withPrefix("L", 1e3)
 fun mc(unit: DerivedUnit) = unit.withPrefix("µ", 1e6)
 fun n(unit: DerivedUnit) = unit.withPrefix("n", 1e9)
 fun p(unit: DerivedUnit) = unit.withPrefix("p", 1e12)
