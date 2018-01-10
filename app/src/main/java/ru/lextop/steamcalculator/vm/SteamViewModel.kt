@@ -10,7 +10,7 @@ import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.binding.nullIfNotInitialized
 import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
-import ru.lextop.steamcalculator.steam.quantity.DerivedQuantity
+import ru.lextop.steamcalculator.steam.quantity.Quantity
 import ru.lextop.steamcalculator.steam.quantity.QuantityValue
 import javax.inject.Inject
 
@@ -20,13 +20,13 @@ class SteamViewModel @Inject constructor
     val secondInputFocusLive: LiveData<Boolean> = MutableLiveData()
 
     val quantityModels: List<QuantityViewModel>
-    private val firstProps: List<DerivedQuantity> = COMPUTABLE_PROP_MAP.keys.toList()
+    private val firstProps: List<Quantity> = COMPUTABLE_PROP_MAP.keys.toList()
     val firstPropNameLive: LiveData<CharSequence> = MutableLiveData()
     val secondPropNameLive: LiveData<CharSequence> = MutableLiveData()
     val firstPropNameToSymbolList: List<Pair<CharSequence, CharSequence>> = firstProps.map {
         context.getSpanned(it.symbolId) to context.getSpanned(it.nameId)
     }
-    private var secondProps: List<DerivedQuantity> = listOf()
+    private var secondProps: List<Quantity> = listOf()
         set(value) {
             field = value
             (secondPropNameToSymbolListLive as MutableLiveData).value = value.map {
@@ -89,8 +89,8 @@ class SteamViewModel @Inject constructor
     private var secondPropSelectedByUser = false
     private var secondUnitSelectedByUser = false
     private val firstQuantityObserver = Observer<QuantityValue> { p ->
-        val newProp = p!!.derivedQuantity
-        val oldProp = nullIfNotInitialized { firstQuantityValue.derivedQuantity }
+        val newProp = p!!.quantity
+        val oldProp = nullIfNotInitialized { firstQuantityValue.quantity }
         firstQuantityValue = p
 
         if (newProp != oldProp) {
@@ -106,8 +106,8 @@ class SteamViewModel @Inject constructor
         }
     }
     private val secondQuantityObserver = Observer<QuantityValue> { p ->
-        val newProp = p!!.derivedQuantity
-        val oldProp = nullIfNotInitialized { secondQuantityValue.derivedQuantity }
+        val newProp = p!!.quantity
+        val oldProp = nullIfNotInitialized { secondQuantityValue.quantity }
         secondQuantityValue = p
         (secondPropSelectionLive as MutableLiveData).value = secondProps.indexOf(newProp)
         if (!secondPropSelectedByUser) {
@@ -132,7 +132,7 @@ class SteamViewModel @Inject constructor
         quantityModels = repo.quantityValueLives.values.map { quantityLive ->
             QuantityViewModel(
                     quantityLive,
-                    repo.getViewUnitLive(quantityLive.value!!.derivedQuantity),
+                    repo.getViewUnitLive(quantityLive.value!!.quantity),
                     context,
                     isPropNameVisibleLive,
                     repo)
@@ -164,7 +164,7 @@ class SteamViewModel @Inject constructor
                     computableProps.forEach {
                         repo.setEditUnit(it, unitSet[it.coherentUnit]!!)
                     }
-                    allProps.forEach{
+                    allQuantities.forEach{
                         repo.setViewUnit(it, unitSet[it.coherentUnit]!!)
                     }
                 }
@@ -207,10 +207,10 @@ class SteamViewModel @Inject constructor
 
     fun selectFirstProp(index: Int) {
         nullIfNotInitialized { firstQuantityValue } ?: return
-        val oldProp = firstQuantityValue.derivedQuantity
+        val oldProp = firstQuantityValue.quantity
         val newProp = firstProps[index]
         val newSecondProps = COMPUTABLE_PROP_MAP[newProp]!!
-        val oldSecondProp = nullIfNotInitialized { secondQuantityValue.derivedQuantity }
+        val oldSecondProp = nullIfNotInitialized { secondQuantityValue.quantity }
         val newSecondProp = when {
             newProp == oldSecondProp -> oldProp
             oldSecondProp in newSecondProps -> oldSecondProp
@@ -226,10 +226,10 @@ class SteamViewModel @Inject constructor
     }
 
     fun selectFirstUnit(index: Int) {
-        repo.setEditUnit(firstQuantityValue.derivedQuantity, firstUnits[index])
+        repo.setEditUnit(firstQuantityValue.quantity, firstUnits[index])
     }
 
     fun selectSecondUnit(index: Int) {
-        repo.setEditUnit(secondQuantityValue.derivedQuantity, secondUnits[index])
+        repo.setEditUnit(secondQuantityValue.quantity, secondUnits[index])
     }
 }

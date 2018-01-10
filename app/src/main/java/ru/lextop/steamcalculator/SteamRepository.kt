@@ -7,7 +7,7 @@ import ru.lextop.steamcalculator.binding.setValueIfNotSame
 import ru.lextop.steamcalculator.db.*
 import ru.lextop.steamcalculator.steam.*
 import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
-import ru.lextop.steamcalculator.steam.quantity.DerivedQuantity
+import ru.lextop.steamcalculator.steam.quantity.Quantity
 import ru.lextop.steamcalculator.steam.quantity.QuantityValue
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,17 +15,17 @@ import javax.inject.Singleton
 @Singleton
 class SteamRepository @Inject constructor
 (private val steamDao: SteamDao) {
-     val viewUnits: Map<DerivedQuantity, LiveData<DerivedUnit>> = allProps.associate {
+     val viewUnits: Map<Quantity, LiveData<DerivedUnit>> = allQuantities.associate {
         val live = MutableLiveData<DerivedUnit>()
         live.value = it.coherentUnit.derived
         it to live
     }
-     val editUnits: Map<DerivedQuantity, LiveData<DerivedUnit>> = computableProps.associate {
+     val editUnits: Map<Quantity, LiveData<DerivedUnit>> = computableProps.associate {
         val live = MutableLiveData<DerivedUnit>()
         live.value = it.coherentUnit.derived
         it to live
     }
-    val quantityValueLives: Map<DerivedQuantity, LiveData<QuantityValue>> = allProps.associate {
+    val quantityValueLives: Map<Quantity, LiveData<QuantityValue>> = allQuantities.associate {
         val live = MutableLiveData<QuantityValue>()
         live.value = it(Double.NaN, it.coherentUnit.derived)
         it to live
@@ -54,7 +54,7 @@ class SteamRepository @Inject constructor
             secondQuantityValueLive.value = second
             val steam = Steam(first, second)
             steam.forEach {
-                val propLive = quantityValueLives[it.derivedQuantity]!! as MutableLiveData
+                val propLive = quantityValueLives[it.quantity]!! as MutableLiveData
                 @Suppress("UNCHECKED_CAST")
                 propLive.value = it
             }
@@ -62,21 +62,21 @@ class SteamRepository @Inject constructor
     }
 
 
-    fun getEditUnitLive(type: DerivedQuantity): LiveData<DerivedUnit> =
-            editUnits[type]!!
+    fun getEditUnitLive(quantity: Quantity): LiveData<DerivedUnit> =
+            editUnits[quantity]!!
 
-    fun setEditUnit(type: DerivedQuantity, unit: DerivedUnit) {
+    fun setEditUnit(type: Quantity, unit: DerivedUnit) {
         doAsync {
             steamDao.insertEditUnit(EditUnit(type.symbol, unit.name))
         }
     }
 
-    fun getViewUnitLive(type: DerivedQuantity): LiveData<DerivedUnit> =
-            viewUnits[type]!!
+    fun getViewUnitLive(quantity: Quantity): LiveData<DerivedUnit> =
+            viewUnits[quantity]!!
 
-    fun setViewUnit(type: DerivedQuantity, unit: DerivedUnit) {
+    fun setViewUnit(quantity: Quantity, unit: DerivedUnit) {
         doAsync {
-            steamDao.insertViewUnit(ViewUnit(type.symbol, unit.name))
+            steamDao.insertViewUnit(ViewUnit(quantity.symbol, unit.name))
         }
     }
 

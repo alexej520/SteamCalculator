@@ -6,7 +6,6 @@ import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
 import ru.lextop.steamcalculator.steam.quantity.QuantityValue
-import ru.lextop.steamcalculator.unitList
 
 open class QuantityViewModel(
         quantityValueLive: LiveData<QuantityValue>,
@@ -15,7 +14,7 @@ open class QuantityViewModel(
         val isPropNameVisibleLive: LiveData<Boolean>,
         private val repo: SteamRepository)
     : ViewModel() {
-    private val prop = quantityValueLive.value!!.derivedQuantity
+    private val prop = quantityValueLive.value!!.quantity
     val propName = context.getSpanned(prop.nameId)
     val propSymbol = context.getSpanned(prop.symbolId)
     val valueLive: LiveData<CharSequence> = MutableLiveData()
@@ -24,7 +23,7 @@ open class QuantityViewModel(
             field = value
             (valueLive as MutableLiveData).value = CustomFormat.format(value)
         }
-    private val _units = quantityValueLive.value!!.derivedQuantity.unitList
+    private val _units = quantityValueLive.value!!.quantity.unitList
     val units = _units.map {
         context.getSpanned(it.id)
     }

@@ -35,12 +35,13 @@ import ru.lextop.steamcalculator.steam.quantity.Units.Temperature_1.R_1
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.BTU_hrftR
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.W_mK
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.kW_mK
+import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
 
-val DerivedQuantity.unitList get() = coherentUnit.unitList
+val Quantity.unitList get() = coherentUnit.derivedUnits
 
 val units = Units
 
-private val COMPUTABLE_PAIRS: List<Pair<DerivedQuantity, DerivedQuantity>> = listOf(
+private val COMPUTABLE_PAIRS: List<Pair<Quantity, Quantity>> = listOf(
         Pressure to Temperature,
         Pressure to SpecificEnthalpy,
         Pressure to SpecificEntropy,
@@ -52,7 +53,7 @@ private val COMPUTABLE_PAIRS: List<Pair<DerivedQuantity, DerivedQuantity>> = lis
         Temperature to VapourFraction
 )
 
-val COMPUTABLE_PROP_MAP: Map<DerivedQuantity, List<DerivedQuantity>> = with(COMPUTABLE_PAIRS.unzip()){
+val COMPUTABLE_PROP_MAP: Map<Quantity, List<Quantity>> = with(COMPUTABLE_PAIRS.unzip()){
     first.union(second).associate { prop ->
         prop to COMPUTABLE_PAIRS.mapNotNull { (p1, p2) ->
             when (prop) {
@@ -66,13 +67,13 @@ val COMPUTABLE_PROP_MAP: Map<DerivedQuantity, List<DerivedQuantity>> = with(COMP
 
 val computableProps = COMPUTABLE_PROP_MAP.keys.toList()
 
-val allProps = DerivedQuantity.SYMBOL_PROP_MAP.values
+val allQuantities = Quantity.QUANTITY_MAP.values
 
-fun String.toProperty(): DerivedQuantity =
-        DerivedQuantity.SYMBOL_PROP_MAP[this]!!
+fun String.toQuantity(): Quantity =
+        Quantity.QUANTITY_MAP[this]!!
 
 fun String.toUnit(prop: DerivedQuantity): DerivedUnit =
-        prop.coherentUnit.unitMap[this]!!
+        prop.coherentUnit.derivedUnitMap[this]!!
 
 val defaultUnits = listOf(
         kg_m3, ratio, Pas, K_1, MPa_1, m2_s, MPa, kJ_kg, kJ_kgK, m3_kg, m_s, N_m, K, W_mK

@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
 import ru.lextop.steamcalculator.steam.quantity.DerivedQuantity
 import ru.lextop.steamcalculator.steam.quantity.QuantityValue
-import ru.lextop.steamcalculator.toProperty
+import ru.lextop.steamcalculator.toQuantity
 import ru.lextop.steamcalculator.toUnit
 
 @Entity(tableName = ViewUnit.TABLE_NAME)
@@ -27,7 +27,7 @@ data class ViewUnit(
 @JvmName("viewUnitToUnitMap")
 fun List<ViewUnit>.toPropUnitList(): List<Pair<DerivedQuantity, DerivedUnit>> =
         map {
-            val propType = it.propSymbol.toProperty()
+            val propType = it.propSymbol.toQuantity()
             propType to it.unitName.toUnit(propType)
         }
 
@@ -49,7 +49,7 @@ data class EditUnit(
 @JvmName("editUnitToUnitMap")
 fun List<EditUnit>.toPropUnitList(): List<Pair<DerivedQuantity, DerivedUnit>> =
         map {
-            val propType = it.propSymbol.toProperty()
+            val propType = it.propSymbol.toQuantity()
             propType to it.unitName.toUnit(propType)
         }
 
@@ -64,7 +64,7 @@ data class SelectedQuantity(
         val value: Double?
 ) {
     constructor(key: String, quantityValue: QuantityValue)
-            : this(key, quantityValue.derivedQuantity.symbol, quantityValue[quantityValue.derivedQuantity.coherentUnit.derived].value)
+            : this(key, quantityValue.quantity.symbol, quantityValue[quantityValue.quantity.coherentUnit.derived].value)
 
     companion object {
         const val TABLE_NAME = "selected_property"
@@ -78,7 +78,7 @@ const val KEY_FIRST_PROP = "first"
 const val KEY_SECOND_PROP = "second"
 
 fun SelectedQuantity.toQuantity(): QuantityValue {
-    val prop = propSymbol.toProperty()
+    val prop = propSymbol.toQuantity()
     return prop(value ?: Double.NaN, prop.coherentUnit.derived)
 }
 

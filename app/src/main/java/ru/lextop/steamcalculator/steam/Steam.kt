@@ -16,7 +16,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
         val computablePair = getComputablePair(pair)
         value1 = computablePair.first.value
         value2 = computablePair.second.value
-        computablePairProps = computablePair.first.derivedQuantity to computablePair.second.derivedQuantity
+        computablePairProps = computablePair.first.quantity to computablePair.second.quantity
     }
 
     private fun if97(p: DerivedQuantity): Lazy<QuantityValue> = lazy {
@@ -294,28 +294,28 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
 
         private fun getComputablePair(pair: Pair<QuantityValue, QuantityValue>): Pair<QuantityValue, QuantityValue> {
             val (arg1, arg2) = pair
-            val baseArg1 = arg1[arg1.derivedQuantity.coherentUnit.derived]
-            val baseArg2 = arg2[arg2.derivedQuantity.coherentUnit.derived]
+            val baseArg1 = arg1[arg1.quantity.coherentUnit.derived]
+            val baseArg2 = arg2[arg2.quantity.coherentUnit.derived]
             val q1: QuantityValue
             val q2: QuantityValue
             when (SpecificVolume) {
-                baseArg1.derivedQuantity -> {
+                baseArg1.quantity -> {
                     q1 = Density(1 / baseArg1.value, Density.coherentUnit.derived)
                     q2 = baseArg2
                 }
-                baseArg2.derivedQuantity -> {
+                baseArg2.quantity -> {
                     q1 = baseArg1
                     q2 = Density(1 / baseArg2.value, Density.coherentUnit.derived)
                 }
                 else -> {
-                    if (baseArg1.derivedQuantity == Temperature && baseArg2.derivedQuantity == SpecificEntropy) {
+                    if (baseArg1.quantity == Temperature && baseArg2.quantity == SpecificEntropy) {
                         q1 = baseArg1
                         q2 = VapourFraction(try {
                             IF97_INSTANCE.vapourFractionTS(baseArg1.value, baseArg2.value)
                         } catch (e: OutOfRangeException) {
                             Double.NaN
                         }, VapourFraction.coherentUnit.derived)
-                    } else if (baseArg1.derivedQuantity == SpecificEntropy && baseArg2.derivedQuantity == Temperature) {
+                    } else if (baseArg1.quantity == SpecificEntropy && baseArg2.quantity == Temperature) {
                         q1 = baseArg2
                         q2 = VapourFraction(try {
                             IF97_INSTANCE.vapourFractionTS(baseArg2.value, baseArg1.value)
@@ -329,8 +329,8 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                 }
             }
             return when {
-                q1.derivedQuantity to q2.derivedQuantity in COMPUTABLE_PAIRS -> q1 to q2
-                q2.derivedQuantity to q1.derivedQuantity in COMPUTABLE_PAIRS -> q2 to q1
+                q1.quantity to q2.quantity in COMPUTABLE_PAIRS -> q1 to q2
+                q2.quantity to q1.quantity in COMPUTABLE_PAIRS -> q2 to q1
                 else -> throw IllegalArgumentException()
             }
         }

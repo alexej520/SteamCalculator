@@ -1,45 +1,44 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-abstract class CoherentUnit private constructor(private val id: List<Int>) {
-    val unitList: List<DerivedUnit> = mutableListOf()
-    val unitMap: Map<String, DerivedUnit> = mutableMapOf()
+open class CoherentUnit private constructor(val dimension: Dimension) {
+    constructor(m: Int = 0,
+                kg: Int = 0,
+                s: Int = 0,
+                A: Int = 0,
+                K: Int = 0,
+                mol: Int = 0,
+                cd: Int = 0) : this(Dimension(m, kg, s, A, K, mol, cd))
+    val derivedUnits: List<DerivedUnit> = mutableListOf()
+    val derivedUnitMap: Map<String, DerivedUnit> = mutableMapOf()
     val defaultProperty = DerivedQuantity(toString(), "", this, 0, 0)
     private var _derived: DerivedUnit? = null
     val derived: DerivedUnit get() = _derived!!
 
     operator fun div(unit: CoherentUnit): CoherentUnit {
-        val resultId = id.zip(unit.id).map { (i1, i2) -> i1 - i2 }
-        return baseUnits.getOrPut(resultId) { object : CoherentUnit(resultId){} }
+        val resultDim = dimension / unit.dimension
+        return coherentUnits.getOrPut(resultDim) { CoherentUnit(resultDim) }
     }
 
     operator fun times(unit: CoherentUnit): CoherentUnit {
-        val resultId = id.zip(unit.id).map { (i1, i2) -> i1 + i2 }
-        return baseUnits.getOrPut(resultId) { object : CoherentUnit(resultId){} }
+        val resultDim = dimension * unit.dimension
+        return coherentUnits.getOrPut(resultDim) { CoherentUnit(resultDim) }
     }
 
-    protected constructor(m: Int = 0,
-                          kg: Int = 0,
-                          s: Int = 0,
-                          A: Int = 0,
-                          K: Int = 0,
-                          mol: Int = 0,
-                          cd: Int = 0) : this(listOf(m, kg, s, A, K, mol, cd))
-
     companion object {
-        private val baseUnits: MutableMap<List<Int>, CoherentUnit> = mutableMapOf()
+        private val coherentUnits: MutableMap<Dimension, CoherentUnit> = mutableMapOf()
     }
 
     override fun toString(): String {
-        return id.joinToString(prefix = "CoherentUnit[", separator = ",", postfix = "]")
+        return with(dimension) { "CoherentUnit[m = $m, kg = $kg, s = $s, A = $A, K = $K, mol = $mol, cd = $cd]" }
     }
 
     protected infix fun DerivedUnit.addWith(pair: Pair<String, Int>): DerivedUnit {
-        if (this@CoherentUnit != coherentUnit) throw RuntimeException("Incorporable CoherentUnit: ${coherentUnit}")
+        if (this@CoherentUnit != coherentUnit) throw RuntimeException("Incorporable Unit: ${coherentUnit}")
         val unitWithNewName = copy(name = pair.first, id = pair.second)
-        return if ((unitMap as MutableMap).put(unitWithNewName.name, unitWithNewName) != null) {
+        return if ((derivedUnitMap as MutableMap).put(unitWithNewName.name, unitWithNewName) != null) {
             throw RuntimeException("${coherentUnit} already has unitName: $name")
         } else {
-            (unitList as MutableList).add(unitWithNewName)
+            (derivedUnits as MutableList).add(unitWithNewName)
             unitWithNewName
         }
     }
@@ -54,7 +53,7 @@ abstract class CoherentUnit private constructor(private val id: List<Int>) {
         val unit = DerivedUnit(this, toString(), 1.0, 0.0, 0)
         val alias = if (pair == null) unit else unit addWith pair
         _derived = alias
-        if (baseUnits.put(id, this) != null) {
+        if (coherentUnits.put(dimension, this) != null) {
             throw RuntimeException("CoherentUnit with same parameters already created")
         }
         return alias

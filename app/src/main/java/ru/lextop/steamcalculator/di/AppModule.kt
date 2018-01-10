@@ -12,6 +12,7 @@ import dagger.Provides
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.db.*
 import javax.inject.Singleton
+import ru.lextop.steamcalculator.steam.quantity.invoke
 
 @Module(includes = arrayOf(
         ViewModelModule::class
@@ -65,7 +66,7 @@ abstract class AppModule {
                                 columns = listOf(
                                         ViewUnit.PROP_SYMBOL,
                                         ViewUnit.UNIT_NAME),
-                                values = allProps.map { prop ->
+                                values = allQuantities.map { prop ->
                                     listOf(
                                             prop.symbol,
                                             defaultUnits[prop.coherentUnit]!!.name)
