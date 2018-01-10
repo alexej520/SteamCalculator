@@ -5,19 +5,19 @@ package ru.lextop.steamcalculator.steam.quantity
 class Dimension(val L: Int = 0,
                 val M: Int = 0,
                 val T: Int = 0,
-                val A: Int = 0,
-                val K: Int = 0,
-                val mol: Int = 0,
-                val cd: Int = 0) {
+                val I: Int = 0,
+                val O: Int = 0,
+                val N: Int = 0,
+                val J: Int = 0) {
     operator fun div(other: Dimension): Dimension {
         return Dimension(
                 L = L - other.L,
                 M = M - other.M,
                 T = T - other.T,
-                A = A - other.A,
-                K = K - other.K,
-                mol = mol - other.mol,
-                cd = cd - other.cd)
+                I = I - other.I,
+                O = O - other.O,
+                N = N - other.N,
+                J = J - other.J)
     }
 
     operator fun times(other: Dimension): Dimension {
@@ -25,9 +25,9 @@ class Dimension(val L: Int = 0,
                 L = L + other.L,
                 M = M + other.M,
                 T = T + other.T,
-                A = A + other.A,
-                K = K + other.K,
-                mol = mol + other.mol,
-                cd = cd + other.cd)
+                I = I + other.I,
+                O = O + other.O,
+                N = N + other.N,
+                J = J + other.J)
     }
 }

@@ -1,5 +1,6 @@
 package ru.lextop.steamcalculator.steam.quantity
 
+import ru.lextop.steamcalculator.steam.unit.base.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.steam.quantity.Units.Energy.BTU
 import ru.lextop.steamcalculator.steam.quantity.Units.Energy.cal
@@ -24,6 +25,7 @@ import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.kcalth_kg
 import ru.lextop.steamcalculator.steam.quantity.Units.SpecificVolume.ft3_lb
 import ru.lextop.steamcalculator.steam.quantity.Units.Temperature.K
 import ru.lextop.steamcalculator.steam.quantity.Units.Temperature.Ra
+
 
 object Units{
     object Mass : CoherentUnit(kg = 1) {
@@ -58,14 +60,14 @@ object Units{
     }
 
     object SpecificHeatCapacity : CoherentUnit(m = 2, K = -1, s = -2){
-        val J_kgK = createCoherentUnit(Pair("J/(M*K)", R.string.J_kgK))
-        val kJ_kgK = kJ_kg / K addWith Pair("kJ/(M*K)", R.string.kJ_kgK)
-        val cal_kgK = cal_kg / K addWith Pair("cal/(M*K)", R.string.cal_kgK)
-        val calth_kgK = calth_kg / K addWith Pair("calth/(M*K)", R.string.calth_kgK)
-        val cal15_kgK = cal15_kg / K addWith Pair("cal15/(M*K)", R.string.cal15_kgK)
-        val kcal_kgK = kcal_kg / K addWith Pair("kcal/(M*K)", R.string.kcal_kgK)
-        val kcalth_kgK = kcalth_kg / K addWith Pair("kcalth/(M*K)", R.string.kcalth_kgK)
-        val kcal15_kgK = kcal15_kg / K addWith Pair("kcal15/(M*K)", R.string.kcal15_kgK)
+        val J_kgK = createCoherentUnit(Pair("J/(M*O)", R.string.J_kgK))
+        val kJ_kgK = kJ_kg / K addWith Pair("kJ/(M*O)", R.string.kJ_kgK)
+        val cal_kgK = cal_kg / K addWith Pair("cal/(M*O)", R.string.cal_kgK)
+        val calth_kgK = calth_kg / K addWith Pair("calth/(M*O)", R.string.calth_kgK)
+        val cal15_kgK = cal15_kg / K addWith Pair("cal15/(M*O)", R.string.cal15_kgK)
+        val kcal_kgK = kcal_kg / K addWith Pair("kcal/(M*O)", R.string.kcal_kgK)
+        val kcalth_kgK = kcalth_kg / K addWith Pair("kcalth/(M*O)", R.string.kcalth_kgK)
+        val kcal15_kgK = kcal15_kg / K addWith Pair("kcal15/(M*O)", R.string.kcal15_kgK)
         val BTU_lbR = BTU_lb / Ra addWith Pair("BTU/(lb*R)", R.string.BTU_lbR)
     }
 
@@ -84,7 +86,7 @@ object Units{
     }
 
     object Temperature : CoherentUnit(K = 1) {
-        val K = createCoherentUnit(Pair("K", R.string.K))
+        val K = createCoherentUnit(Pair("O", R.string.K))
         val C = K - 273.15 addWith Pair("C", R.string.C)
         val F = 9.0 / 5.0 * C + 32.0 addWith Pair("F", R.string.F)
         val Ra = F + 459.57 addWith Pair("R", R.string.Ra)
@@ -143,7 +145,7 @@ object Units{
     }
 
     object ThermalConductivity: CoherentUnit(kg = 1, m = 1, s = -3, K = -1){
-        val W_mK = createCoherentUnit(Pair("W/(L*K)", R.string.W_mK))
+        val W_mK = createCoherentUnit(Pair("W/(L*O)", R.string.W_mK))
         val kW_mK = k(W_mK) addWith Pair(byDefault, R.string.kW_mK)
         val BTU_hrftR = W_mK / 1.7295772056 addWith Pair("BTU/(hr*ft*R)", R.string.BTU_hrftR)
     }

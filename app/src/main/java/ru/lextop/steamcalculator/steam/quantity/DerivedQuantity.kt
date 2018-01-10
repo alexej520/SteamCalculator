@@ -1,5 +1,7 @@
 package ru.lextop.steamcalculator.steam.quantity
 
-class DerivedQuantity(name: String, symbol: String, coherentUnit: CoherentUnit, nameId: Int, symbolId: Int) :
-        Quantity(name, symbol, coherentUnit, nameId, symbolId)
+import ru.lextop.steamcalculator.steam.unit.CoherentUnt
+
+class DerivedQuantity(name: String, symbol: String, coherentUnit: CoherentUnt) :
+        Quantity(name, symbol, coherentUnit)
 
