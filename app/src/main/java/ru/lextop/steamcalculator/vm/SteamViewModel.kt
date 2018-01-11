@@ -14,6 +14,7 @@ import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.binding.nullIfNotInitialized
 import ru.lextop.steamcalculator.model.*
+import steam.quantities.RefractiveIndex
 import javax.inject.Inject
 
 class SteamViewModel @Inject constructor
@@ -132,12 +133,13 @@ class SteamViewModel @Inject constructor
         CustomFormat.maxSymbols = prefs.getInt(context.getString(R.string.preferenceKeyDecimals), 5)
         CustomFormat.scientificFormatOnly = prefs.getBoolean(context.getString(R.string.preferenceKeyScientificFormatOnly), false)
         quantityValueModels = repo.quantityValueLives.values.map { quantityLive ->
+            val quantity = quantityLive.value!!.quantity
             QuantityValueViewModel(
                     quantityLive,
-                    repo.getViewUnitLive(quantityLive.value!!.quantity),
+                    repo.getViewUnitLive(quantity),
                     context,
                     isQuantityNameVisibleLive,
-                    repo)
+                    { repo.setViewUnit(quantity, it) })
         }
         repo.firstQuantityValueLive.observeForever(firstQuantityObserver)
         repo.secondQuantityValueLive.observeForever(secondQuantityObserver)
@@ -233,5 +235,24 @@ class SteamViewModel @Inject constructor
 
     fun selectSecondUnit(index: Int) {
         repo.setEditUnit(secondQuantityValue.quantity, secondUnits[index])
+    }
+
+    // For Refractive Index
+
+    val refractiveIndexQuantityValueViewModel: QuantityValueViewModel
+
+    init {
+        val unitLive = MutableLiveData<UnitPh>()
+        val refractiveIndexQuantityValueLive = repo.getRefractiveIndexQuantityValueLive()
+        refractiveIndexQuantityValueLive.observeForever {
+            unitLive.value = it!!.unit
+        }
+        refractiveIndexQuantityValueViewModel = QuantityValueViewModel(
+                quantityValueLive = refractiveIndexQuantityValueLive,
+                unitLive = unitLive,
+                context = context,
+                isPropNameVisibleLive = isQuantityNameVisibleLive,
+                onUnitSelect = { repo.setViewUnit(RefractiveIndex, it) }
+        )
     }
 }

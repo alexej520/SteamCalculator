@@ -86,9 +86,9 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
         }
     }
 
-    fun refractiveIndex(waveLength: QuantityValue): QuantityValue {
-        if (waveLength.quantity != Wavelength) throw IllegalArgumentException()
-        val doubleResult = CALC_REFRACTIVE_INDEX_MAP[computablePairProps]!!.invoke(value1, value2, waveLength[m].value)
+    fun refractiveIndex(wavelength: QuantityValue): QuantityValue {
+        if (wavelength.quantity != Wavelength) throw IllegalArgumentException()
+        val doubleResult = CALC_REFRACTIVE_INDEX_MAP[computablePairProps]!!.invoke(value1, value2, wavelength[m].value)
         return QuantityValue(Wavelength, doubleResult, m)
     }
 

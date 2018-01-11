@@ -14,7 +14,7 @@ class QuantityValueViewModel(
         unitLive: LiveData<UnitPh>,
         context: Context,
         val isPropNameVisibleLive: LiveData<Boolean>,
-        private val repo: SteamRepository)
+        val onUnitSelect: (UnitPh) -> Unit)
     : ViewModel() {
     private val quantity = quantityValueLive.value!!.quantity
     val quantityName = context.getSpanned(quantity.nameId)
@@ -46,6 +46,6 @@ class QuantityValueViewModel(
     }
 
     fun selectUnit(id: Int) {
-        repo.setEditUnit(quantity, _units[id])
+        onUnitSelect(_units[id])
     }
 }
