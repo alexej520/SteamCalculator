@@ -66,7 +66,7 @@ class SteamRepository @Inject constructor
 
     fun setEditUnit(type: Quantity, unit: UnitPh) {
         doAsync {
-            steamDao.insertEditUnit(EditUnit(type.symbol, unit.name))
+            steamDao.insertEditUnit(EditUnit(type.symbol, unit.symbol))
         }
     }
 
@@ -75,15 +75,15 @@ class SteamRepository @Inject constructor
 
     fun setViewUnit(quantity: Quantity, unit: UnitPh) {
         doAsync {
-            steamDao.insertViewUnit(ViewUnit(quantity.symbol, unit.name))
+            steamDao.insertViewUnit(ViewUnit(quantity.symbol, unit.symbol))
         }
     }
 
     fun setProperties(first: QuantityValue, second: QuantityValue) {
         doAsync {
             steamDao.insertSelectedProperty(
-                    SelectedQuantity(KEY_FIRST_PROP, first),
-                    SelectedQuantity(KEY_SECOND_PROP, second)
+                    SelectedQuantityValue(KEY_FIRST_PROP, first),
+                    SelectedQuantityValue(KEY_SECOND_PROP, second)
             )
         }
     }

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 @Database(entities = arrayOf(
         ViewUnit::class,
         EditUnit::class,
-        SelectedQuantity::class
+        SelectedQuantityValue::class
 ), version = 1)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun propertyUnitPairDao(): SteamDao

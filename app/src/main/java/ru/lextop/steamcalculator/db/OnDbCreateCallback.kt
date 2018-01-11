@@ -2,9 +2,11 @@ package ru.lextop.steamcalculator.db
 
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.RoomDatabase
-import quantityvalue.CoherentUnit
 import quantityvalue.invoke
-import ru.lextop.steamcalculator.model.*
+import ru.lextop.steamcalculator.model.allQuantities
+import ru.lextop.steamcalculator.model.computablePropMap
+import ru.lextop.steamcalculator.model.computableQuantities
+import ru.lextop.steamcalculator.model.defaultUnits
 
 object OnDbCreateCallback: RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
@@ -16,7 +18,7 @@ object OnDbCreateCallback: RoomDatabase.Callback() {
                 values = computableQuantities.map { prop ->
                     listOf(
                             prop.symbol,
-                            defaultUnits[prop.dimension]!!.name)
+                            defaultUnits[prop.dimension]!!.symbol)
                 })
         db.fillTable(
                 tableName = ViewUnit.TABLE_NAME,
@@ -26,19 +28,19 @@ object OnDbCreateCallback: RoomDatabase.Callback() {
                 values = allQuantities.map { prop ->
                     listOf(
                             prop.symbol,
-                            defaultUnits[prop.dimension]!!.name)
+                            defaultUnits[prop.dimension]!!.symbol)
                 })
         val first = computablePropMap.keys.first()
         val second = computablePropMap[first]!!.first()
         db.fillTable(
-                tableName = SelectedQuantity.TABLE_NAME,
+                tableName = SelectedQuantityValue.TABLE_NAME,
                 columns = listOf(
-                        SelectedQuantity.KEY,
-                        SelectedQuantity.PROP_SYMBOL,
-                        SelectedQuantity.VALUE),
+                        SelectedQuantityValue.KEY,
+                        SelectedQuantityValue.PROP_SYMBOL,
+                        SelectedQuantityValue.VALUE),
                 values = listOf(
-                        SelectedQuantity(KEY_FIRST_PROP, first(Double.NaN, CoherentUnit(first.dimension))),
-                        SelectedQuantity(KEY_SECOND_PROP, second(Double.NaN, CoherentUnit(second.dimension)))).map {
+                        SelectedQuantityValue(KEY_FIRST_PROP, first(Double.NaN, defaultUnits[first.dimension]!!)),
+                        SelectedQuantityValue(KEY_SECOND_PROP, second(Double.NaN, defaultUnits[second.dimension]!!))).map {
                     listOf(
                             it.key,
                             it.propSymbol,

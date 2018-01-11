@@ -36,13 +36,50 @@ val BTU_lb = BTU / lb withSymbol "BTU/lb"
 // Temperature
 
 val K = quantityvalue.baseunits.K
-val C = K - 273.15 withSymbol "C"
-val F = 9.0 / 5.0 * C + 32.0 withSymbol "F"
-val Ra = F + 459.57 withSymbol "R"
-val D = (100.0 - C) * 3.0 / 2.0 withSymbol "D"
-val N = 33.0 / 100.0 * C withSymbol "N"
-val Re = 0.8 * C withSymbol "Re"
-val Ro = 21.0 / 40.0 * C + 7.5 withSymbol "Ro"
+
+private class OffsetUnitConverter(
+        val factor: Double,
+        internal val offset: Double)
+    : UnitPh.Converter {
+    override fun convertToCoherent(value: Double): Double = (value - offset) / factor
+    override fun convertFromCoherent(value: Double): Double = value * factor + offset
+}
+
+val C = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = 1.0, offset = -273.15),
+        factor = 1.0,
+        symbol = "C")
+val F = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = 9.0 / 5.0, offset = -273.15 * 9.0 / 5.0 + 32.0),
+        factor = 9.0 / 5.0,
+        symbol = "F")
+val Ra = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = 9.0 / 5.0, offset = -273.15 * 9.0 / 5.0 + 32.0 + 459.57),
+        factor = 9.0 / 5.0,
+        symbol = "R")
+val D = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = -2.0 / 3.0, offset = 373.15 / -(2.0 / 3.0)),
+        factor = -3.0 / 2.0,
+        symbol = "D")
+val N = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = 33.0 / 100.0, offset = -273.15 * 33.0 / 100.0),
+        factor = 33.0 / 100.0,
+        symbol = "N")
+val Re = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = 0.8, offset = -273.15 * 0.8),
+        factor = 0.8,
+        symbol = "Re")
+val Ro = UnitPh(
+        dimension = K.dimension,
+        converter = OffsetUnitConverter(factor = 21.0 / 40.0, offset = -273.15 * 21.0 / 40.0 + 7.5),
+        factor = 21.0 / 40.0,
+        symbol = "Ro")
 
 // Specific Heat Capacity
 
@@ -54,7 +91,7 @@ val cal15_kgK = cal15_kg / K withSymbol "cal15/(kg*K)"
 val kcal_kgK = kcal_kg / K withSymbol "kcal/(kg*K)"
 val kcalth_kgK = kcalth_kg / K withSymbol "kcalth/(kg*K)"
 val kcal15_kgK = kcal15_kg / K withSymbol "kcal15/(kg*K)"
-val BTU_lbR = BTU_lb / Ra withSymbol "BTU/(lb*R)"
+val BTU_lbR = BTU_lb / K / (9.0 / 5.0) withSymbol "BTU/(lb*R)"
 
 // Pressure
 
@@ -87,13 +124,13 @@ val lb_ft3 = ratio / ft3_lb withSymbol "lb/ft3"
 
 // Dynamic Viscosity
 
-val Pas = CoherentUnit(Dimension(M = 1, T = -1, L = -1), symbol = "Pa*T")
+val Pas = CoherentUnit(Dimension(M = 1, T = -1, L = -1), symbol = "Pa*s")
 val cP = Pas * 1e3 withSymbol "cP"
 
 // Temperature^-1
 
 val K_1 = CoherentUnit(Dimension(O = -1), symbol = "1/K")
-val R_1 = ratio / Ra withSymbol  "1/R"
+val R_1 = ratio / K / (9.0 / 5.0) withSymbol "1/R"
 
 // Compressibility
 

@@ -19,9 +19,9 @@ interface SteamDao {
     @Update
     fun insertEditUnit(editUnit: EditUnit)
 
-    @Query("SELECT * from ${SelectedQuantity.TABLE_NAME}")
-    fun getSelectedProperty(): LiveData<List<SelectedQuantity>>
+    @Query("SELECT * from ${SelectedQuantityValue.TABLE_NAME}")
+    fun getSelectedProperty(): LiveData<List<SelectedQuantityValue>>
 
     @Update
-    fun insertSelectedProperty(vararg selectedQuantity: SelectedQuantity)
+    fun insertSelectedProperty(vararg selectedQuantityValue: SelectedQuantityValue)
 }

@@ -50,8 +50,8 @@ fun List<EditUnit>.toPropUnitList(): List<Pair<Quantity, UnitPh>> =
             propType to it.unitName.toUnit()
         }
 
-@Entity(tableName = SelectedQuantity.TABLE_NAME)
-data class SelectedQuantity(
+@Entity(tableName = SelectedQuantityValue.TABLE_NAME)
+data class SelectedQuantityValue(
         @ColumnInfo(name = KEY)
         @PrimaryKey
         val key: String,
@@ -61,7 +61,7 @@ data class SelectedQuantity(
         val value: Double?
 ) {
     constructor(key: String, quantityValue: QuantityValue)
-            : this(key, quantityValue.quantity.symbol, quantityValue[CoherentUnit(quantityValue.unit.dimension)].value)
+            : this(key, quantityValue.quantity.symbol, quantityValue[siUnits[quantityValue.unit.dimension]!!].value)
 
     companion object {
         const val TABLE_NAME = "selected_property"
@@ -74,11 +74,11 @@ data class SelectedQuantity(
 const val KEY_FIRST_PROP = "first"
 const val KEY_SECOND_PROP = "second"
 
-fun SelectedQuantity.toQuantity(): QuantityValue {
+fun SelectedQuantityValue.toQuantityValue(): QuantityValue {
     val prop = propSymbol.toQuantity()
-    return prop(value ?: Double.NaN, CoherentUnit(prop.dimension))
+    return prop(value ?: Double.NaN, siUnits[prop.dimension]!!)
 }
 
 @Suppress("UNCHECKED_CAST")
-fun List<SelectedQuantity>.toQuantityMap(): Map<String, QuantityValue> =
-        map { it.key to it.toQuantity() }.toMap()
+fun List<SelectedQuantityValue>.toQuantityMap(): Map<String, QuantityValue> =
+        map { it.key to it.toQuantityValue() }.toMap()

@@ -66,10 +66,9 @@ val Quantity.symbolId: Int get() = Quantity_symbolId[this]!!
 
 val allQuantities: List<Quantity> = quantitiesMapping.map { it.first }
 
-// TODO Check
-private val quantityMap = allQuantities.associate { it.name to it }
+private val String_toQuantity = allQuantities.associate { it.symbol to it }
 
-fun String.toQuantity(): Quantity = quantityMap[this]!!
+fun String.toQuantity(): Quantity = String_toQuantity[this]!!
 
 private val unitsMapping: List<Pair<UnitPh, Int>> = listOf(
 
@@ -202,9 +201,9 @@ private val Dimension_unitList = unitsMapping.map { it.first }.groupBy { it.dime
 
 val Dimension.unitList: List<UnitPh> get() = Dimension_unitList[this]!!
 
-private val unitMap = unitsMapping.associate { it.first.name to it.first }
+private val String_toUnit = unitsMapping.associate { it.first.symbol to it.first }
 
-fun String.toUnit(): UnitPh = unitMap[this]!!
+fun String.toUnit(): UnitPh = String_toUnit[this]!!
 
 val defaultUnits = listOf(
         kg_m3, ratio, Pas, K_1, MPa_1, m2_s, MPa, kJ_kg, kJ_kgK, m3_kg, m_s, N_m, K, W_mK

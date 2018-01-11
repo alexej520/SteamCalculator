@@ -1,27 +1,25 @@
 package quantityvalue
 
-import java.util.Locale
+import java.util.*
 
-class UnitPh constructor(
+class UnitPh(
         val dimension: Dimension,
         val converter: Converter? = null,
-        val factor: Double = converter?.factor ?: UNDEFINED,
+        val factor: Double = Double.NaN,
         val name: String = "AnonymousUnit",
         val symbol: String = defaultSymbol(factor, dimension)) {
     fun convertToCoherent(value: Double): Double =
-            converter?.convertToCoherent(value) ?: factor / value
+            converter?.convertToCoherent(value) ?: value / factor
 
     fun convertFromCoherent(value: Double): Double =
-            converter?.convertFromCoherent(value) ?: factor * value
+            converter?.convertFromCoherent(value) ?: value * factor
 
     interface Converter {
-        val factor: Double
         fun convertToCoherent(value: Double): Double
         fun convertFromCoherent(value: Double): Double
     }
 
     companion object {
-        val UNDEFINED = Double.NaN
         fun defaultSymbol(factor: Double, dimension: Dimension): String = with(dimension) {
             StringBuilder().apply {
                 if (L != 0) append("m").append(L)
@@ -39,22 +37,19 @@ class UnitPh constructor(
     }
 }
 
-// for Temperature units
-
-class OffsetUnitConverter(
-        override val factor: Double,
-        val offset: Double)
-    : UnitPh.Converter {
-    override fun convertToCoherent(value: Double): Double = (value - offset) / factor
-    override fun convertFromCoherent(value: Double): Double = value * factor + offset
-}
-
 @Suppress("NOTHING_TO_INLINE")
 inline fun CoherentUnit(
         dimension: Dimension,
         name: String = "AnonymousUnit",
         symbol: String = UnitPh.defaultSymbol(1.0, dimension))
         : UnitPh = UnitPh(dimension, factor = 1.0, name = name, symbol = symbol)
+
+@Suppress("NOTHING_TO_INLINE")
+private inline fun UnitPh.checkWithoutConverter() {
+    if (converter != null) {
+        throw UnsupportedOperationException("unit must have converter == null")
+    }
+}
 
 operator fun UnitPh.times(unit: UnitPh): UnitPh =
         UnitPh(dimension = dimension * unit.dimension, factor = factor * unit.factor)
@@ -74,29 +69,11 @@ operator fun UnitPh.div(div: Double): UnitPh =
 operator fun Double.div(unit: UnitPh): UnitPh =
         UnitPh(dimension = unit.dimension, factor = unit.factor / this)
 
-operator fun UnitPh.plus(plus: Double): UnitPh {
-    val newConverter = OffsetUnitConverter(factor, ((converter as? OffsetUnitConverter)?.factor ?: 0.0) + plus)
-    return UnitPh(dimension = dimension, factor = factor, converter = newConverter)
-}
-
-operator fun Double.plus(unit: UnitPh): UnitPh {
-    val newConverter = OffsetUnitConverter(unit.factor, ((unit.converter as? OffsetUnitConverter)?.factor ?: 0.0) + this)
-    return UnitPh(dimension = unit.dimension, factor = unit.factor, converter = newConverter)
-}
-
-operator fun UnitPh.minus(minus: Double): UnitPh {
-    val newConverter = OffsetUnitConverter(factor, ((converter as? OffsetUnitConverter)?.factor ?: 0.0) - minus)
-    return UnitPh(dimension = dimension, factor = factor, converter = newConverter)
-}
-
-operator fun Double.minus(unit: UnitPh): UnitPh {
-    val newConverter = OffsetUnitConverter(unit.factor, this - ((unit.converter as? OffsetUnitConverter)?.factor ?: 0.0))
-    return UnitPh(dimension = unit.dimension, factor = unit.factor, converter = newConverter)
-}
-
 @Suppress("NOTHING_TO_INLINE")
-private inline fun UnitPh.withPrefix(prefix: String, times: Double): UnitPh =
-        UnitPh(dimension = dimension, factor = factor * times)
+private inline fun UnitPh.withPrefix(prefix: String, times: Double): UnitPh {
+    checkWithoutConverter()
+    return UnitPh(dimension = dimension, factor = factor * times)
+}
 
 fun da(unit: UnitPh) = unit.withPrefix("da", 1e-1)
 fun h(unit: UnitPh) = unit.withPrefix("h", 1e-2)
@@ -121,7 +98,7 @@ fun z(unit: UnitPh) = unit.withPrefix("z", 1e21)
 fun y(unit: UnitPh) = unit.withPrefix("y", 1e24)
 
 infix fun UnitPh.withSymbol(symbol: String): UnitPh =
-        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor)
+        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor, converter = converter)
 
 infix fun UnitPh.withName(name: String): UnitPh =
-        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor)
+        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor, converter = converter)

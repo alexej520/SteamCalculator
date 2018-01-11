@@ -1,6 +1,6 @@
 package quantityvalue
 
-data class QuantityValue constructor(val quantity: Quantity, val value: Double, val unit: UnitPh) {
+data class QuantityValue(val quantity: Quantity, val value: Double, val unit: UnitPh) {
     constructor(quantity: Quantity, value: Number, unit: UnitPh) : this(quantity, value.toDouble(), unit)
 
     init {
@@ -8,20 +8,20 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
             throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
     }
 
-    private inline val basicValue get() = unit.convertToCoherent(value)
+    internal val coherentValue = unit.convertToCoherent(value)
 
     operator fun get(unit: UnitPh): QuantityValue =
             if (unit.dimension != quantity.dimension) {
                 throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
             } else {
-                QuantityValue(quantity, unit.convertFromCoherent(basicValue), unit)
+                QuantityValue(quantity, unit.convertFromCoherent(coherentValue), unit)
             }
 
     override fun toString(): String =
             if (value.isNaN())
                 "${quantity.symbol}=${String.format("%.4g", value)}"
             else
-                "${quantity.symbol}=${String.format("%.4g", value)}[${unit.name}]"
+                "${quantity.symbol}=${String.format("%.4g", value)}[${unit.symbol}]"
 
     operator fun plus(other: QuantityValue): QuantityValue =
             if (quantity.dimension != other.quantity.dimension) {
@@ -29,7 +29,7 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
             } else {
                 QuantityValue(
                         quantity = Quantity(dimension = quantity.dimension),
-                        value = basicValue + other.basicValue,
+                        value = coherentValue + other.coherentValue,
                         unit = CoherentUnit(quantity.dimension))
             }
 
@@ -39,7 +39,7 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
             } else {
                 QuantityValue(
                         quantity = Quantity(dimension = quantity.dimension),
-                        value = basicValue - other.basicValue,
+                        value = coherentValue - other.coherentValue,
                         unit = CoherentUnit(quantity.dimension))
             }
 
@@ -47,7 +47,7 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
         val newDimension = quantity.dimension * other.quantity.dimension
         return QuantityValue(
                 quantity = Quantity(dimension = newDimension),
-                value = basicValue * other.basicValue,
+                value = coherentValue * other.coherentValue,
                 unit = CoherentUnit(newDimension))
     }
 
@@ -55,7 +55,7 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
         val newDimension = quantity.dimension * other.quantity.dimension
         return QuantityValue(
                 quantity = Quantity(dimension = newDimension),
-                value = basicValue / other.basicValue,
+                value = coherentValue / other.coherentValue,
                 unit = CoherentUnit(newDimension))
     }
 }

@@ -4,7 +4,7 @@ import com.hummeling.if97.IF97
 import com.hummeling.if97.OutOfRangeException
 import quantityvalue.*
 import steam.quantities.*
-import steam.units.J_kg
+import steam.units.*
 import java.util.*
 
 class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
@@ -33,7 +33,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
             } else {
                 Double.NaN
             }
-        }, CoherentUnit(p.dimension))
+        }, DEFAULT_UNITS[p]!!)
     }
 
     constructor(arg1: QuantityValue, arg2: QuantityValue) : this(arg1 to arg2)
@@ -293,20 +293,45 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                 Temperature to VapourFraction
         )
 
+        private val DEFAULT_UNITS: Map<Quantity, UnitPh> = mapOf(
+                Pressure to Pa,
+                Temperature to K,
+                SpecificEnthalpy to J_kg,
+                SpecificEntropy to J_kgK,
+                VapourFraction to ratio,
+                SpecificVolume to m3_kg,
+                Density to kg_m3,
+                SpeedOfSound to m_s,
+                SpecificIsobaricHeatCapacity to J_kgK,
+                SpecificIsochoricHeatCapacity to J_kgK,
+                SpecificEnthalpyOfVaporization to J_kg,
+                ThermalConductivity to W_mK,
+                ThermalDiffusivity to m2_s,
+                PrandtlNumber to ratio,
+                DynamicViscosity to Pas,
+                KinematicViscosity to m2_s,
+                SurfaceTension to N_m,
+                IsobaricCubicExpansionCoefficient to K_1,
+                IsothermalCompressibility to Pa_1,
+                RelativePermittivity to ratio,
+                SpecificInternalEnergy to J_kg,
+                SpecificGibbsFreeEnergy to J_kg
+        )
+
         private fun getComputablePair(pair: Pair<QuantityValue, QuantityValue>): Pair<QuantityValue, QuantityValue> {
             val (arg1, arg2) = pair
-            val baseArg1 = arg1[CoherentUnit(arg1.quantity.dimension)]
-            val baseArg2 = arg2[CoherentUnit(arg2.quantity.dimension)]
+            val baseArg1 = arg1[DEFAULT_UNITS[arg1.quantity]!!]
+            val baseArg2 = arg2[DEFAULT_UNITS[arg2.quantity]!!]
             val q1: QuantityValue
             val q2: QuantityValue
             when (SpecificVolume) {
                 baseArg1.quantity -> {
-                    q1 = Density(1 / baseArg1.value, CoherentUnit(Density.dimension))
+                    q1 = Density(1 / baseArg1.value, kg_m3)
                     q2 = baseArg2
                 }
                 baseArg2.quantity -> {
                     q1 = baseArg1
-                    q2 = Density(1 / baseArg2.value, CoherentUnit(Density.dimension))
+                    q2 = Density(1 / baseArg2.value, kg_m3)
                 }
                 else -> {
                     if (baseArg1.quantity == Temperature && baseArg2.quantity == SpecificEntropy) {
@@ -315,14 +340,14 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                             IF97_INSTANCE.vapourFractionTS(baseArg1.value, baseArg2.value)
                         } catch (e: OutOfRangeException) {
                             Double.NaN
-                        }, CoherentUnit(VapourFraction.dimension))
+                        }, ratio)
                     } else if (baseArg1.quantity == SpecificEntropy && baseArg2.quantity == Temperature) {
                         q1 = baseArg2
                         q2 = VapourFraction(try {
                             IF97_INSTANCE.vapourFractionTS(baseArg2.value, baseArg1.value)
                         } catch (e: OutOfRangeException) {
                             Double.NaN
-                        }, CoherentUnit(VapourFraction.dimension))
+                        }, ratio)
                     } else {
                         q1 = baseArg1
                         q2 = baseArg2

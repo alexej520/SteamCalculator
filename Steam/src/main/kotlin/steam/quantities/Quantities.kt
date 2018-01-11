@@ -6,7 +6,7 @@ import steam.units.*
 val Pressure = Quantity("Pressure", "P", Pa.dimension)
 val Temperature = quantityvalue.basequantities.Temperature
 val SpecificEnthalpy = Quantity("Specific Enthalpy", "h", kJ_kg.dimension)
-val SpecificEntropy = Quantity("Specific Entropy", "T", kJ_kgK.dimension)
+val SpecificEntropy = Quantity("Specific Entropy", "s", kJ_kgK.dimension)
 val VapourFraction = Quantity("Vapour Fraction", "x", ratio.dimension)
 val SpecificVolume = Quantity("Specific Volume", "v", m3_kg.dimension)
 val Density = Quantity("Density", "rho", kg_m3.dimension)
