@@ -39,7 +39,7 @@ val K = quantityvalue.baseunits.K
 
 private class OffsetUnitConverter(
         val factor: Double,
-        internal val offset: Double)
+        val offset: Double)
     : UnitPh.Converter {
     override fun convertToCoherent(value: Double): Double = (value - offset) / factor
     override fun convertFromCoherent(value: Double): Double = value * factor + offset
@@ -62,7 +62,7 @@ val Ra = UnitPh(
         symbol = "R")
 val D = UnitPh(
         dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = -2.0 / 3.0, offset = 373.15 / -(2.0 / 3.0)),
+        converter = OffsetUnitConverter(factor = -3.0 / 2.0, offset = 373.15 * (3.0 / 2.0)),
         factor = -3.0 / 2.0,
         symbol = "D")
 val N = UnitPh(
