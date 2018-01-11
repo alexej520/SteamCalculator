@@ -24,7 +24,7 @@
     <string name="mmHg">mm Hg</string>
     <string name="mH2O"><![CDATA[m H<sub><small>2</small></sub>O]]></string>
     <string name="kJ">kJ</string>
-    <string name="erg" >erg</string>
+    <string name="erg">erg</string>
     <string name="cal">cal</string>
     <string name="calth"><![CDATA[cal<sub><small>th</small></sub>]]></string>
     <string name="cal15"><![CDATA[cal<sub><small>15</small></sub>]]></string>
@@ -162,4 +162,10 @@
     <string name="preferenceKeyRateLastRequestLaunch" translatable="false">rateLastRequestLaunch</string>
     <string name="preferenceKeyAppLastLaunchTime" translatable="false">appLastLaunchTime</string>
     <string name="preferenceKeyAppLaunchCounter" translatable="false">appLaunchCounter</string>
+    <string name="m">m</string>
+    <string name="cm">cm</string>
+    <string name="mm">mm</string>
+    <string name="mcm"><![CDATA[&mu;m]]></string>
+    <string name="nm">nm</string>
+    <string name="inch">in</string>
 </resources>

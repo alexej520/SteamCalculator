@@ -151,13 +151,13 @@ class SteamViewModel @Inject constructor
                 CustomFormat.scientificFormatOnly = prefs.getBoolean(key, false)
                 firstValue = firstValue
                 secondValue = secondValue
-                quantityValueModels.forEach { it.value = it.value }
+                quantityValueModels.forEach { it.updateValue() }
             }
             context.getString(R.string.preferenceKeyDecimals) -> {
                 CustomFormat.maxSymbols = prefs.getInt(key, 4)
                 firstValue = firstValue
                 secondValue = secondValue
-                quantityValueModels.forEach { it.value = it.value }
+                quantityValueModels.forEach { it.updateValue() }
             }
             context.getString(R.string.preferenceKeyUnitSet) -> {
                 val unitSet = unitSetMap.mapKeys { context.getString(it.key) }.get(

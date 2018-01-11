@@ -2,12 +2,12 @@ package quantityvalue
 
 import java.util.*
 
-class UnitPh(
+data class UnitPh(
         val dimension: Dimension,
-        val converter: Converter? = null,
         val factor: Double = Double.NaN,
         val name: String = "AnonymousUnit",
-        val symbol: String = defaultSymbol(factor, dimension)) {
+        val symbol: String = defaultSymbol(factor, dimension),
+        val converter: Converter? = null) {
     fun convertToCoherent(value: Double): Double =
             converter?.convertToCoherent(value) ?: value / factor
 

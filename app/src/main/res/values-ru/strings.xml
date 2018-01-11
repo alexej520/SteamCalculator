@@ -100,4 +100,10 @@
     <string name="rateViewAskEmailFeedback">Расскажете, что не так?</string>
     <string name="rateViewYes">Да</string>
     <string name="rateViewNo">Нет</string>
+    <string name="m">м</string>
+    <string name="cm">см</string>
+    <string name="mm">мм</string>
+    <string name="mcm">мкм</string>
+    <string name="nm">нм</string>
+    <string name="inch">дюйм</string>
 </resources>

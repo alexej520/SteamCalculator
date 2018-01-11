@@ -66,7 +66,7 @@ data class SelectedQuantityValue(
     companion object {
         const val TABLE_NAME = "selected_property"
         const val KEY = "key"
-        const val PROP_SYMBOL = "propSymbol"
+        const val PROP_SYMBOL = "quantitySymbol"
         const val VALUE = "value"
     }
 }

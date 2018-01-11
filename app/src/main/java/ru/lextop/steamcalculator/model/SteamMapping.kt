@@ -191,7 +191,16 @@ private val unitsMapping: List<Pair<UnitPh, Int>> = listOf(
 
         Pair(W_mK, R.string.W_mK),
         Pair(kW_mK, R.string.kW_mK),
-        Pair(BTU_hrftR, R.string.BTU_hrftR)
+        Pair(BTU_hrftR, R.string.BTU_hrftR),
+
+// Wavelength
+
+        Pair(m, R.string.m),
+        Pair(cm, R.string.cm),
+        Pair(mm, R.string.mm),
+        Pair(mcm, R.string.mcm),
+        Pair(nm, R.string.nm),
+        Pair(inch, R.string.inch)
 )
 
 private val UnitPh_symbolId = unitsMapping.associate { it.first to it.second }

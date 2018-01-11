@@ -9,18 +9,21 @@ import ru.lextop.steamcalculator.model.nameId
 import ru.lextop.steamcalculator.model.symbolId
 import ru.lextop.steamcalculator.model.unitList
 
-open class QuantityValueViewModel(
+class QuantityValueViewModel(
         quantityValueLive: LiveData<QuantityValue>,
         unitLive: LiveData<UnitPh>,
         context: Context,
         val isPropNameVisibleLive: LiveData<Boolean>,
         private val repo: SteamRepository)
     : ViewModel() {
-    private val prop = quantityValueLive.value!!.quantity
-    val propName = context.getSpanned(prop.nameId)
-    val propSymbol = context.getSpanned(prop.symbolId)
+    private val quantity = quantityValueLive.value!!.quantity
+    val quantityName = context.getSpanned(quantity.nameId)
+    val quantitySymbol = context.getSpanned(quantity.symbolId)
     val valueLive: LiveData<CharSequence> = MutableLiveData()
-    var value = Double.NaN
+
+    fun updateValue() { value = value }
+
+    private var value = Double.NaN
         set(value) {
             field = value
             (valueLive as MutableLiveData).value = CustomFormat.format(value)
@@ -43,6 +46,6 @@ open class QuantityValueViewModel(
     }
 
     fun selectUnit(id: Int) {
-        repo.setViewUnit(prop, _units[id])
+        repo.setEditUnit(quantity, _units[id])
     }
 }

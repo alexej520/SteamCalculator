@@ -15,7 +15,7 @@ class QuantityUI : Binding.Component<QuantityValueViewModel, ViewGroup>() {
             textCaption {
                 startPadding = dip(8)
                 bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
-                bind(this::setText) { propName }
+                bind(this::setText) { quantityName }
             }.lparams(matchParent, wrapContent)
             linearLayout {
                 isBaselineAligned = false
@@ -23,7 +23,7 @@ class QuantityUI : Binding.Component<QuantityValueViewModel, ViewGroup>() {
                     verticalPadding = (textSize / 4).toInt()
                     R.style.Widget_AppCompat_Spinner
                     setEms(2)
-                    bind(this::setText) { propSymbol }
+                    bind(this::setText) { quantitySymbol }
                 }.lparams(wrapContent, wrapContent) {
                     horizontalMargin = dip(8)
                     gravity = Gravity.CENTER
