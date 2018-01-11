@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import org.jetbrains.anko.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.binding.*
-import ru.lextop.steamcalculator.vm.QuantityViewModel
+import ru.lextop.steamcalculator.vm.QuantityValueViewModel
 
-class QuantityUI : Binding.Component<QuantityViewModel, ViewGroup>() {
-    override fun Binding<QuantityViewModel>.createView(ui: AnkoContext<ViewGroup>) = with(ui) {
+class QuantityUI : Binding.Component<QuantityValueViewModel, ViewGroup>() {
+    override fun Binding<QuantityValueViewModel>.createView(ui: AnkoContext<ViewGroup>) = with(ui) {
         verticalLayout {
             startPadding = dip(8)
             lparams(matchParent, wrapContent)

@@ -37,14 +37,6 @@ val BTU_lb = BTU / lb withSymbol "BTU/lb"
 
 val K = quantityvalue.baseunits.K
 
-private class OffsetUnitConverter(
-        val factor: Double,
-        val offset: Double)
-    : UnitPh.Converter {
-    override fun convertToCoherent(value: Double): Double = (value - offset) / factor
-    override fun convertFromCoherent(value: Double): Double = value * factor + offset
-}
-
 val C = UnitPh(
         dimension = K.dimension,
         converter = OffsetUnitConverter(factor = 1.0, offset = -273.15),
@@ -159,3 +151,12 @@ val lbf_ft = kg_s2 / 14.5939029 withName "lbf/ft"
 val W_mK = CoherentUnit(Dimension(M = 1, L = 1, T = -3, O = -1), symbol = "W/(m*K)")
 val kW_mK = k(W_mK) withName "kW/(m*K)"
 val BTU_hrftR = W_mK / 1.7295772056 withName "BTU/(hr*ft*R)"
+
+// Wavelength
+
+val m = quantityvalue.baseunits.m
+val cm = c(m) withName "cm"
+val mm = m(m) withName "mm"
+val mcm = mc(m) withName "µm"
+val nm = n(m) withName "nm"
+val inch = mm * 25.4 withName "in"

@@ -9,7 +9,7 @@ import ru.lextop.steamcalculator.model.nameId
 import ru.lextop.steamcalculator.model.symbolId
 import ru.lextop.steamcalculator.model.unitList
 
-open class QuantityViewModel(
+open class QuantityValueViewModel(
         quantityValueLive: LiveData<QuantityValue>,
         unitLive: LiveData<UnitPh>,
         context: Context,

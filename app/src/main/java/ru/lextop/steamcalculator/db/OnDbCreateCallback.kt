@@ -39,8 +39,8 @@ object OnDbCreateCallback: RoomDatabase.Callback() {
                         SelectedQuantityValue.PROP_SYMBOL,
                         SelectedQuantityValue.VALUE),
                 values = listOf(
-                        SelectedQuantityValue(KEY_FIRST_PROP, first(Double.NaN, defaultUnits[first.dimension]!!)),
-                        SelectedQuantityValue(KEY_SECOND_PROP, second(Double.NaN, defaultUnits[second.dimension]!!))).map {
+                        SelectedQuantityValue(KEY_FIRST_QUANTITY, first(Double.NaN, defaultUnits[first.dimension]!!)),
+                        SelectedQuantityValue(KEY_SECOND_QUANTITY, second(Double.NaN, defaultUnits[second.dimension]!!))).map {
                     listOf(
                             it.key,
                             it.propSymbol,

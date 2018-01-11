@@ -42,8 +42,8 @@ abstract class AppModule {
         @Provides
         @Singleton
         @JvmStatic
-        fun provideDerivativeUnitPairDao(db: AppDatabase): SteamDao {
-            val steamDao = db.propertyUnitPairDao()
+        fun provideSteamDao(db: AppDatabase): SteamDao {
+            val steamDao = db.steamDao()
             this.steamDao = steamDao
             return steamDao
         }

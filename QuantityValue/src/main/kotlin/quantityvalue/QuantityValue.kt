@@ -1,5 +1,7 @@
 package quantityvalue
 
+import java.util.Locale
+
 data class QuantityValue(val quantity: Quantity, val value: Double, val unit: UnitPh) {
     constructor(quantity: Quantity, value: Number, unit: UnitPh) : this(quantity, value.toDouble(), unit)
 
@@ -19,9 +21,9 @@ data class QuantityValue(val quantity: Quantity, val value: Double, val unit: Un
 
     override fun toString(): String =
             if (value.isNaN())
-                "${quantity.symbol}=${String.format("%.4g", value)}"
+                "${quantity.symbol}=${String.format(Locale.ROOT, "%.4g", value)}"
             else
-                "${quantity.symbol}=${String.format("%.4g", value)}[${unit.symbol}]"
+                "${quantity.symbol}=${String.format(Locale.ROOT, "%.4g", value)}[${unit.symbol}]"
 
     operator fun plus(other: QuantityValue): QuantityValue =
             if (quantity.dimension != other.quantity.dimension) {

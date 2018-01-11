@@ -21,8 +21,8 @@ data class ViewUnit(
     }
 }
 
-@JvmName("viewUnitToUnitMap")
-fun List<ViewUnit>.toPropUnitList(): List<Pair<Quantity, UnitPh>> =
+@JvmName("viewUnitToQuantityValuePairs")
+fun List<ViewUnit>.toQuantityUnitPairs(): List<Pair<Quantity, UnitPh>> =
         map {
             val propType = it.propSymbol.toQuantity()
             propType to it.unitName.toUnit()
@@ -43,8 +43,8 @@ data class EditUnit(
     }
 }
 
-@JvmName("editUnitToUnitMap")
-fun List<EditUnit>.toPropUnitList(): List<Pair<Quantity, UnitPh>> =
+@JvmName("editUnitToQuantityValuePairs")
+fun List<EditUnit>.toQuantityUnitPairs(): List<Pair<Quantity, UnitPh>> =
         map {
             val propType = it.propSymbol.toQuantity()
             propType to it.unitName.toUnit()
@@ -71,8 +71,8 @@ data class SelectedQuantityValue(
     }
 }
 
-const val KEY_FIRST_PROP = "first"
-const val KEY_SECOND_PROP = "second"
+const val KEY_FIRST_QUANTITY = "first"
+const val KEY_SECOND_QUANTITY = "second"
 
 fun SelectedQuantityValue.toQuantityValue(): QuantityValue {
     val prop = propSymbol.toQuantity()

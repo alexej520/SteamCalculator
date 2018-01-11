@@ -86,6 +86,12 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
         }
     }
 
+    fun refractiveIndex(waveLength: QuantityValue): QuantityValue {
+        if (waveLength.quantity != Wavelength) throw IllegalArgumentException()
+        val doubleResult = CALC_REFRACTIVE_INDEX_MAP[computablePairProps]!!.invoke(value1, value2, waveLength[m].value)
+        return QuantityValue(Wavelength, doubleResult, m)
+    }
+
     private val quantityValues: List<QuantityValue> by lazy {
         listOf(
                 rho, epsilon, eta, av, kT, nu, Pr, P, /*n,*/ h, u, s, cp, cv, v, w, sigma, T, lambda, k, x, g, hvap
@@ -279,6 +285,16 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                             VapourFraction to { _: Double, x: Double -> x }
                             //SpecificGibbsFreeEnergy to this::specificGibbsFreeEnergyTX
                     )
+            )
+        }
+
+        private val CALC_REFRACTIVE_INDEX_MAP: Map<Pair<Quantity, Quantity>, (Double, Double, Double) -> Double> = with(IF97_INSTANCE){
+            mapOf(
+                    Pressure to Temperature to this::refractiveIndexPTLambda,
+                    Pressure to SpecificEnthalpy to this::refractiveIndexPHLambda,
+                    Pressure to SpecificEntropy to this::refractiveIndexPSLambda,
+                    SpecificEnthalpy to SpecificEntropy to this::refractiveIndexHSLambda,
+                    Density to Temperature to this::refractiveIndexRhoTLambda
             )
         }
 

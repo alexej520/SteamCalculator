@@ -34,28 +34,28 @@ class SteamRepository @Inject constructor
 
     init {
         steamDao.getViewUnitsLive().observeForever { list ->
-            list!!.toPropUnitList().forEach { (propType, unit) ->
-                (viewUnits[propType]!! as MutableLiveData).setValueIfNotSame(unit)
+            list!!.toQuantityUnitPairs().forEach { (quantity, unit) ->
+                (viewUnits[quantity]!! as MutableLiveData).setValueIfNotSame(unit)
             }
         }
         steamDao.getEditUnitsLive().observeForever { list ->
-            list!!.toPropUnitList().forEach { (propType, unit) ->
-                (editUnits[propType]!! as MutableLiveData).setValueIfNotSame(unit)
+            list!!.toQuantityUnitPairs().forEach { (quantity, unit) ->
+                (editUnits[quantity]!! as MutableLiveData).setValueIfNotSame(unit)
             }
         }
-        steamDao.getSelectedProperty().observeForever {
+        steamDao.getSelectedQuantityValue().observeForever {
             val map = it!!.toQuantityMap()
-            val first = map[KEY_FIRST_PROP]!!
-            val second = map[KEY_SECOND_PROP]!!
+            val first = map[KEY_FIRST_QUANTITY]!!
+            val second = map[KEY_SECOND_QUANTITY]!!
             firstQuantityValueLive as MutableLiveData
             firstQuantityValueLive.value = first
             secondQuantityValueLive as MutableLiveData
             secondQuantityValueLive.value = second
             val steam = Steam(first, second)
             steam.forEach {
-                val propLive = quantityValueLives[it.quantity]!! as MutableLiveData
+                val quantityValueLive = quantityValueLives[it.quantity]!! as MutableLiveData
                 @Suppress("UNCHECKED_CAST")
-                propLive.value = it
+                quantityValueLive.value = it
             }
         }
     }
@@ -79,11 +79,11 @@ class SteamRepository @Inject constructor
         }
     }
 
-    fun setProperties(first: QuantityValue, second: QuantityValue) {
+    fun setQuantityValues(first: QuantityValue, second: QuantityValue) {
         doAsync {
-            steamDao.insertSelectedProperty(
-                    SelectedQuantityValue(KEY_FIRST_PROP, first),
-                    SelectedQuantityValue(KEY_SECOND_PROP, second)
+            steamDao.insertSelectedQuantityValue(
+                    SelectedQuantityValue(KEY_FIRST_QUANTITY, first),
+                    SelectedQuantityValue(KEY_SECOND_QUANTITY, second)
             )
         }
     }

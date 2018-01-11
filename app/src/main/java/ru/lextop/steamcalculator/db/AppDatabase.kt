@@ -11,5 +11,5 @@ import javax.inject.Singleton
         SelectedQuantityValue::class
 ), version = 1)
 abstract class AppDatabase: RoomDatabase() {
-    abstract fun propertyUnitPairDao(): SteamDao
+    abstract fun steamDao(): SteamDao
 }

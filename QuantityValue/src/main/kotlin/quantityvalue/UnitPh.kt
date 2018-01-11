@@ -37,6 +37,16 @@ class UnitPh(
     }
 }
 
+// Use with Temperature Units for example (C, F, etc.)
+
+class OffsetUnitConverter(
+        val factor: Double,
+        val offset: Double)
+    : UnitPh.Converter {
+    override fun convertToCoherent(value: Double): Double = (value - offset) / factor
+    override fun convertFromCoherent(value: Double): Double = value * factor + offset
+}
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun CoherentUnit(
         dimension: Dimension,

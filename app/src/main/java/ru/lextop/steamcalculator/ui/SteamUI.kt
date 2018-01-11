@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -18,7 +17,7 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.SteamFragment
 import ru.lextop.steamcalculator.binding.*
-import ru.lextop.steamcalculator.vm.QuantityViewModel
+import ru.lextop.steamcalculator.vm.QuantityValueViewModel
 import ru.lextop.steamcalculator.vm.RateViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
@@ -62,22 +61,22 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                 verticalLayout {
                     startPadding = dip(8)
                     textCaption {
-                        bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
-                        bindLive(this::setText) { firstPropNameLive }
+                        bindLive({ visibility = it!!.toVisibleOrGone() }) { isQuantityNameVisibleLive }
+                        bindLive(this::setText) { firstQuantityNameLive }
                         startPadding = dip(8)
                     }.lparams(matchParent, wrapContent)
                     linearLayout {
                         spinner {
                             adapter = DropdownHintArrayAdapter(ctx)
-                            bind({ (adapter as DropdownHintArrayAdapter).items = it!! }) { firstPropNameToSymbolList }
-                            bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isPropNameVisibleLive }
-                            bindLive({ setSelection(it!!) }) { firstPropSelectionLive }
-                            onItemSelectedListener = OnItemSelectedListener { callback { selectFirstProp(it) } }
+                            bind({ (adapter as DropdownHintArrayAdapter).items = it!! }) { firstQuantityNameToSymbolList }
+                            bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isQuantityNameVisibleLive }
+                            bindLive({ setSelection(it!!) }) { firstQuantitySelectionLive }
+                            onItemSelectedListener = OnItemSelectedListener { callback { selectFirstQuantity(it) } }
                         }.lparams(wrapContent, wrapContent)
                         editTextMaterial {
                             val listener = object : TextWatcher {
                                 override fun afterTextChanged(input: Editable) {
-                                    callback { inputFirstPropValue(input) }
+                                    callback { inputFirstValue(input) }
                                 }
 
                                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -108,15 +107,15 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                     }.lparams(matchParent, wrapContent)
                     textCaption {
                         startPadding = dip(8)
-                        bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
-                        bindLive(this::setText) { secondPropNameLive }
+                        bindLive({ visibility = it!!.toVisibleOrGone() }) { isQuantityNameVisibleLive }
+                        bindLive(this::setText) { secondQuantityNameLive }
                     }.lparams(matchParent, wrapContent)
                     linearLayout {
                         spinner {
                             adapter = DropdownHintArrayAdapter(ctx)
-                            bindLive({ (adapter as DropdownHintArrayAdapter).items = it!! }) { secondPropNameToSymbolListLive }
-                            bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isPropNameVisibleLive }
-                            bindLive({ setSelection(it!!) }) { secondPropSelectionLive }
+                            bindLive({ (adapter as DropdownHintArrayAdapter).items = it!! }) { secondQuantityNameToSymbolListLive }
+                            bindLive({ (adapter as DropdownHintArrayAdapter).isHintVisible = it!! }) { isQuantityNameVisibleLive }
+                            bindLive({ setSelection(it!!) }) { secondQuantitySelectionLive }
                             onItemSelectedListener = OnItemSelectedListener { callback { selectSecondProp(it) } }
                         }.lparams(wrapContent, wrapContent)
                         editTextMaterial {
@@ -160,7 +159,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                 addItemDecoration(DividerItemDecoration(ctx, lm.orientation))
                 adapter = SimpleBindingAdapter(owner, QuantityUI())
                 @Suppress("UNCHECKED_CAST")
-                bind({ (adapter as SimpleBindingAdapter<QuantityViewModel>).viewModels = it!! }) { quantityModels }
+                bind({ (adapter as SimpleBindingAdapter<QuantityValueViewModel>).viewModels = it!! }) { quantityValueModels }
             }.lparams(matchParent, wrapContent)
         }
     }
