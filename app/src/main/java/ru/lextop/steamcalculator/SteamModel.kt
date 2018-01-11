@@ -36,6 +36,7 @@ import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.BTU_hr
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.W_mK
 import ru.lextop.steamcalculator.steam.quantity.Units.ThermalConductivity.kW_mK
 import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
+import ru.lextop.steamcalculator.steam.unit.UnitPh
 
 val Quantity.unitList get() = coherentUnit.derivedUnits
 
@@ -72,7 +73,7 @@ val allQuantities = Quantity.QUANTITY_MAP.values
 fun String.toQuantity(): Quantity =
         Quantity.QUANTITY_MAP[this]!!
 
-fun String.toUnit(prop: DerivedQuantity): DerivedUnit =
+fun String.toUnit(prop: Dimension): UnitPh =
         prop.coherentUnit.derivedUnitMap[this]!!
 
 val defaultUnits = listOf(
