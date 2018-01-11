@@ -1,16 +1,17 @@
-package ru.lextop.steamcalculator.steam
+package steam
 
 import com.hummeling.if97.IF97
 import com.hummeling.if97.OutOfRangeException
-import ru.lextop.steamcalculator.steam.quantity.*
-import ru.lextop.steamcalculator.steam.quantity.Units.SpecificEnergy.J_kg
+import quantityvalue.*
+import steam.quantities.*
+import steam.units.J_kg
 import java.util.*
 
 class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
     : Iterable<QuantityValue> {
     private val value1: Double
     private val value2: Double
-    private val computablePairProps: Pair<DerivedQuantity, DerivedQuantity>
+    private val computablePairProps: Pair<Quantity, Quantity>
 
     init {
         val computablePair = getComputablePair(pair)
@@ -19,7 +20,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
         computablePairProps = computablePair.first.quantity to computablePair.second.quantity
     }
 
-    private fun if97(p: DerivedQuantity): Lazy<QuantityValue> = lazy {
+    private fun if97(p: Quantity): Lazy<QuantityValue> = lazy {
         p(try {
             CALC_MAP[computablePairProps]!![p]!!(value1, value2)
         } catch (e: Exception) {
@@ -32,7 +33,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
             } else {
                 Double.NaN
             }
-        }, p.coherentUnit.derived)
+        }, CoherentUnit(p.dimension))
     }
 
     constructor(arg1: QuantityValue, arg2: QuantityValue) : this(arg1 to arg2)
@@ -45,7 +46,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                 s: QuantityValue?,
                 x: QuantityValue?) : this(getPairOrThrowException(rho, v, P, T, h, s, x))
 
-    operator fun get(p: DerivedQuantity): QuantityValue = if97(p).value
+    operator fun get(p: Quantity): QuantityValue = if97(p).value
 
     val rho: QuantityValue by if97(Density)
     val epsilon: QuantityValue by if97(RelativePermittivity)
@@ -100,8 +101,8 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
 
     private companion object {
         private val IF97_INSTANCE = IF97(IF97.UnitSystem.SI)
-        private val IF97_QUANTITY_MAP: Map<com.hummeling.if97.IF97.Quantity, DerivedQuantity> =
-                EnumMap<com.hummeling.if97.IF97.Quantity, DerivedQuantity>(com.hummeling.if97.IF97.Quantity::class.java).apply {
+        private val IF97_QUANTITY_MAP: Map<com.hummeling.if97.IF97.Quantity, Quantity> =
+                EnumMap<com.hummeling.if97.IF97.Quantity, Quantity>(com.hummeling.if97.IF97.Quantity::class.java).apply {
                     put(com.hummeling.if97.IF97.Quantity.p, Pressure)
                     put(com.hummeling.if97.IF97.Quantity.T, Temperature)
                     put(com.hummeling.if97.IF97.Quantity.v, SpecificVolume)
@@ -115,7 +116,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                     put(com.hummeling.if97.IF97.Quantity.x, VapourFraction)
                 }
 
-        private val CALC_MAP: Map<Pair<DerivedQuantity, DerivedQuantity>, Map<DerivedQuantity, (Double, Double) -> Double>> = with(IF97_INSTANCE) {
+        private val CALC_MAP: Map<Pair<Quantity, Quantity>, Map<Quantity, (Double, Double) -> Double>> = with(IF97_INSTANCE) {
             mapOf(
                     Pressure to Temperature to mapOf(
                             Density to this::densityPT,
@@ -281,7 +282,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
             )
         }
 
-        private val COMPUTABLE_PAIRS: Set<Pair<DerivedQuantity, DerivedQuantity>> = setOf(
+        private val COMPUTABLE_PAIRS: Set<Pair<Quantity, Quantity>> = setOf(
                 Pressure to Temperature,
                 Pressure to SpecificEnthalpy,
                 Pressure to SpecificEntropy,
@@ -294,18 +295,18 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
 
         private fun getComputablePair(pair: Pair<QuantityValue, QuantityValue>): Pair<QuantityValue, QuantityValue> {
             val (arg1, arg2) = pair
-            val baseArg1 = arg1[arg1.quantity.coherentUnit.derived]
-            val baseArg2 = arg2[arg2.quantity.coherentUnit.derived]
+            val baseArg1 = arg1[CoherentUnit(arg1.quantity.dimension)]
+            val baseArg2 = arg2[CoherentUnit(arg2.quantity.dimension)]
             val q1: QuantityValue
             val q2: QuantityValue
             when (SpecificVolume) {
                 baseArg1.quantity -> {
-                    q1 = Density(1 / baseArg1.value, Density.coherentUnit.derived)
+                    q1 = Density(1 / baseArg1.value, CoherentUnit(Density.dimension))
                     q2 = baseArg2
                 }
                 baseArg2.quantity -> {
                     q1 = baseArg1
-                    q2 = Density(1 / baseArg2.value, Density.coherentUnit.derived)
+                    q2 = Density(1 / baseArg2.value, CoherentUnit(Density.dimension))
                 }
                 else -> {
                     if (baseArg1.quantity == Temperature && baseArg2.quantity == SpecificEntropy) {
@@ -314,14 +315,14 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
                             IF97_INSTANCE.vapourFractionTS(baseArg1.value, baseArg2.value)
                         } catch (e: OutOfRangeException) {
                             Double.NaN
-                        }, VapourFraction.coherentUnit.derived)
+                        }, CoherentUnit(VapourFraction.dimension))
                     } else if (baseArg1.quantity == SpecificEntropy && baseArg2.quantity == Temperature) {
                         q1 = baseArg2
                         q2 = VapourFraction(try {
                             IF97_INSTANCE.vapourFractionTS(baseArg2.value, baseArg1.value)
                         } catch (e: OutOfRangeException) {
                             Double.NaN
-                        }, VapourFraction.coherentUnit.derived)
+                        }, CoherentUnit(VapourFraction.dimension))
                     } else {
                         q1 = baseArg1
                         q2 = baseArg2

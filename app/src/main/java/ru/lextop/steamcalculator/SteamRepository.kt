@@ -5,29 +5,28 @@ import android.arch.lifecycle.MutableLiveData
 import org.jetbrains.anko.doAsync
 import ru.lextop.steamcalculator.binding.setValueIfNotSame
 import ru.lextop.steamcalculator.db.*
-import ru.lextop.steamcalculator.steam.*
-import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
-import ru.lextop.steamcalculator.steam.quantity.Quantity
-import ru.lextop.steamcalculator.steam.quantity.QuantityValue
+import quantityvalue.*
+import steam.Steam
+import ru.lextop.steamcalculator.model.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SteamRepository @Inject constructor
 (private val steamDao: SteamDao) {
-     val viewUnits: Map<Quantity, LiveData<DerivedUnit>> = allQuantities.associate {
-        val live = MutableLiveData<DerivedUnit>()
-        live.value = it.coherentUnit.derived
+     val viewUnits: Map<Quantity, LiveData<UnitPh>> = allQuantities.associate {
+        val live = MutableLiveData<UnitPh>()
+        live.value = it.dimension.unitList.first()
         it to live
     }
-     val editUnits: Map<Quantity, LiveData<DerivedUnit>> = computableProps.associate {
-        val live = MutableLiveData<DerivedUnit>()
-        live.value = it.coherentUnit.derived
+     val editUnits: Map<Quantity, LiveData<UnitPh>> = computableQuantities.associate {
+        val live = MutableLiveData<UnitPh>()
+        live.value = it.dimension.unitList.first()
         it to live
     }
     val quantityValueLives: Map<Quantity, LiveData<QuantityValue>> = allQuantities.associate {
         val live = MutableLiveData<QuantityValue>()
-        live.value = it(Double.NaN, it.coherentUnit.derived)
+        live.value = it(Double.NaN, it.dimension.unitList.first())
         it to live
     }.toMutableMap()
     val firstQuantityValueLive: LiveData<QuantityValue> = MutableLiveData()
@@ -62,19 +61,19 @@ class SteamRepository @Inject constructor
     }
 
 
-    fun getEditUnitLive(quantity: Quantity): LiveData<DerivedUnit> =
+    fun getEditUnitLive(quantity: Quantity): LiveData<UnitPh> =
             editUnits[quantity]!!
 
-    fun setEditUnit(type: Quantity, unit: DerivedUnit) {
+    fun setEditUnit(type: Quantity, unit: UnitPh) {
         doAsync {
             steamDao.insertEditUnit(EditUnit(type.symbol, unit.name))
         }
     }
 
-    fun getViewUnitLive(quantity: Quantity): LiveData<DerivedUnit> =
+    fun getViewUnitLive(quantity: Quantity): LiveData<UnitPh> =
             viewUnits[quantity]!!
 
-    fun setViewUnit(quantity: Quantity, unit: DerivedUnit) {
+    fun setViewUnit(quantity: Quantity, unit: UnitPh) {
         doAsync {
             steamDao.insertViewUnit(ViewUnit(quantity.symbol, unit.name))
         }

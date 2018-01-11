@@ -1,12 +1,10 @@
-package ru.lextop.steamcalculator.steam.units
+package steam.units
 
-import ru.lextop.steamcalculator.steam.quantity.Dimension
-import ru.lextop.steamcalculator.steam.unit.*
-import ru.lextop.steamcalculator.steam.unit.base.K
-import ru.lextop.steamcalculator.steam.unit.base.kg
+import quantityvalue.*
 
-// Mass Units
+// Mass
 
+val kg = quantityvalue.baseunits.kg
 val lb = kg / 0.45359237 withSymbol "lb"
 
 // Energy
@@ -37,6 +35,7 @@ val BTU_lb = BTU / lb withSymbol "BTU/lb"
 
 // Temperature
 
+val K = quantityvalue.baseunits.K
 val C = K - 273.15 withSymbol "C"
 val F = 9.0 / 5.0 * C + 32.0 withSymbol "F"
 val Ra = F + 459.57 withSymbol "R"

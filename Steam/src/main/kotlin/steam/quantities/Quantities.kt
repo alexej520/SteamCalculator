@@ -1,10 +1,10 @@
-package ru.lextop.steamcalculator.steam.quantity
+package steam.quantities
 
-import ru.lextop.steamcalculator.steam.unit.base.*
-import ru.lextop.steamcalculator.steam.units.*
+import quantityvalue.Quantity
+import steam.units.*
 
 val Pressure = Quantity("Pressure", "P", Pa.dimension)
-val Temperature = Quantity("Temperature", "T", K.dimension)
+val Temperature = quantityvalue.basequantities.Temperature
 val SpecificEnthalpy = Quantity("Specific Enthalpy", "h", kJ_kg.dimension)
 val SpecificEntropy = Quantity("Specific Entropy", "T", kJ_kgK.dimension)
 val VapourFraction = Quantity("Vapour Fraction", "x", ratio.dimension)

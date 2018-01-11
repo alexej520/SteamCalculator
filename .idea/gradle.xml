@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/QuantityValue" />
+            <option value="$PROJECT_DIR$/Steam" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

@@ -8,6 +8,7 @@ import android.view.*
 import org.jetbrains.anko.AnkoContext
 import ru.lextop.steamcalculator.binding.viewModel
 import ru.lextop.steamcalculator.di.Injectable
+import ru.lextop.steamcalculator.model.unitSetMap
 import ru.lextop.steamcalculator.ui.SteamUI
 import ru.lextop.steamcalculator.vm.ViewModelFactory
 import javax.inject.Inject
@@ -64,9 +65,9 @@ class SteamFragment : Fragment(), Injectable {
         var unitSetValue: String? = null
         for ((unitSetRes, unitSetMap) in unitSetMap) {
             if (repo.editUnits.all { (p, u) ->
-                u.value == unitSetMap[p.coherentUnit]
+                u.value == unitSetMap[p.dimension]
             } && repo.viewUnits.all { (p, u) ->
-                u.value == unitSetMap[p.coherentUnit]
+                u.value == unitSetMap[p.dimension]
             }) {
                 unitSetValue = context.getString(unitSetRes)
                 break

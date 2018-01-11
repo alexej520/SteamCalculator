@@ -1,7 +1,6 @@
-package ru.lextop.steamcalculator.steam.unit
+package quantityvalue
 
-import ru.lextop.steamcalculator.steam.quantity.Dimension
-import java.util.*
+import java.util.Locale
 
 class UnitPh constructor(
         val dimension: Dimension,

@@ -9,9 +9,8 @@ import android.content.SharedPreferences
 import ru.lextop.steamcalculator.*
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.binding.nullIfNotInitialized
-import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
-import ru.lextop.steamcalculator.steam.quantity.Quantity
-import ru.lextop.steamcalculator.steam.quantity.QuantityValue
+import quantityvalue.*
+import ru.lextop.steamcalculator.model.*
 import javax.inject.Inject
 
 class SteamViewModel @Inject constructor
@@ -20,7 +19,7 @@ class SteamViewModel @Inject constructor
     val secondInputFocusLive: LiveData<Boolean> = MutableLiveData()
 
     val quantityModels: List<QuantityViewModel>
-    private val firstProps: List<Quantity> = COMPUTABLE_PROP_MAP.keys.toList()
+    private val firstProps: List<Quantity> = computablePropMap.keys.toList()
     val firstPropNameLive: LiveData<CharSequence> = MutableLiveData()
     val secondPropNameLive: LiveData<CharSequence> = MutableLiveData()
     val firstPropNameToSymbolList: List<Pair<CharSequence, CharSequence>> = firstProps.map {
@@ -39,21 +38,21 @@ class SteamViewModel @Inject constructor
     var isPropNameVisibleLive: LiveData<Boolean> = MutableLiveData()
     private lateinit var firstQuantityValue: QuantityValue
     private lateinit var secondQuantityValue: QuantityValue
-    private var firstUnitLive: LiveData<DerivedUnit> = MutableLiveData()
-    private var secondUnitLive: LiveData<DerivedUnit> = MutableLiveData()
+    private var firstUnitLive: LiveData<UnitPh> = MutableLiveData()
+    private var secondUnitLive: LiveData<UnitPh> = MutableLiveData()
     val firstUnitsLive: LiveData<List<CharSequence>> = MutableLiveData()
     val secondUnitsLive: LiveData<List<CharSequence>> = MutableLiveData()
-    private var firstUnits: List<DerivedUnit> = listOf()
+    private var firstUnits: List<UnitPh> = listOf()
         set(value) {
             field = value
             firstUnitsLive as MutableLiveData
-            firstUnitsLive.value = value.map { context.getSpanned(it.id) }
+            firstUnitsLive.value = value.map { context.getSpanned(it.symbolId) }
         }
-    private var secondUnits: List<DerivedUnit> = listOf()
+    private var secondUnits: List<UnitPh> = listOf()
         set(value) {
             field = value
             secondUnitsLive as MutableLiveData
-            secondUnitsLive.value = value.map { context.getSpanned(it.id) }
+            secondUnitsLive.value = value.map { context.getSpanned(it.symbolId) }
         }
     val firstUnitSelectionLive: LiveData<Int> = MutableLiveData()
     val secondUnitSelectionLive: LiveData<Int> = MutableLiveData()
@@ -70,13 +69,13 @@ class SteamViewModel @Inject constructor
             (secondValueLive as MutableLiveData).value = doubleToInputValue(value)
         }
 
-    private val firstUnitObserver = Observer<DerivedUnit> { unit ->
+    private val firstUnitObserver = Observer<UnitPh> { unit ->
         (firstUnitSelectionLive as MutableLiveData).value = firstUnits.indexOf(unit)
         firstValue = firstQuantityValue[unit!!].value
         (secondInputFocusLive as MutableLiveData).value = false
         (firstInputFocusLive as MutableLiveData).value = true
     }
-    private val secondUnitObserver = Observer<DerivedUnit> { unit ->
+    private val secondUnitObserver = Observer<UnitPh> { unit ->
         (secondUnitSelectionLive as MutableLiveData).value = secondUnits.indexOf(unit)
         secondValue = secondQuantityValue[unit!!].value
         if (secondUnitSelectedByUser) {
@@ -96,13 +95,13 @@ class SteamViewModel @Inject constructor
         if (newProp != oldProp) {
             (firstPropNameLive as MutableLiveData).value = context.getSpanned(newProp.nameId)
             (firstPropSelectionLive as MutableLiveData).value = firstProps.indexOf(newProp)
-            firstUnits = newProp.unitList
+            firstUnits = newProp.dimension.unitList
             firstUnitLive.removeObserver(firstUnitObserver)
             firstUnitLive = repo.getEditUnitLive(newProp)
             firstUnitLive.observeForever(firstUnitObserver)
             firstValue = p[firstUnitLive.value!!].value
             secondPropSelectedByUser = false
-            secondProps = COMPUTABLE_PROP_MAP[newProp]!!
+            secondProps = computablePropMap[newProp]!!
         }
     }
     private val secondQuantityObserver = Observer<QuantityValue> { p ->
@@ -116,7 +115,7 @@ class SteamViewModel @Inject constructor
         }
         if (newProp != oldProp) {
             (secondPropNameLive as MutableLiveData).value = context.getSpanned(newProp.nameId)
-            secondUnits = newProp.unitList
+            secondUnits = newProp.dimension.unitList
             secondUnitLive.removeObserver(secondUnitObserver)
             secondUnitLive = repo.getEditUnitLive(newProp)
             secondUnitLive.observeForever(secondUnitObserver)
@@ -161,11 +160,11 @@ class SteamViewModel @Inject constructor
                 val unitSet = unitSetMap.mapKeys { context.getString(it.key) }.get(
                         prefs.getString(key, context.getString(R.string.unitSetDefaultValue)))
                 if (unitSet != null){
-                    computableProps.forEach {
-                        repo.setEditUnit(it, unitSet[it.coherentUnit]!!)
+                    computableQuantities.forEach {
+                        repo.setEditUnit(it, unitSet[it.dimension]!!)
                     }
                     allQuantities.forEach{
-                        repo.setViewUnit(it, unitSet[it.coherentUnit]!!)
+                        repo.setViewUnit(it, unitSet[it.dimension]!!)
                     }
                 }
             }
@@ -190,11 +189,11 @@ class SteamViewModel @Inject constructor
             CustomFormat.parse(input.toString())
 
     private fun setFirstPropValue(value: Double) {
-        repo.setProperties(firstQuantityValue.copy(value, firstUnitLive.value!!), secondQuantityValue)
+        repo.setProperties(firstQuantityValue.copy(value = value, unit = firstUnitLive.value!!), secondQuantityValue)
     }
 
     private fun setSecondPropValue(value: Double) {
-        repo.setProperties(firstQuantityValue, secondQuantityValue.copy(value, secondUnitLive.value!!))
+        repo.setProperties(firstQuantityValue, secondQuantityValue.copy(value = value, unit = secondUnitLive.value!!))
     }
 
     fun inputFirstPropValue(input: CharSequence) {
@@ -209,7 +208,7 @@ class SteamViewModel @Inject constructor
         nullIfNotInitialized { firstQuantityValue } ?: return
         val oldProp = firstQuantityValue.quantity
         val newProp = firstProps[index]
-        val newSecondProps = COMPUTABLE_PROP_MAP[newProp]!!
+        val newSecondProps = computablePropMap[newProp]!!
         val oldSecondProp = nullIfNotInitialized { secondQuantityValue.quantity }
         val newSecondProp = when {
             newProp == oldSecondProp -> oldProp

@@ -1,9 +1,7 @@
-package ru.lextop.steamcalculator.steam.unit.base
+package quantityvalue.baseunits
 
-import ru.lextop.steamcalculator.steam.quantity.Dimension
-import ru.lextop.steamcalculator.steam.quantity.checkBaseDimension
-import ru.lextop.steamcalculator.steam.unit.CoherentUnit
-import ru.lextop.steamcalculator.steam.unit.UnitPh
+import quantityvalue.*
+
 
 internal fun BaseUnit(dimension: Dimension, name: String, symbol: String): UnitPh {
     if (!checkBaseDimension(dimension))

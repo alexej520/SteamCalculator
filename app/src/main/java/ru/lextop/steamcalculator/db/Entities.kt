@@ -3,11 +3,8 @@ package ru.lextop.steamcalculator.db
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
-import ru.lextop.steamcalculator.steam.quantity.DerivedQuantity
-import ru.lextop.steamcalculator.steam.quantity.QuantityValue
-import ru.lextop.steamcalculator.toQuantity
-import ru.lextop.steamcalculator.toUnit
+import quantityvalue.*
+import ru.lextop.steamcalculator.model.*
 
 @Entity(tableName = ViewUnit.TABLE_NAME)
 data class ViewUnit(
@@ -25,10 +22,10 @@ data class ViewUnit(
 }
 
 @JvmName("viewUnitToUnitMap")
-fun List<ViewUnit>.toPropUnitList(): List<Pair<DerivedQuantity, DerivedUnit>> =
+fun List<ViewUnit>.toPropUnitList(): List<Pair<Quantity, UnitPh>> =
         map {
             val propType = it.propSymbol.toQuantity()
-            propType to it.unitName.toUnit(propType)
+            propType to it.unitName.toUnit()
         }
 
 @Entity(tableName = EditUnit.TABLE_NAME)
@@ -47,10 +44,10 @@ data class EditUnit(
 }
 
 @JvmName("editUnitToUnitMap")
-fun List<EditUnit>.toPropUnitList(): List<Pair<DerivedQuantity, DerivedUnit>> =
+fun List<EditUnit>.toPropUnitList(): List<Pair<Quantity, UnitPh>> =
         map {
             val propType = it.propSymbol.toQuantity()
-            propType to it.unitName.toUnit(propType)
+            propType to it.unitName.toUnit()
         }
 
 @Entity(tableName = SelectedQuantity.TABLE_NAME)
@@ -64,7 +61,7 @@ data class SelectedQuantity(
         val value: Double?
 ) {
     constructor(key: String, quantityValue: QuantityValue)
-            : this(key, quantityValue.quantity.symbol, quantityValue[quantityValue.quantity.coherentUnit.derived].value)
+            : this(key, quantityValue.quantity.symbol, quantityValue[CoherentUnit(quantityValue.unit.dimension)].value)
 
     companion object {
         const val TABLE_NAME = "selected_property"
@@ -79,7 +76,7 @@ const val KEY_SECOND_PROP = "second"
 
 fun SelectedQuantity.toQuantity(): QuantityValue {
     val prop = propSymbol.toQuantity()
-    return prop(value ?: Double.NaN, prop.coherentUnit.derived)
+    return prop(value ?: Double.NaN, CoherentUnit(prop.dimension))
 }
 
 @Suppress("UNCHECKED_CAST")

@@ -1,4 +1,4 @@
-package ru.lextop.steamcalculator.steam.quantity
+package quantityvalue
 
 data class Quantity(
         val name: String = "AnonymousQuantity",

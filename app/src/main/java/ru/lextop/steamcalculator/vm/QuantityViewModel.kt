@@ -4,12 +4,14 @@ import android.arch.lifecycle.*
 import android.content.Context
 import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.getSpanned
-import ru.lextop.steamcalculator.steam.quantity.DerivedUnit
-import ru.lextop.steamcalculator.steam.quantity.QuantityValue
+import quantityvalue.*
+import ru.lextop.steamcalculator.model.nameId
+import ru.lextop.steamcalculator.model.symbolId
+import ru.lextop.steamcalculator.model.unitList
 
 open class QuantityViewModel(
         quantityValueLive: LiveData<QuantityValue>,
-        unitLive: LiveData<DerivedUnit>,
+        unitLive: LiveData<UnitPh>,
         context: Context,
         val isPropNameVisibleLive: LiveData<Boolean>,
         private val repo: SteamRepository)
@@ -23,9 +25,9 @@ open class QuantityViewModel(
             field = value
             (valueLive as MutableLiveData).value = CustomFormat.format(value)
         }
-    private val _units = quantityValueLive.value!!.quantity.unitList
+    private val _units = quantityValueLive.value!!.quantity.dimension.unitList
     val units = _units.map {
-        context.getSpanned(it.id)
+        context.getSpanned(it.symbolId)
     }
     val unitSelectionLive: LiveData<Int> = MutableLiveData()
 

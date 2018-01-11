@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/QuantityValue/QuantityValue.iml" filepath="$PROJECT_DIR$/QuantityValue/QuantityValue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Steam/Steam.iml" filepath="$PROJECT_DIR$/Steam/Steam.iml" />
       <module fileurl="file://$PROJECT_DIR$/SteamCalculator.iml" filepath="$PROJECT_DIR$/SteamCalculator.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

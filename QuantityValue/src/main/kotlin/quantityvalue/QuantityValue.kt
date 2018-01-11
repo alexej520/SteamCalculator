@@ -1,7 +1,4 @@
-package ru.lextop.steamcalculator.steam.quantity
-
-import ru.lextop.steamcalculator.steam.unit.UnitPh
-import ru.lextop.steamcalculator.steam.unit.CoherentUnit
+package quantityvalue
 
 data class QuantityValue constructor(val quantity: Quantity, val value: Double, val unit: UnitPh) {
     constructor(quantity: Quantity, value: Number, unit: UnitPh) : this(quantity, value.toDouble(), unit)
@@ -11,7 +8,7 @@ data class QuantityValue constructor(val quantity: Quantity, val value: Double, 
             throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
     }
 
-    private val basicValue = unit.convertToCoherent(value)
+    private inline val basicValue get() = unit.convertToCoherent(value)
 
     operator fun get(unit: UnitPh): QuantityValue =
             if (unit.dimension != quantity.dimension) {

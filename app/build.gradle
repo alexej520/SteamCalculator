@@ -23,6 +23,8 @@ android {
 }
 
 dependencies {
+    implementation project(':Steam')
+    implementation project(':QuantityValue')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$app_compat_version"
@@ -48,7 +50,6 @@ dependencies {
     //implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
-    implementation 'com.hummeling:if97:1.0.5'
     implementation 'android.arch.lifecycle:extensions:1.0.0'
     //implementation 'android.arch.paging:runtime:1.0.0-alpha4-1'
     implementation 'android.arch.persistence.room:runtime:1.0.0'

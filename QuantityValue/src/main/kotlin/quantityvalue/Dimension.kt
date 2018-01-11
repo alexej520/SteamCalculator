@@ -1,4 +1,4 @@
-package ru.lextop.steamcalculator.steam.quantity
+package quantityvalue
 
 // The International System of Units (SI) [8th edition, 2006; updated in 2014]
 
