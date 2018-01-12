@@ -8,7 +8,6 @@ import android.support.v7.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import ru.lextop.steamcalculator.db.AppDatabase
-import ru.lextop.steamcalculator.db.OnDbCreateCallback
 import ru.lextop.steamcalculator.db.SteamDao
 import javax.inject.Singleton
 
@@ -25,8 +24,9 @@ abstract class AppModule {
         @JvmStatic
         fun provideDatabase(app: Application): AppDatabase = Room
                 .databaseBuilder(app, AppDatabase::class.java, "app-db")
-                .allowMainThreadQueries()
-                .addCallback(OnDbCreateCallback)
+                .fallbackToDestructiveMigration()
+                .addCallback(AppDatabase.ON_CREATE)
+                .addMigrations(AppDatabase.MIGRATION_1_2)
                 .build()
 
         @Provides

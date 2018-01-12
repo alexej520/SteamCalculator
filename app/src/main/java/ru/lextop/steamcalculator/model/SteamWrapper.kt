@@ -1,5 +1,6 @@
 package ru.lextop.steamcalculator.model
 
+import android.content.Context
 import quantityvalue.Quantity
 import quantityvalue.QuantityValue
 import quantityvalue.UnitConverter
@@ -8,12 +9,22 @@ import ru.lextop.steamcalculator.R
 import steam.Steam
 import steam.quantities.*
 import steam.units.*
+import kotlin.reflect.KProperty1
 
 class UnitConverterWrapper(
         val id: Int,
         val unit: UnitConverter,
         val symbolRes: Int
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other !is UnitConverterWrapper) return false
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id
+    }
+}
 
 private val allUnitMappings = mutableListOf<UnitConverterWrapper>()
 
@@ -161,33 +172,11 @@ private val _wavelengthUnits = listOf(
         UnitConverterWrapper(79, inch, R.string.inch)
 ).also { allUnitMappings.addAll(it) }
 
-private val unitUnitMapping = allUnitMappings.associate { it.unit to it }
-
-private val computablePairs: List<Pair<QuantityWrapper, QuantityWrapper>> = listOf(
-        Pressure to Temperature,
-        Pressure to SpecificEnthalpy,
-        Pressure to SpecificEntropy,
-        SpecificEnthalpy to SpecificEntropy,
-        Temperature to SpecificEntropy,
-        Density to Temperature,
-        SpecificVolume to Temperature,
-        Pressure to VapourFraction,
-        Temperature to VapourFraction
-).map { (q1, q2) -> quantityQuantityMapping[q1]!! to quantityQuantityMapping[q2]!! }
-
-val computablePropMap: Map<QuantityWrapper, List<QuantityWrapper>> = with(computablePairs.unzip()) {
-    first.union(second).associate { prop ->
-        prop to computablePairs.mapNotNull { (p1, p2) ->
-            when (prop) {
-                p1 -> p2
-                p2 -> p1
-                else -> null
-            }
-        }
-    }
+private val unitUnitMapping = allUnitMappings.associate {
+    it.unit to it
 }
 
-val computableQuantities = computablePropMap.keys.toList()
+val unitIdMap = allUnitMappings.associate { it.id to it }
 
 class QuantityWrapper internal constructor(
         val id: Int,
@@ -215,17 +204,38 @@ class DefaultUnits internal constructor(
         si: UnitConverter,
         imperial: UnitConverter
 ) {
-    val default: UnitConverterWrapper = unitUnitMapping[default]!!
-    val engineering: UnitConverterWrapper = unitUnitMapping[engineering]!!
-    val si: UnitConverterWrapper = unitUnitMapping[si]!!
-    val imperial: UnitConverterWrapper = unitUnitMapping[imperial]!!
+    val default: UnitConverterWrapper by lazy { unitUnitMapping[default]!! }
+    val engineering: UnitConverterWrapper by lazy { unitUnitMapping[engineering]!! }
+    val si: UnitConverterWrapper by lazy { unitUnitMapping[si]!! }
+    val imperial: UnitConverterWrapper by lazy { unitUnitMapping[imperial]!! }
+
+    companion object {
+        val allUnitSystems = listOf(DefaultUnits::default, DefaultUnits::engineering, DefaultUnits::si, DefaultUnits::imperial)
+        fun getName(context: Context, unitSystem: KProperty1<DefaultUnits, UnitConverterWrapper>?) =
+                when (unitSystem) {
+                    DefaultUnits::default -> context.getString(R.string.unitSetDefaultValue)
+                    DefaultUnits::engineering -> context.getString(R.string.unitSetEngineeringValue)
+                    DefaultUnits::si -> context.getString(R.string.unitSetSIValue)
+                    DefaultUnits::imperial -> context.getString(R.string.unitSetImperialValue)
+                    else -> context.getString(R.string.unitSetCustomValue)
+                }
+
+        fun getUnitSystem(context: Context, key: String): KProperty1<DefaultUnits, UnitConverterWrapper>? =
+                when (key) {
+                    context.getString(R.string.unitSetDefaultValue) -> DefaultUnits::default
+                    context.getString(R.string.unitSetEngineeringValue) -> DefaultUnits::engineering
+                    context.getString(R.string.unitSetSIValue) -> DefaultUnits::si
+                    context.getString(R.string.unitSetImperialValue) -> DefaultUnits::imperial
+                    else -> null
+                }
+    }
 }
 
-val allQuantityWrappers: List<QuantityWrapper> = listOf(
+val allQuantities: List<QuantityWrapper> = listOf(
         QuantityWrapper(1, Pressure, _pressureUnits, R.string.Pressure, R.string.P),
         QuantityWrapper(2, Temperature, _temperatureUnits, R.string.Temperature, R.string.T),
         QuantityWrapper(3, SpecificEnthalpy, _specificEnergyUnits, R.string.SpecificEnthalpy, R.string.h),
-        QuantityWrapper(4, SpecificEntropy, _specificEnergyUnits, R.string.SpecificEntropy, R.string.s),
+        QuantityWrapper(4, SpecificEntropy, _specificHeatCapacityUnits, R.string.SpecificEntropy, R.string.s),
         QuantityWrapper(5, VapourFraction, _ratioUnits, R.string.VapourFraction, R.string.x),
         QuantityWrapper(6, SpecificVolume, _specificVolumeUnits, R.string.SpecificVolume, R.string.v),
         QuantityWrapper(7, Density, _densityUnits, R.string.Density, R.string.rho),
@@ -246,15 +256,19 @@ val allQuantityWrappers: List<QuantityWrapper> = listOf(
         QuantityWrapper(22, SpecificGibbsFreeEnergy, _specificEnergyUnits, R.string.SpecificGibbsFreeEnergy, R.string.g)
 )
 
-val quantityQuantityMapping = allQuantityWrappers.associate { it.quantity to it }
+private val quantityQuantityMapping = allQuantities.associate { it.quantity to it }
 
-val quantityIdMap = allQuantityWrappers.associate { it.id to it }
+val quantityIdMap = allQuantities.associate { it.id to it }
 
-private val quantityQuantityMap = allQuantityWrappers.associate { it.quantity to it }
+private val quantityQuantityMap = allQuantities.associate { it.quantity to it }
 
 class QuantityValueWrapper(internal val quantityValue: QuantityValue) {
     constructor(quantity: QuantityWrapper, value: Double, unit: UnitConverterWrapper) :
-            this(QuantityValue(quantity.quantity, value, unit.unit.unit))
+            this(try {
+                QuantityValue(quantity.quantity, value, unit.unit.unit)
+            }catch (e: Exception){
+                throw Exception()
+            })
 
     operator fun get(unit: UnitConverterWrapper) = quantityValue[unit.unit]
 
@@ -268,7 +282,7 @@ class SteamWrapper(first: QuantityValueWrapper, second: QuantityValueWrapper) : 
             first.quantityValue,
             second.quantityValue)
 
-    constructor(): this(QuantityValueWrapper(Pressure(Double.NaN, Pa)), QuantityValueWrapper(Temperature(Double.NaN, K)))
+    constructor() : this(QuantityValueWrapper(Pressure(Double.NaN, Pa)), QuantityValueWrapper(Temperature(Double.NaN, K)))
 
     operator fun get(quantity: QuantityWrapper) = steam.get(quantity.quantity)
 
@@ -280,3 +294,29 @@ class SteamWrapper(first: QuantityValueWrapper, second: QuantityValueWrapper) : 
         }
     }
 }
+
+private val computablePairs: List<Pair<QuantityWrapper, QuantityWrapper>> = listOf(
+        Pressure to Temperature,
+        Pressure to SpecificEnthalpy,
+        Pressure to SpecificEntropy,
+        SpecificEnthalpy to SpecificEntropy,
+        Temperature to SpecificEntropy,
+        Density to Temperature,
+        SpecificVolume to Temperature,
+        Pressure to VapourFraction,
+        Temperature to VapourFraction
+).map { (q1, q2) -> quantityQuantityMapping[q1]!! to quantityQuantityMapping[q2]!! }
+
+val computablePropMap: Map<QuantityWrapper, List<QuantityWrapper>> = with(computablePairs.unzip()) {
+    first.union(second).associate { prop ->
+        prop to computablePairs.mapNotNull { (p1, p2) ->
+            when (prop) {
+                p1 -> p2
+                p2 -> p1
+                else -> null
+            }
+        }
+    }
+}
+
+val computableQuantities = computablePropMap.keys.toList()

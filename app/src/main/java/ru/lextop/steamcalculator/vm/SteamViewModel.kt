@@ -158,18 +158,12 @@ class SteamViewModel @Inject constructor
                 quantityValueModels.forEach { it.updateValue() }
             }
             context.getString(R.string.preferenceKeyUnitSet) -> {
-                val unitSystem = when (prefs.getString(key, "")) {
-                    context.getString(R.string.unitSetDefaultValue) -> DefaultUnits::default
-                    context.getString(R.string.unitSetEngineeringValue) -> DefaultUnits::engineering
-                    context.getString(R.string.unitSetSIValue) -> DefaultUnits::si
-                    context.getString(R.string.unitSetImperialValue) -> DefaultUnits::imperial
-                    else -> null
-                }
+                val unitSystem = DefaultUnits.getUnitSystem(context, prefs.getString(key, ""))
                 if (unitSystem != null) {
                     computableQuantities.forEach {
                         repo.setEditUnit(it, unitSystem(it.defaultUnits))
                     }
-                    allQuantityWrappers.forEach {
+                    allQuantities.forEach {
                         repo.setViewUnit(it, unitSystem(it.defaultUnits))
                     }
                 }

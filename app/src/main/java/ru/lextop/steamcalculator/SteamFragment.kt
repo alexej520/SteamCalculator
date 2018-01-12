@@ -8,7 +8,7 @@ import android.view.*
 import org.jetbrains.anko.AnkoContext
 import ru.lextop.steamcalculator.binding.viewModel
 import ru.lextop.steamcalculator.di.Injectable
-import ru.lextop.steamcalculator.model.unitSetMap
+import ru.lextop.steamcalculator.model.DefaultUnits
 import ru.lextop.steamcalculator.ui.SteamUI
 import ru.lextop.steamcalculator.vm.ViewModelFactory
 import javax.inject.Inject
@@ -62,20 +62,18 @@ class SteamFragment : Fragment(), Injectable {
     private fun setActualUnitSetPreference() {
         val context = context!!
         val unitSetKey = context.getString(R.string.preferenceKeyUnitSet)
-        var unitSetValue: String? = null
-        for ((unitSetRes, unitSetMap) in unitSetMap) {
-            if (repo.editUnits.all { (p, u) ->
-                u.value == unitSetMap[p.dimension]
-            } && repo.viewUnits.all { (p, u) ->
-                u.value == unitSetMap[p.dimension]
-            }) {
-                unitSetValue = context.getString(unitSetRes)
-                break
+
+        val unitSystem = DefaultUnits.allUnitSystems.firstOrNull {
+            repo.editUnits.all { (q, u) ->
+                u.value == it(q.defaultUnits)
+            } && repo.viewUnits.all { (q, u) ->
+                u.value == it(q.defaultUnits)
             }
         }
-        unitSetValue = unitSetValue ?: context.getString(R.string.unitSetCustomValue)
-        if (unitSetValue != prefs.getString(unitSetKey, "")) {
-            prefs.edit().putString(unitSetKey, unitSetValue).apply()
+        val unitSystemName = DefaultUnits.getName(context, unitSystem)
+
+        if (unitSystemName != prefs.getString(unitSetKey, "")) {
+            prefs.edit().putString(unitSetKey, unitSystemName).apply()
         }
     }
 }

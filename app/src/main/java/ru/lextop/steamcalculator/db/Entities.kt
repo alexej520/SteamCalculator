@@ -23,8 +23,7 @@ data class ViewUnit(
 @JvmName("viewUnitToQuantityValuePairs")
 fun List<ViewUnit>.toQuantityUnitPairs(): List<Pair<QuantityWrapper, UnitConverterWrapper>> =
         map {
-            val propType = it.propSymbol.toQuantity()
-            propType to it.unitName.toUnit()
+            quantityIdMap[it.quantityId]!! to unitIdMap[it.unitId]!!
         }
 
 @Entity(tableName = EditUnit.TABLE_NAME)
@@ -45,13 +44,12 @@ data class EditUnit(
 @JvmName("editUnitToQuantityValuePairs")
 fun List<EditUnit>.toQuantityUnitPairs(): List<Pair<QuantityWrapper, UnitConverterWrapper>> =
         map {
-            val propType = it.propSymbol.toQuantity()
-            propType to it.unitName.toUnit()
+            quantityIdMap[it.quantityId]!! to unitIdMap[it.unitId]!!
         }
 
 @Entity(tableName = SelectedQuantityValue.TABLE_NAME)
 data class SelectedQuantityValue(
-        @ColumnInfo(name = KEY)
+        @ColumnInfo(name = ID)
         @PrimaryKey
         val id: Int,
         @ColumnInfo(name = QUANTITY_ID)
@@ -64,7 +62,7 @@ data class SelectedQuantityValue(
 
     companion object {
         const val TABLE_NAME = "selectedQuantityValue"
-        const val KEY = "key"
+        const val ID = "id"
         const val QUANTITY_ID = "quantityId"
         const val VALUE = "value"
     }
@@ -82,5 +80,5 @@ fun SelectedQuantityValue.toQuantityValue(): QuantityValueWrapper {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun List<SelectedQuantityValue>.toQuantityMap(): Map<String, QuantityValueWrapper> =
-        map { it.key to it.toQuantityValue() }.toMap()
+fun List<SelectedQuantityValue>.toQuantityMap(): Map<Int, QuantityValueWrapper> =
+        map { it.id to it.toQuantityValue() }.toMap()

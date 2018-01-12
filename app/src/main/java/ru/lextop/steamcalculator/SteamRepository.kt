@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class SteamRepository @Inject constructor
 (private val steamDao: SteamDao, private val prefs: SharedPreferences, private val context: Context) {
     private var steam: SteamWrapper = SteamWrapper()
-    val viewUnits: Map<QuantityWrapper, LiveData<UnitConverterWrapper>> = allQuantityWrappers.associate {
+    val viewUnits: Map<QuantityWrapper, LiveData<UnitConverterWrapper>> = allQuantities.associate {
         val live = MutableLiveData<UnitConverterWrapper>()
         live.value = it.units.first()
         it to live
@@ -25,7 +25,7 @@ class SteamRepository @Inject constructor
         live.value = it.units.first()
         it to live
     }
-    val quantityValueLives: Map<QuantityWrapper, LiveData<QuantityValueWrapper>> = allQuantityWrappers.associate {
+    val quantityValueLives: Map<QuantityWrapper, LiveData<QuantityValueWrapper>> = allQuantities.associate {
         val live = MutableLiveData<QuantityValueWrapper>()
         live.value = QuantityValueWrapper(it, Double.NaN, it.units.first())
         it to live
