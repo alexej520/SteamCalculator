@@ -1,4 +1,4 @@
-package quantityvalue.baseunits
+package quantityvalue.units.base
 
 import quantityvalue.*
 

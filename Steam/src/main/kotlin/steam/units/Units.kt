@@ -4,7 +4,7 @@ import quantityvalue.*
 
 // Mass
 
-val kg = quantityvalue.baseunits.kg
+val kg = quantityvalue.units.base.kg
 val lb = kg / 0.45359237 withSymbol "lb"
 
 // Energy
@@ -35,43 +35,15 @@ val BTU_lb = BTU / lb withSymbol "BTU/lb"
 
 // Temperature
 
-val K = quantityvalue.baseunits.K
+val K = quantityvalue.units.base.K
 
-val C = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = 1.0, offset = -273.15),
-        factor = 1.0,
-        symbol = "C")
-val F = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = 9.0 / 5.0, offset = -273.15 * 9.0 / 5.0 + 32.0),
-        factor = 9.0 / 5.0,
-        symbol = "F")
-val Ra = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = 9.0 / 5.0, offset = -273.15 * 9.0 / 5.0 + 32.0 + 459.57),
-        factor = 9.0 / 5.0,
-        symbol = "R")
-val D = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = -3.0 / 2.0, offset = 373.15 * (3.0 / 2.0)),
-        factor = -3.0 / 2.0,
-        symbol = "D")
-val N = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = 33.0 / 100.0, offset = -273.15 * 33.0 / 100.0),
-        factor = 33.0 / 100.0,
-        symbol = "N")
-val Re = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = 0.8, offset = -273.15 * 0.8),
-        factor = 0.8,
-        symbol = "Re")
-val Ro = UnitPh(
-        dimension = K.dimension,
-        converter = OffsetUnitConverter(factor = 21.0 / 40.0, offset = -273.15 * 21.0 / 40.0 + 7.5),
-        factor = 21.0 / 40.0,
-        symbol = "Ro")
+val C = quantityvalue.units.temperature.C
+val F = quantityvalue.units.temperature.F
+val Ra = quantityvalue.units.temperature.R
+val D = quantityvalue.units.temperature.D
+val N = quantityvalue.units.temperature.N
+val Re = quantityvalue.units.temperature.Re
+val Ro = quantityvalue.units.temperature.Ro
 
 // Specific Heat Capacity
 
@@ -154,7 +126,7 @@ val BTU_hrftR = W_mK / 1.7295772056 withName "BTU/(hr*ft*R)"
 
 // Wavelength
 
-val m = quantityvalue.baseunits.m
+val m = quantityvalue.units.base.m
 val cm = c(m) withName "cm"
 val mm = m(m) withName "mm"
 val mcm = mc(m) withName "µm"

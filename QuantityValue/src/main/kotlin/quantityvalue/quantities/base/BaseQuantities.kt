@@ -1,7 +1,7 @@
-package quantityvalue.basequantities
+package quantityvalue.quantities.base
 
 import quantityvalue.*
-import quantityvalue.baseunits.*
+import quantityvalue.units.base.*
 
 internal fun BaseQuantity(name: String, symbol: String, baseUnit: UnitPh): Quantity {
     if (!checkBaseDimension(baseUnit.dimension))

@@ -1,36 +1,35 @@
 package ru.lextop.steamcalculator.vm
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
-import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.getSpanned
-import quantityvalue.*
-import ru.lextop.steamcalculator.model.nameId
-import ru.lextop.steamcalculator.model.symbolId
-import ru.lextop.steamcalculator.model.unitList
+import ru.lextop.steamcalculator.model.QuantityValueWrapper
+import ru.lextop.steamcalculator.model.UnitConverterWrapper
 
 class QuantityValueViewModel(
-        quantityValueLive: LiveData<QuantityValue>,
-        unitLive: LiveData<UnitPh>,
+        quantityValueLive: LiveData<QuantityValueWrapper>,
+        unitLive: LiveData<UnitConverterWrapper>,
         context: Context,
         val isPropNameVisibleLive: LiveData<Boolean>,
-        val onUnitSelect: (UnitPh) -> Unit)
-    : ViewModel() {
+        val onUnitSelect: (UnitConverterWrapper) -> Unit) {
     private val quantity = quantityValueLive.value!!.quantity
-    val quantityName = context.getSpanned(quantity.nameId)
-    val quantitySymbol = context.getSpanned(quantity.symbolId)
+    val quantityName = context.getSpanned(quantity.nameRes)
+    val quantitySymbol = context.getSpanned(quantity.symbolRes)
     val valueLive: LiveData<CharSequence> = MutableLiveData()
 
-    fun updateValue() { value = value }
+    fun updateValue() {
+        value = value
+    }
 
     private var value = Double.NaN
         set(value) {
             field = value
             (valueLive as MutableLiveData).value = CustomFormat.format(value)
         }
-    private val _units = quantityValueLive.value!!.quantity.dimension.unitList
+    private val _units = quantityValueLive.value!!.quantity.units
     val units = _units.map {
-        context.getSpanned(it.symbolId)
+        context.getSpanned(it.symbolRes)
     }
     val unitSelectionLive: LiveData<Int> = MutableLiveData()
 

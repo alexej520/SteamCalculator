@@ -7,17 +7,25 @@ data class QuantityValue(val quantity: Quantity, val value: Double, val unit: Un
 
     init {
         if (quantity.dimension != unit.dimension)
-            throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
+            throw IllegalArgumentException("Incompatible Dimension: ${unit.dimension}")
     }
 
     internal val coherentValue = unit.convertToCoherent(value)
+/*
 
     operator fun get(unit: UnitPh): QuantityValue =
             if (unit.dimension != quantity.dimension) {
-                throw RuntimeException("Incompatible Dimension: ${unit.dimension}")
+                throw IllegalArgumentException("Incompatible Dimension: ${unit.dimension}")
             } else {
                 QuantityValue(quantity, unit.convertFromCoherent(coherentValue), unit)
             }
+*/
+    operator fun get(converter: UnitConverter): QuantityValue {
+        if (converter.unit.dimension != quantity.dimension) {
+            throw IllegalArgumentException("Incompatible Dimension: ${unit.dimension}")
+        }
+        return QuantityValue(quantity, converter.convertFromCoherent(coherentValue), converter.unit)
+    }
 
     override fun toString(): String =
             if (value.isNaN())
@@ -27,7 +35,7 @@ data class QuantityValue(val quantity: Quantity, val value: Double, val unit: Un
 
     operator fun plus(other: QuantityValue): QuantityValue =
             if (quantity.dimension != other.quantity.dimension) {
-                throw RuntimeException("Incompatible Dimension: ${other.quantity.dimension}")
+                throw IllegalArgumentException("Incompatible Dimension: ${other.quantity.dimension}")
             } else {
                 QuantityValue(
                         quantity = Quantity(dimension = quantity.dimension),
@@ -37,7 +45,7 @@ data class QuantityValue(val quantity: Quantity, val value: Double, val unit: Un
 
     operator fun minus(other: QuantityValue): QuantityValue =
             if (quantity.dimension != other.quantity.dimension) {
-                throw RuntimeException("Incompatible Dimension: ${other.quantity.dimension}")
+                throw IllegalArgumentException("Incompatible Dimension: ${other.quantity.dimension}")
             } else {
                 QuantityValue(
                         quantity = Quantity(dimension = quantity.dimension),

@@ -6,18 +6,11 @@ data class UnitPh(
         val dimension: Dimension,
         val factor: Double = Double.NaN,
         val name: String = "AnonymousUnit",
-        val symbol: String = defaultSymbol(factor, dimension),
-        val converter: Converter? = null) {
-    fun convertToCoherent(value: Double): Double =
-            converter?.convertToCoherent(value) ?: value / factor
+        val symbol: String = defaultSymbol(factor, dimension)): UnitConverter{
+    override val unit: UnitPh get() = this
+    fun convertToCoherent(value: Double): Double = value / factor
 
-    fun convertFromCoherent(value: Double): Double =
-            converter?.convertFromCoherent(value) ?: value * factor
-
-    interface Converter {
-        fun convertToCoherent(value: Double): Double
-        fun convertFromCoherent(value: Double): Double
-    }
+    override fun convertFromCoherent(value: Double): Double = value * factor
 
     companion object {
         fun defaultSymbol(factor: Double, dimension: Dimension): String = with(dimension) {
@@ -37,14 +30,19 @@ data class UnitPh(
     }
 }
 
+interface UnitConverter {
+    val unit: UnitPh
+    fun convertFromCoherent(value: Double): Double
+}
+
 // Use with Temperature Units for example (C, F, etc.)
 
-class OffsetUnitConverter(
-        val factor: Double,
+class OffsetConverter(
+        override val unit: UnitPh,
         val offset: Double)
-    : UnitPh.Converter {
-    override fun convertToCoherent(value: Double): Double = (value - offset) / factor
-    override fun convertFromCoherent(value: Double): Double = value * factor + offset
+    : UnitConverter {
+    //override fun convertToCoherent(value: Double): Double = (value - offset) / factor
+    override fun convertFromCoherent(value: Double): Double = value * unit.factor + offset
 }
 
 @Suppress("NOTHING_TO_INLINE")
@@ -53,13 +51,6 @@ inline fun CoherentUnit(
         name: String = "AnonymousUnit",
         symbol: String = UnitPh.defaultSymbol(1.0, dimension))
         : UnitPh = UnitPh(dimension, factor = 1.0, name = name, symbol = symbol)
-
-@Suppress("NOTHING_TO_INLINE")
-private inline fun UnitPh.checkWithoutConverter() {
-    if (converter != null) {
-        throw UnsupportedOperationException("unit must have converter == null")
-    }
-}
 
 operator fun UnitPh.times(unit: UnitPh): UnitPh =
         UnitPh(dimension = dimension * unit.dimension, factor = factor * unit.factor)
@@ -81,7 +72,6 @@ operator fun Double.div(unit: UnitPh): UnitPh =
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun UnitPh.withPrefix(prefix: String, times: Double): UnitPh {
-    checkWithoutConverter()
     return UnitPh(dimension = dimension, factor = factor * times)
 }
 
@@ -108,7 +98,7 @@ fun z(unit: UnitPh) = unit.withPrefix("z", 1e21)
 fun y(unit: UnitPh) = unit.withPrefix("y", 1e24)
 
 infix fun UnitPh.withSymbol(symbol: String): UnitPh =
-        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor, converter = converter)
+        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor)
 
 infix fun UnitPh.withName(name: String): UnitPh =
-        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor, converter = converter)
+        UnitPh(dimension = dimension, symbol = symbol, name = name, factor = factor)

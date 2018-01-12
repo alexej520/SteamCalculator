@@ -2,7 +2,6 @@ package ru.lextop.steamcalculator.db
 
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.RoomDatabase
-import quantityvalue.invoke
 import ru.lextop.steamcalculator.model.allQuantities
 import ru.lextop.steamcalculator.model.computablePropMap
 import ru.lextop.steamcalculator.model.computableQuantities
@@ -23,8 +22,8 @@ object OnDbCreateCallback: RoomDatabase.Callback() {
         db.fillTable(
                 tableName = ViewUnit.TABLE_NAME,
                 columns = listOf(
-                        ViewUnit.PROP_SYMBOL,
-                        ViewUnit.UNIT_NAME),
+                        ViewUnit.QUANTITY_ID,
+                        ViewUnit.UNIT_ID),
                 values = allQuantities.map { prop ->
                     listOf(
                             prop.symbol,
@@ -39,11 +38,11 @@ object OnDbCreateCallback: RoomDatabase.Callback() {
                         SelectedQuantityValue.PROP_SYMBOL,
                         SelectedQuantityValue.VALUE),
                 values = listOf(
-                        SelectedQuantityValue(KEY_FIRST_QUANTITY, first(Double.NaN, defaultUnits[first.dimension]!!)),
-                        SelectedQuantityValue(KEY_SECOND_QUANTITY, second(Double.NaN, defaultUnits[second.dimension]!!))).map {
+                        SelectedQuantityValue(ID_ARG1, first(Double.NaN, defaultUnits[first.dimension]!!)),
+                        SelectedQuantityValue(ID_ARG2, second(Double.NaN, defaultUnits[second.dimension]!!))).map {
                     listOf(
                             it.key,
-                            it.propSymbol,
+                            it.quantityId,
                             it.value!!)
                 }
         )
