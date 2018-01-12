@@ -56,17 +56,17 @@ abstract class AppDatabase : RoomDatabase() {
                             listOf(
                                     it.id,
                                     it.quantityId,
-                                    it.value!!)
+                                    it.value)
                         }
                 )
             }
         }
 
-        private fun SupportSQLiteDatabase.fillTable(tableName: String, columns: List<String>, values: List<List<Any>>) {
+        private fun SupportSQLiteDatabase.fillTable(tableName: String, columns: List<String>, values: List<List<Any?>>) {
             val insert = columns.joinToString(
-                    prefix = "INSERT INTO $tableName (",
-                    separator = ", ",
-                    postfix = ") VALUES "
+                    prefix = "INSERT INTO `$tableName` (`",
+                    separator = "`, `",
+                    postfix = "`) VALUES "
             )
             val sql = values.joinToString(
                     prefix = insert,
@@ -74,9 +74,9 @@ abstract class AppDatabase : RoomDatabase() {
                     postfix = ";",
                     transform = { list ->
                         list.joinToString(
-                                prefix = "(`",
-                                separator = "`, `",
-                                postfix = "`)"
+                                prefix = "(",
+                                separator = ", ",
+                                postfix = ")"
                         )
                     }
             )
@@ -85,13 +85,9 @@ abstract class AppDatabase : RoomDatabase() {
 
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("""
-                    begin;
-                    DROP TABLE IF EXISTS `view_unit`;
-                    DROP TABLE IF EXISTS `edit_unit`;
-                    DROP TABLE IF EXISTS `selected_property`;
-                    commit;
-                    """.trimIndent())
+                db.execSQL("DROP TABLE IF EXISTS `view_unit`")
+                db.execSQL("DROP TABLE IF EXISTS `edit_unit`")
+                db.execSQL("DROP TABLE IF EXISTS `selected_property`")
                 db.execSQL("CREATE TABLE IF NOT EXISTS `viewUnit` (`quantityId` INTEGER NOT NULL, `unitId` INTEGER NOT NULL, PRIMARY KEY(`quantityId`))")
                 db.execSQL("CREATE TABLE IF NOT EXISTS `editUnit` (`quantityId` INTEGER NOT NULL, `unitId` INTEGER NOT NULL, PRIMARY KEY(`quantityId`))")
                 db.execSQL("CREATE TABLE IF NOT EXISTS `selectedQuantityValue` (`id` INTEGER NOT NULL, `quantityId` INTEGER NOT NULL, `value` REAL, PRIMARY KEY(`id`))")
@@ -125,11 +121,11 @@ abstract class AppDatabase : RoomDatabase() {
                                 SelectedQuantityValue.VALUE),
                         values = listOf(
                                 SelectedQuantityValue(ID_ARG1, QuantityValueWrapper(first, Double.NaN, first.defaultUnits.default)),
-                                SelectedQuantityValue(ID_ARG2, QuantityValueWrapper(second, Double.NaN, first.defaultUnits.default))).map {
+                                SelectedQuantityValue(ID_ARG2, QuantityValueWrapper(second, Double.NaN, second.defaultUnits.default))).map {
                             listOf(
                                     it.id,
                                     it.quantityId,
-                                    it.value!!)
+                                    it.value)
                         }
                 )
             }

@@ -58,7 +58,7 @@ data class SelectedQuantityValue(
         val value: Double?
 ) {
     constructor(id: Int, quantityValue: QuantityValueWrapper)
-            : this(id, quantityValue.quantity.id, quantityValue[quantityValue.quantity.defaultUnits.si].value)
+            : this(id, quantityValue.quantity.id, quantityValue[quantityValue.quantity.defaultUnits.si].value.takeUnless { it.isNaN() })
 
     companion object {
         const val TABLE_NAME = "selectedQuantityValue"

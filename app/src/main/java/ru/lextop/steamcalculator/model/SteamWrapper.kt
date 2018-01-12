@@ -284,7 +284,7 @@ class SteamWrapper(first: QuantityValueWrapper, second: QuantityValueWrapper) : 
 
     constructor() : this(QuantityValueWrapper(Pressure(Double.NaN, Pa)), QuantityValueWrapper(Temperature(Double.NaN, K)))
 
-    operator fun get(quantity: QuantityWrapper) = steam.get(quantity.quantity)
+    operator fun get(quantity: QuantityWrapper) = steam[quantity.quantity]
 
     override fun iterator(): Iterator<QuantityValueWrapper> {
         val original = steam.iterator()

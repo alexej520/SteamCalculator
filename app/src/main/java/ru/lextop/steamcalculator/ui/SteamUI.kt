@@ -1,5 +1,7 @@
 package ru.lextop.steamcalculator.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -44,13 +46,20 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                                 email(ctx.getString(R.string.contactUsEmail), subject = ctx.getString(R.string.app_name))
                             }
                         }
-                        val index = (this@root as LinearLayout).indexOfChild(this)
-                        this@root.removeViewAt(index)
-                        this@root.addView(com.google.android.gms.ads.AdView(this@root.context).apply {
-                            adSize = bannerSize
-                            adUnitId = ctx.getString(R.string.adUnitIdBanner)
-                            loadAd(AdRequest.Builder().build())
-                        }, index, android.widget.LinearLayout.LayoutParams(matchParent, wrapContent))
+                        animate()
+                                .alpha(0f)
+                                .setListener(object:AnimatorListenerAdapter(){
+                                    override fun onAnimationEnd(animation: Animator?) {
+                                        val index = (this@root as LinearLayout).indexOfChild(this@rateView)
+                                        removeViewAt(index)
+                                        this@root.removeViewAt(index)
+                                        this@root.addView(com.google.android.gms.ads.AdView(this@root.context).apply {
+                                            adSize = bannerSize
+                                            adUnitId = ctx.getString(R.string.adUnitIdBanner)
+                                            loadAd(AdRequest.Builder().build())
+                                        }, index, android.widget.LinearLayout.LayoutParams(matchParent, wrapContent))
+                                    }
+                                })
                         RateViewModel.onRateDialogCompleted(ctx, success, positive)
                     }
                 }.lparams(bannerSize.getWidthInPixels(ctx), maxOf(bannerSize.getHeightInPixels(ctx), dip(48)))

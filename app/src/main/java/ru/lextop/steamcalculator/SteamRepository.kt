@@ -52,12 +52,10 @@ class SteamRepository @Inject constructor
             firstQuantityValueLive.value = first
             secondQuantityValueLive as MutableLiveData
             secondQuantityValueLive.value = second
-            steam = SteamWrapper(first, second).apply {
-                forEach {
-                    val quantityValueLive = quantityValueLives[it.quantity]!! as MutableLiveData
-                    @Suppress("UNCHECKED_CAST")
-                    quantityValueLive.value = it
-                }
+            steam = SteamWrapper(first, second)
+            steam.forEach {
+                val quantityValueLive = quantityValueLives[it.quantity]!! as MutableLiveData
+                quantityValueLive.value = it
             }
         }
     }

@@ -168,6 +168,4 @@
     <string name="mcm"><![CDATA[&mu;m]]></string>
     <string name="nm">nm</string>
     <string name="inch">in</string>
-    <string name="preferenceKeyWavelengthEditUnit" translatable="false">wavelengthEditUnit</string>
-    <string name="preferenceKeyWavelengthValue">wavelengthValue</string>
 </resources>
