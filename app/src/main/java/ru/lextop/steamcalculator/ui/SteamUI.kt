@@ -23,7 +23,7 @@ import ru.lextop.steamcalculator.vm.QuantityValueViewModel
 import ru.lextop.steamcalculator.vm.RateViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
-class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
+class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
 
     override fun Binding<SteamViewModel>.createView(ui: AnkoContext<SteamFragment>): View = with(ui) {
         verticalLayout root@ {
@@ -48,7 +48,7 @@ class SteamUI : Binding.Component<SteamViewModel, SteamFragment>() {
                         }
                         animate()
                                 .alpha(0f)
-                                .setListener(object:AnimatorListenerAdapter(){
+                                .setListener(object : AnimatorListenerAdapter() {
                                     override fun onAnimationEnd(animation: Animator?) {
                                         val index = (this@root as LinearLayout).indexOfChild(this@rateView)
                                         removeViewAt(index)

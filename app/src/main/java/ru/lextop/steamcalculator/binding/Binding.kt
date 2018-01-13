@@ -6,9 +6,10 @@ import android.view.View
 import org.jetbrains.anko.AnkoContext
 import java.util.*
 
-class Binding<VM : Any> private constructor() {
+open class Binding<VM : Any> {
+    val nested: MutableMap<Any, Binding<*>> = mutableMapOf()
     private var _view: View? = null
-    private fun setView(view: View) {
+    fun setView(view: View) {
         _view = view
         Companion.addBinding(this)
     }
@@ -36,6 +37,10 @@ class Binding<VM : Any> private constructor() {
         liveDataObservers.clear()
         liveBindings.forEach { it(viewModel, viewModelLO) }
         bindings.forEach { it(viewModel) }
+        nested.forEach { (key, binding) ->
+            @Suppress("UNCHECKED_CAST")
+            (binding as Binding<Any>).setViewModel(viewModelLO, (viewModel as? BindingViewModel)?.nested?.get(key))
+        }
     }
 
     fun callback(receive: VM.() -> Unit) {
@@ -78,11 +83,19 @@ class Binding<VM : Any> private constructor() {
     }
 
     abstract class  Component<VM : Any, T> {
-        protected abstract fun Binding<VM>.createView(ui: AnkoContext<T>): View
-        fun createBinding(ui: AnkoContext<T>): Binding<VM> {
+        abstract fun createBinding(ui: AnkoContext<T>): Binding<VM>
+    }
+
+    abstract class SimpleComponent<VM : Any, T>: Component<VM, T>() {
+        abstract protected fun Binding<VM>.createView(ui: AnkoContext<T>): View
+        override final fun createBinding(ui: AnkoContext<T>): Binding<VM> {
             val binding = Binding<VM>()
             binding.setView(binding.createView(ui))
             return binding
         }
     }
+}
+
+interface BindingViewModel {
+    val nested: MutableMap<Any, Any>
 }

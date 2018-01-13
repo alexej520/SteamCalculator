@@ -4,7 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
-open class SimpleBindingAdapter<VM : Any>(private val bindingLo: LifecycleOwner, private val bc: Binding.Component<VM, ViewGroup>)
+class SimpleBindingAdapter<VM : Any>(private val bindingLo: LifecycleOwner, private val bc: Binding.Component<VM, ViewGroup>)
     : RecyclerView.Adapter<BindingHolder<VM>>() {
     var viewModels: List<VM> = listOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder<VM> {
