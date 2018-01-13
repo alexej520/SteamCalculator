@@ -61,26 +61,22 @@ class SteamViewModel @Inject constructor
     val secondUnitSelectionLive: LiveData<Int> = MutableLiveData()
     val firstValueLive: LiveData<CharSequence> = MutableLiveData()
     val secondValueLive: LiveData<CharSequence> = MutableLiveData()
-    private var firstValue: Double = Double.NaN
-        set(value) {
-            field = value
-            (firstValueLive as MutableLiveData).value = doubleToInputValue(value)
-        }
-    private var secondValue: Double = Double.NaN
-        set(value) {
-            field = value
-            (secondValueLive as MutableLiveData).value = doubleToInputValue(value)
-        }
+    private fun setFirstValueLive(value: Double){
+        (firstValueLive as MutableLiveData).value = doubleToInputValue(value)
+    }
+    private fun setSecondValueLive(value: Double){
+        (secondValueLive as MutableLiveData).value = doubleToInputValue(value)
+    }
 
     private val firstUnitObserver = Observer<UnitConverterWrapper> { unit ->
         (firstUnitSelectionLive as MutableLiveData).value = firstUnits.indexOf(unit)
-        firstValue = firstQuantityValue[unit!!].value
+        setFirstValueLive(firstQuantityValue[unit!!].value)
         (secondInputFocusLive as MutableLiveData).value = false
         (firstInputFocusLive as MutableLiveData).value = true
     }
     private val secondUnitObserver = Observer<UnitConverterWrapper> { unit ->
         (secondUnitSelectionLive as MutableLiveData).value = secondUnits.indexOf(unit)
-        secondValue = secondQuantityValue[unit!!].value
+        setSecondValueLive(secondQuantityValue[unit!!].value)
         if (secondUnitSelectedByUser) {
             (firstInputFocusLive as MutableLiveData).value = false
             (secondInputFocusLive as MutableLiveData).value = true
@@ -102,7 +98,7 @@ class SteamViewModel @Inject constructor
             firstUnitLive.removeObserver(firstUnitObserver)
             firstUnitLive = repo.getEditUnitLive(newQuantity)
             firstUnitLive.observeForever(firstUnitObserver)
-            firstValue = quantityValue[firstUnitLive.value!!].value
+            setFirstValueLive(quantityValue[firstUnitLive.value!!].value)
             secondQuantitySelectedByUser = false
             secondQuantities = computablePropMap[newQuantity]!!
         }
@@ -122,7 +118,7 @@ class SteamViewModel @Inject constructor
             secondUnitLive.removeObserver(secondUnitObserver)
             secondUnitLive = repo.getEditUnitLive(newQuantity)
             secondUnitLive.observeForever(secondUnitObserver)
-            secondValue = quantityValue[secondUnitLive.value!!].value
+            setSecondValueLive(quantityValue[secondUnitLive.value!!].value)
         }
     }
 
@@ -186,8 +182,8 @@ class SteamViewModel @Inject constructor
     }
 
     fun updateValues() {
-        firstValue = firstValue
-        secondValue = secondValue
+        setFirstValueLive(inputValueToDouble(firstValueLive.value!!))
+        setSecondValueLive(inputValueToDouble(secondValueLive.value!!))
         quantityValueViewModels.forEach { it.updateValue() }
         refractiveIndexViewModel.updateValue()
     }
@@ -211,6 +207,7 @@ class SteamViewModel @Inject constructor
             CustomFormat.parse(input.toString())
 
     fun inputFirstValue(input: CharSequence) {
+        (firstValueLive as MutableLiveData).value = input
         repo.setArg1Arg2(
                 QuantityValueWrapper(
                         quantity = firstQuantityValue.quantity,
@@ -219,7 +216,8 @@ class SteamViewModel @Inject constructor
                 secondQuantityValue)
     }
 
-    fun inputSecondPropValue(input: CharSequence) {
+    fun inputSecondValue(input: CharSequence) {
+        (secondValueLive as MutableLiveData).value = input
         repo.setArg1Arg2(
                 firstQuantityValue,
                 QuantityValueWrapper(

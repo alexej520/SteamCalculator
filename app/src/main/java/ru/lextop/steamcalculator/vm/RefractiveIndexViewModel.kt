@@ -33,11 +33,9 @@ class RefractiveIndexViewModel(
     val wavelengthUnitSelectionLive: LiveData<Int> = MutableLiveData()
     val wavelengthValueLive: LiveData<CharSequence> = MutableLiveData()
     private lateinit var wavelengthQuantityValue: QuantityValueWrapper
-    private var wavelengthValue: Double = Double.NaN
-        set(value) {
-            field = value
-            (wavelengthValueLive as MutableLiveData).value = doubleToInputValue(value)
-        }
+    private fun setWavelengthValueLive(value: Double){
+        (wavelengthValueLive as MutableLiveData).value = doubleToInputValue(value)
+    }
 
     private val waveLengthQuantityValueObserver = Observer<QuantityValueWrapper> { quantityValue ->
         val oldQuantity = nullIfNotInitialized { wavelengthQuantityValue }
@@ -49,7 +47,7 @@ class RefractiveIndexViewModel(
 
     private val wavelengthUnitObserver = Observer<UnitConverterWrapper> { unit ->
         (wavelengthUnitSelectionLive as MutableLiveData).value = WavelengthWrapper.units.indexOf(unit)
-        wavelengthValue = wavelengthQuantityValue[unit!!].value
+        setWavelengthValueLive(wavelengthQuantityValue[unit!!].value)
     }
 
     init {
@@ -69,7 +67,7 @@ class RefractiveIndexViewModel(
     }
 
     fun updateValue() {
-        wavelengthValue = wavelengthValue
+        setWavelengthValueLive(inputValueToDouble(wavelengthValueLive.value!!))
         refractiveIndexQuantityValueViewModel.updateValue()
     }
 
@@ -78,6 +76,7 @@ class RefractiveIndexViewModel(
     }
 
     fun inputWavelengthValue(input: CharSequence) {
+        (wavelengthValueLive as MutableLiveData).value = input
         onWavelengthQuantityValueChanged(QuantityValueWrapper(
                 quantity = WavelengthWrapper,
                 value = inputValueToDouble(input),

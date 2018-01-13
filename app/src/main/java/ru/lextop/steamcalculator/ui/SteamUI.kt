@@ -83,7 +83,9 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                         }.lparams(wrapContent, wrapContent)
                         editTextMaterial {
                             val listener = object : TextWatcher {
+                                var isEnabled = true
                                 override fun afterTextChanged(input: Editable) {
+                                    if (!isEnabled) return
                                     callback { inputFirstValue(input) }
                                 }
 
@@ -98,10 +100,12 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                                 }
                             }) { firstInputFocusLive }
                             bindLive({
-                                removeTextChangedListener(listener)
-                                setText(it)
-                                setSelection(length())
-                                addTextChangedListener(listener)
+                                listener.isEnabled = false
+                                if (text != it){
+                                    setText(it)
+                                    setSelection(length())
+                                }
+                                listener.isEnabled = true
                             }) { firstValueLive }
                             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                             addTextChangedListener(listener)
@@ -128,8 +132,10 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                         }.lparams(wrapContent, wrapContent)
                         editTextMaterial {
                             val listener = object : TextWatcher {
+                                var isEnabled = true
                                 override fun afterTextChanged(input: Editable) {
-                                    callback { inputSecondPropValue(input) }
+                                    if (!isEnabled) return
+                                    callback { inputSecondValue(input) }
                                 }
 
                                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -143,10 +149,12 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                                 }
                             }) { secondInputFocusLive }
                             bindLive({
-                                removeTextChangedListener(listener)
-                                setText(it)
-                                setSelection(length())
-                                addTextChangedListener(listener)
+                                listener.isEnabled = false
+                                if (text != it){
+                                    setText(it)
+                                    setSelection(length())
+                                }
+                                listener.isEnabled = true
                             }) { secondValueLive }
                             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                             addTextChangedListener(listener)

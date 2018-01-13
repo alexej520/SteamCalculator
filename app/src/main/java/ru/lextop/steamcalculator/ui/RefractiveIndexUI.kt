@@ -40,7 +40,9 @@ class RefractiveIndexUI : Binding.Component<RefractiveIndexViewModel, ViewGroup>
                             }
                             editTextMaterial {
                                 val listener = object : TextWatcher {
+                                    var isEnabled = true
                                     override fun afterTextChanged(input: Editable) {
+                                        if (!isEnabled) return
                                         callback { inputWavelengthValue(input) }
                                     }
 
@@ -55,10 +57,12 @@ class RefractiveIndexUI : Binding.Component<RefractiveIndexViewModel, ViewGroup>
                                     }
                                 }) { wavelengthInputFocusLive }*/
                                 bindLive({
-                                    removeTextChangedListener(listener)
-                                    setText(it)
-                                    setSelection(length())
-                                    addTextChangedListener(listener)
+                                    listener.isEnabled = false
+                                    if (text != it) {
+                                        setText(it)
+                                        setSelection(length())
+                                    }
+                                    listener.isEnabled = true
                                 }) { wavelengthValueLive }
                                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
                                 addTextChangedListener(listener)
