@@ -26,12 +26,12 @@ class UnitConverterWrapper(
     }
 }
 
-private val allUnitMappings = mutableListOf<UnitConverterWrapper>()
+private val allUnitWrappers = mutableListOf<UnitConverterWrapper>()
 
 private val _massUnits = listOf(
         UnitConverterWrapper(1, kg, R.string.kg),
         UnitConverterWrapper(2, lb, R.string.lb)
-).also { allUnitMappings.addAll(it) }
+).also { allUnitWrappers.addAll(it) }
 
 private val _energyUnits = listOf(
         UnitConverterWrapper(3, J, R.string.J),
@@ -45,7 +45,7 @@ private val _energyUnits = listOf(
         UnitConverterWrapper(11, kcal15, R.string.kcal15),
         UnitConverterWrapper(12, BTU, R.string.BTU),
         UnitConverterWrapper(13, kWh, R.string.kWh)
-).also { allUnitMappings.addAll(it) }
+).also { allUnitWrappers.addAll(it) }
 
 private val _specificEnergyUnits = listOf(
         UnitConverterWrapper(14, J_kg, R.string.J_kg),
@@ -57,7 +57,7 @@ private val _specificEnergyUnits = listOf(
         UnitConverterWrapper(20, kcalth_kg, R.string.kcalth_kg),
         UnitConverterWrapper(21, kcal15_kg, R.string.kcal15_kg),
         UnitConverterWrapper(22, BTU_lb, R.string.BTU_lb)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = kJ_kg, engineering = kJ_kg, si = J_kg, imperial = BTU_lb)
 
 private val _temperatureUnits = listOf(
@@ -69,7 +69,7 @@ private val _temperatureUnits = listOf(
         UnitConverterWrapper(28, N, R.string.N),
         UnitConverterWrapper(29, Re, R.string.Re),
         UnitConverterWrapper(30, Ro, R.string.Ro)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = K, engineering = C, si = K, imperial = F)
 
 private val _specificHeatCapacityUnits = listOf(
@@ -82,7 +82,7 @@ private val _specificHeatCapacityUnits = listOf(
         UnitConverterWrapper(37, kcalth_kgK, R.string.kcalth_kgK),
         UnitConverterWrapper(38, kcal15_kgK, R.string.kcal15_kgK),
         UnitConverterWrapper(39, BTU_lbR, R.string.BTU_lbR)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = kJ_kgK, engineering = kJ_kgK, si = J_kgK, imperial = BTU_lbR)
 
 private val _pressureUnits = listOf(
@@ -97,70 +97,70 @@ private val _pressureUnits = listOf(
         UnitConverterWrapper(48, lb_in2, R.string.lb_in2),
         UnitConverterWrapper(49, mmHg, R.string.mmHg),
         UnitConverterWrapper(50, mH2O, R.string.mH2O)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = MPa, engineering = bar, si = Pa, imperial = psi)
 
 private val _ratioUnits = listOf(
         UnitConverterWrapper(51, ratio, R.string.ratio),
         UnitConverterWrapper(52, percent, R.string.percent)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = ratio, engineering = ratio, si = ratio, imperial = ratio)
 
 private val _specificVolumeUnits = listOf(
         UnitConverterWrapper(53, m3_kg, R.string.m3_kg),
         UnitConverterWrapper(54, ft3_lb, R.string.ft3_lb)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = m3_kg, engineering = m3_kg, si = m3_kg, imperial = ft3_lb)
 
 private val _densityUnits = listOf(
         UnitConverterWrapper(55, kg_m3, R.string.kg_m3),
         UnitConverterWrapper(56, lb_ft3, R.string.lb_ft3)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = kg_m3, engineering = kg_m3, si = kg_m3, imperial = lb_ft3)
 
 private val _dynamicViscosityUnits = listOf(
         UnitConverterWrapper(57, Pas, R.string.Pas),
         UnitConverterWrapper(58, cP, R.string.cP)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = Pas, engineering = Pas, si = Pas, imperial = cP)
 
 private val _temperature_1Units = listOf(
         UnitConverterWrapper(59, K_1, R.string.K_1),
         UnitConverterWrapper(60, R_1, R.string.R_1)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = K_1, engineering = K_1, si = K_1, imperial = R_1)
 
 private val _compressibilityUnits = listOf(
         UnitConverterWrapper(61, Pa_1, R.string.Pa_1),
         UnitConverterWrapper(62, MPa_1, R.string.MPa_1),
         UnitConverterWrapper(63, in2_lb, R.string.in2_lb)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = MPa_1, engineering = MPa_1, si = Pa_1, imperial = in2_lb)
 
 private val _kinematicViscosityUnits = listOf(
         UnitConverterWrapper(64, m2_s, R.string.m2_s),
         UnitConverterWrapper(65, cSt, R.string.cSt)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = m2_s, engineering = m2_s, si = m2_s, imperial = cSt)
 
 private val _speedUnits = listOf(
         UnitConverterWrapper(66, m_s, R.string.m_s),
         UnitConverterWrapper(67, ft_s, R.string.ft_s)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = m_s, engineering = m_s, si = m_s, imperial = ft_s)
 
 private val _surfaceTensionUnits = listOf(
         UnitConverterWrapper(68, N_m, R.string.N_m),
         UnitConverterWrapper(69, kg_s2, R.string.kg_s2),
         UnitConverterWrapper(70, lbf_ft, R.string.lbf_ft)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = N_m, engineering = N_m, si = N_m, imperial = lbf_ft)
 
 private val _thermalConductivityUnits = listOf(
         UnitConverterWrapper(71, W_mK, R.string.W_mK),
         UnitConverterWrapper(72, kW_mK, R.string.kW_mK),
         UnitConverterWrapper(73, BTU_hrftR, R.string.BTU_hrftR)
-).also { allUnitMappings.addAll(it) } to
+).also { allUnitWrappers.addAll(it) } to
         DefaultUnits(default = W_mK, engineering = kW_mK, si = W_mK, imperial = BTU_hrftR)
 
 private val _wavelengthUnits = listOf(
@@ -170,13 +170,16 @@ private val _wavelengthUnits = listOf(
         UnitConverterWrapper(77, mcm, R.string.mcm),
         UnitConverterWrapper(78, nm, R.string.nm),
         UnitConverterWrapper(79, inch, R.string.inch)
-).also { allUnitMappings.addAll(it) }
+).also { allUnitWrappers.addAll(it) } to
+        DefaultUnits(default = mcm, engineering = mcm, si = m, imperial = inch)
 
-private val unitUnitMapping = allUnitMappings.associate {
+private val unitUnitWrapperMap = allUnitWrappers.associate {
     it.unit to it
 }
 
-val unitIdMap = allUnitMappings.associate { it.id to it }
+val UnitConverter.wrapper get() = unitUnitWrapperMap[this]!!
+
+val unitIdMap = allUnitWrappers.associate { it.id to it }
 
 class QuantityWrapper internal constructor(
         val id: Int,
@@ -204,10 +207,10 @@ class DefaultUnits internal constructor(
         si: UnitConverter,
         imperial: UnitConverter
 ) {
-    val default: UnitConverterWrapper by lazy { unitUnitMapping[default]!! }
-    val engineering: UnitConverterWrapper by lazy { unitUnitMapping[engineering]!! }
-    val si: UnitConverterWrapper by lazy { unitUnitMapping[si]!! }
-    val imperial: UnitConverterWrapper by lazy { unitUnitMapping[imperial]!! }
+    val default: UnitConverterWrapper by lazy { default.wrapper }
+    val engineering: UnitConverterWrapper by lazy { engineering.wrapper }
+    val si: UnitConverterWrapper by lazy { si.wrapper }
+    val imperial: UnitConverterWrapper by lazy { imperial.wrapper }
 
     companion object {
         val allUnitSystems = listOf(DefaultUnits::default, DefaultUnits::engineering, DefaultUnits::si, DefaultUnits::imperial)
@@ -253,28 +256,48 @@ val allQuantities: List<QuantityWrapper> = listOf(
         QuantityWrapper(19, IsothermalCompressibility, _compressibilityUnits, R.string.IsothermalCompressibility, R.string.kT),
         QuantityWrapper(20, RelativePermittivity, _ratioUnits, R.string.RelativePermittivity, R.string.epsilon),
         QuantityWrapper(21, SpecificInternalEnergy, _specificEnergyUnits, R.string.SpecificInternalEnergy, R.string.u),
-        QuantityWrapper(22, SpecificGibbsFreeEnergy, _specificEnergyUnits, R.string.SpecificGibbsFreeEnergy, R.string.g)
+        QuantityWrapper(22, SpecificGibbsFreeEnergy, _specificEnergyUnits, R.string.SpecificGibbsFreeEnergy, R.string.g),
+        QuantityWrapper(23, Wavelength, _wavelengthUnits, R.string.Wavelength, R.string.lambda),
+        QuantityWrapper(24, RefractiveIndex, _ratioUnits, R.string.RefractiveIndex, R.string.n)
 )
 
-private val quantityQuantityMapping = allQuantities.associate { it.quantity to it }
+private val quantityQuantityWrapperMap = allQuantities.associate { it.quantity to it }
+
+val Quantity.wrapper: QuantityWrapper get() = quantityQuantityWrapperMap[this]!!
 
 val quantityIdMap = allQuantities.associate { it.id to it }
-
-private val quantityQuantityMap = allQuantities.associate { it.quantity to it }
 
 class QuantityValueWrapper(internal val quantityValue: QuantityValue) {
     constructor(quantity: QuantityWrapper, value: Double, unit: UnitConverterWrapper) :
             this(try {
                 QuantityValue(quantity.quantity, value, unit.unit.unit)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 throw Exception()
             })
 
     operator fun get(unit: UnitConverterWrapper) = quantityValue[unit.unit]
 
-    val value get() = quantityValue.value
-    val quantity get() = quantityQuantityMapping[quantityValue.quantity]!!
-    val unit get() = unitUnitMapping[quantityValue.unit]!!
+    val value: Double by lazy { quantityValue.value }
+    val quantity: QuantityWrapper by lazy { quantityValue.quantity.wrapper }
+    val unit: UnitConverterWrapper by lazy { quantityValue.unit.wrapper }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is QuantityValueWrapper) return false
+
+        if (value != other.value) return false
+        if (quantity != other.quantity) return false
+        if (unit != other.unit) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + quantity.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
+    }
 }
 
 class SteamWrapper(first: QuantityValueWrapper, second: QuantityValueWrapper) : Iterable<QuantityValueWrapper> {
@@ -293,6 +316,17 @@ class SteamWrapper(first: QuantityValueWrapper, second: QuantityValueWrapper) : 
             override fun next(): QuantityValueWrapper = QuantityValueWrapper(original.next())
         }
     }
+
+    fun refractiveIndex(wavelength: QuantityValueWrapper) =
+        QuantityValueWrapper(steam.refractiveIndex(wavelength.quantityValue))
+
+    override fun equals(other: Any?): Boolean {
+        return steam == other
+    }
+
+    override fun hashCode(): Int {
+        return steam.hashCode()
+    }
 }
 
 private val computablePairs: List<Pair<QuantityWrapper, QuantityWrapper>> = listOf(
@@ -305,7 +339,7 @@ private val computablePairs: List<Pair<QuantityWrapper, QuantityWrapper>> = list
         SpecificVolume to Temperature,
         Pressure to VapourFraction,
         Temperature to VapourFraction
-).map { (q1, q2) -> quantityQuantityMapping[q1]!! to quantityQuantityMapping[q2]!! }
+).map { (q1, q2) -> quantityQuantityWrapperMap[q1]!! to quantityQuantityWrapperMap[q2]!! }
 
 val computablePropMap: Map<QuantityWrapper, List<QuantityWrapper>> = with(computablePairs.unzip()) {
     first.union(second).associate { prop ->

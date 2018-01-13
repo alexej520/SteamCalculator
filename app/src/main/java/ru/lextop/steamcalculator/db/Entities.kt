@@ -70,6 +70,7 @@ data class SelectedQuantityValue(
 
 const val ID_ARG1 = 1
 const val ID_ARG2 = 2
+const val ID_WAVELENGTH = 3
 
 fun SelectedQuantityValue.toQuantityValue(): QuantityValueWrapper {
     val quantity = quantityIdMap[quantityId]!!
@@ -80,5 +81,5 @@ fun SelectedQuantityValue.toQuantityValue(): QuantityValueWrapper {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun List<SelectedQuantityValue>.toQuantityMap(): Map<Int, QuantityValueWrapper> =
+fun List<SelectedQuantityValue>.toQuantityValueMap(): Map<Int, QuantityValueWrapper> =
         map { it.id to it.toQuantityValue() }.toMap()

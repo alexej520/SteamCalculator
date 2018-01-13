@@ -14,7 +14,7 @@ class QuantityUI : Binding.SimpleComponent<QuantityValueViewModel, ViewGroup>() 
             lparams(matchParent, wrapContent)
             textCaption {
                 startPadding = dip(8)
-                bindLive({ visibility = it!!.toVisibleOrGone() }) { isPropNameVisibleLive }
+                bindLive({ visibility = it!!.toVisibleOrGone() }) { isQuantityNameVisibleLive }
                 bind(this::setText) { quantityName }
             }.lparams(matchParent, wrapContent)
             linearLayout {

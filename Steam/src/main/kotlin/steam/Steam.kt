@@ -13,6 +13,8 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
     private val value2: Double
     private val computablePairProps: Pair<Quantity, Quantity>
 
+
+
     init {
         val computablePair = getComputablePair(pair)
         value1 = computablePair.first.value
@@ -20,13 +22,22 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
         computablePairProps = computablePair.first.quantity to computablePair.second.quantity
     }
 
+    private var recursiveIf97 = false
+
     private fun if97(p: Quantity): Lazy<QuantityValue> = lazy {
         p(try {
             CALC_MAP[computablePairProps]!![p]!!(value1, value2)
         } catch (e: Exception) {
             if (computablePairProps.second == VapourFraction) {
                 try {
-                    CALC_MAP[SpecificEnthalpy to SpecificEntropy]!![p]!!(h.value, s.value)
+                    if (recursiveIf97) {
+                        Double.NaN
+                    } else {
+                        recursiveIf97 = true
+                        CALC_MAP[SpecificEnthalpy to SpecificEntropy]!![p]!!(h.value, s.value)
+                    }.also {
+                        recursiveIf97 = false
+                    }
                 } catch (e: Exception) {
                     Double.NaN
                 }
@@ -88,8 +99,12 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
 
     fun refractiveIndex(wavelength: QuantityValue): QuantityValue {
         if (wavelength.quantity != Wavelength) throw IllegalArgumentException()
-        val doubleResult = CALC_REFRACTIVE_INDEX_MAP[computablePairProps]!!.invoke(value1, value2, wavelength[m].value)
-        return QuantityValue(Wavelength, doubleResult, m)
+        val doubleResult = try {
+            CALC_REFRACTIVE_INDEX_MAP[computablePairProps]?.invoke(value1, value2, wavelength[m].value) ?: Double.NaN
+        } catch (e: OutOfRangeException) {
+            Double.NaN
+        }
+        return QuantityValue(RefractiveIndex, doubleResult, ratio)
     }
 
     private val quantityValues: List<QuantityValue> by lazy {
@@ -98,11 +113,29 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
         )
     }
 
-    override fun toString(): String = quantityValues.toString()
+    override fun toString(): String = quantityValues.joinToString()
     override fun iterator(): Iterator<QuantityValue> = object : Iterator<QuantityValue> {
         val iterator = quantityValues.iterator()
         override fun hasNext(): Boolean = iterator.hasNext()
         override fun next(): QuantityValue = iterator.next()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Steam) return false
+
+        if (value1 != other.value1) return false
+        if (value2 != other.value2) return false
+        if (computablePairProps != other.computablePairProps) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = value1.hashCode()
+        result = 31 * result + value2.hashCode()
+        result = 31 * result + computablePairProps.hashCode()
+        return result
     }
 
     private companion object {

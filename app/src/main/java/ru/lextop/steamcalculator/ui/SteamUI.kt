@@ -19,7 +19,6 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.SteamFragment
 import ru.lextop.steamcalculator.binding.*
-import ru.lextop.steamcalculator.vm.QuantityValueViewModel
 import ru.lextop.steamcalculator.vm.RateViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
@@ -166,9 +165,9 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                 val lm = LinearLayoutManager(ctx)
                 layoutManager = lm
                 addItemDecoration(DividerItemDecoration(ctx, lm.orientation))
-                adapter = SimpleBindingAdapter(owner, QuantityUI())
-                @Suppress("UNCHECKED_CAST")
-                bind({ (adapter as SimpleBindingAdapter<QuantityValueViewModel>).viewModels = it!! }) { quantityValueModels }
+                adapter = SteamBindingAdapter(owner)
+                bind({ (adapter as SteamBindingAdapter).viewModels = it!! }) { quantityValueViewModels }
+                bind({ (adapter as SteamBindingAdapter).refractiveIndexViewModel = it!! }) { refractiveIndexViewModel }
             }.lparams(matchParent, wrapContent)
         }
     }

@@ -4,10 +4,8 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
-import ru.lextop.steamcalculator.model.QuantityValueWrapper
-import ru.lextop.steamcalculator.model.allQuantities
-import ru.lextop.steamcalculator.model.computablePropMap
-import ru.lextop.steamcalculator.model.computableQuantities
+import ru.lextop.steamcalculator.model.*
+import steam.quantities.Wavelength
 import javax.inject.Singleton
 
 @Singleton
@@ -27,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
                         columns = listOf(
                                 EditUnit.QUANTITY_ID,
                                 EditUnit.UNIT_ID),
-                        values = computableQuantities.map { quantity ->
+                        values = (computableQuantities + Wavelength.wrapper).map { quantity ->
                             listOf(
                                     quantity.id,
                                     quantity.defaultUnits.default.id)
@@ -42,8 +40,9 @@ abstract class AppDatabase : RoomDatabase() {
                                     quantity.id,
                                     quantity.defaultUnits.default.id)
                         })
-                val first = computablePropMap.keys.first()
-                val second = computablePropMap[first]!!.first()
+                val arg1 = computablePropMap.keys.first()
+                val arg2 = computablePropMap[arg1]!!.first()
+                val wavelength = Wavelength.wrapper
                 db.fillTable(
                         tableName = SelectedQuantityValue.TABLE_NAME,
                         columns = listOf(
@@ -51,9 +50,10 @@ abstract class AppDatabase : RoomDatabase() {
                                 SelectedQuantityValue.QUANTITY_ID,
                                 SelectedQuantityValue.VALUE),
                         values = listOf(
-                                SelectedQuantityValue(ID_ARG1, QuantityValueWrapper(first, Double.NaN, first.defaultUnits.default)),
-                                SelectedQuantityValue(ID_ARG2, QuantityValueWrapper(second, Double.NaN, second.defaultUnits.default))).map {
-                            listOf(
+                                SelectedQuantityValue(ID_ARG1, QuantityValueWrapper(arg1, Double.NaN, arg1.defaultUnits.default)),
+                                SelectedQuantityValue(ID_ARG2, QuantityValueWrapper(arg2, Double.NaN, arg2.defaultUnits.default)),
+                                SelectedQuantityValue(ID_WAVELENGTH, QuantityValueWrapper(wavelength, Double.NaN, wavelength.defaultUnits.default))).map {
+                            listOf<Number?>(
                                     it.id,
                                     it.quantityId,
                                     it.value)
@@ -62,7 +62,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private fun SupportSQLiteDatabase.fillTable(tableName: String, columns: List<String>, values: List<List<Any?>>) {
+        private fun SupportSQLiteDatabase.fillTable(tableName: String, columns: List<String>, values: List<List<Number?>>) {
             val insert = columns.joinToString(
                     prefix = "INSERT INTO `$tableName` (`",
                     separator = "`, `",
@@ -96,7 +96,7 @@ abstract class AppDatabase : RoomDatabase() {
                         columns = listOf(
                                 EditUnit.QUANTITY_ID,
                                 EditUnit.UNIT_ID),
-                        values = computableQuantities.map { quantity ->
+                        values = (computableQuantities + Wavelength.wrapper).map { quantity ->
                             listOf(
                                     quantity.id,
                                     quantity.defaultUnits.default.id)
@@ -111,8 +111,9 @@ abstract class AppDatabase : RoomDatabase() {
                                     quantity.id,
                                     quantity.defaultUnits.default.id)
                         })
-                val first = computablePropMap.keys.first()
-                val second = computablePropMap[first]!!.first()
+                val arg1 = computablePropMap.keys.first()
+                val arg2 = computablePropMap[arg1]!!.first()
+                val wavelength = Wavelength.wrapper
                 db.fillTable(
                         tableName = SelectedQuantityValue.TABLE_NAME,
                         columns = listOf(
@@ -120,9 +121,10 @@ abstract class AppDatabase : RoomDatabase() {
                                 SelectedQuantityValue.QUANTITY_ID,
                                 SelectedQuantityValue.VALUE),
                         values = listOf(
-                                SelectedQuantityValue(ID_ARG1, QuantityValueWrapper(first, Double.NaN, first.defaultUnits.default)),
-                                SelectedQuantityValue(ID_ARG2, QuantityValueWrapper(second, Double.NaN, second.defaultUnits.default))).map {
-                            listOf(
+                                SelectedQuantityValue(ID_ARG1, QuantityValueWrapper(arg1, Double.NaN, arg1.defaultUnits.default)),
+                                SelectedQuantityValue(ID_ARG2, QuantityValueWrapper(arg2, Double.NaN, arg2.defaultUnits.default)),
+                                SelectedQuantityValue(ID_WAVELENGTH, QuantityValueWrapper(wavelength, Double.NaN, wavelength.defaultUnits.default))).map {
+                            listOf<Number?>(
                                     it.id,
                                     it.quantityId,
                                     it.value)

@@ -168,4 +168,7 @@
     <string name="mcm"><![CDATA[&mu;m]]></string>
     <string name="nm">nm</string>
     <string name="inch">in</string>
+    <string name="Wavelength">Wavelength</string>
+    <string name="RefractiveIndex">Refractive Index</string>
+    <string name="n">n</string>
 </resources>
