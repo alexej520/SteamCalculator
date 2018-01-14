@@ -50,7 +50,6 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                                 .setListener(object : AnimatorListenerAdapter() {
                                     override fun onAnimationEnd(animation: Animator?) {
                                         val index = (this@root as LinearLayout).indexOfChild(this@rateView)
-                                        removeViewAt(index)
                                         this@root.removeViewAt(index)
                                         this@root.addView(com.google.android.gms.ads.AdView(this@root.context).apply {
                                             adSize = bannerSize
