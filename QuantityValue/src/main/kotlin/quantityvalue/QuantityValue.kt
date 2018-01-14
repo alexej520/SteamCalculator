@@ -10,7 +10,7 @@ data class QuantityValue(val quantity: Quantity, val value: Double, val unit: Un
             throw IllegalArgumentException("Incompatible Dimension: ${unit.dimension}")
     }
 
-    internal val coherentValue = unit.convertToCoherent(value)
+    private val coherentValue = unit.convertToCoherent(value)
 /*
 
     operator fun get(unit: UnitPh): QuantityValue =
@@ -25,6 +25,18 @@ data class QuantityValue(val quantity: Quantity, val value: Double, val unit: Un
             throw IllegalArgumentException("Incompatible Dimension: ${unit.dimension}")
         }
         return QuantityValue(quantity, converter.convertFromCoherent(coherentValue), converter.unit)
+    }
+
+    fun equals(other: QuantityValue, ignoreUnit: Boolean = false, ignoreQuantity: Boolean = false,
+               ignoreUnitSymbol: Boolean = false, ignoreUnitName: Boolean = false,
+               ignoreQuantitySymbol: Boolean = false, ignoreQuantityName: Boolean = false): Boolean {
+        if (this === other) return true
+
+        if (coherentValue != other.coherentValue) return false
+        if (!ignoreUnit && !unit.equals(other.unit, ignoreName = ignoreUnitName, ignoreSymbol = ignoreUnitSymbol)) return false
+        if (!ignoreQuantity && quantity.equals(other.quantity, ignoreName = ignoreQuantityName, ignoreSymbol = ignoreQuantitySymbol)) return false
+
+        return true
     }
 
     override fun toString(): String =

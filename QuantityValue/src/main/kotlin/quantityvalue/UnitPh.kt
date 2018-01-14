@@ -10,6 +10,17 @@ data class UnitPh(
     override val unit: UnitPh get() = this
     fun convertToCoherent(value: Double): Double = value / factor
 
+    fun equals(other: UnitPh, ignoreName: Boolean = false, ignoreSymbol: Boolean = false): Boolean {
+        if (this === other) return true
+
+        if (factor != other.factor) return false
+        if (dimension != other.dimension) return false
+        if (!ignoreName && name != other.name) return false
+        if (!ignoreSymbol && symbol != other.symbol) return true
+
+        return true
+    }
+
     override fun convertFromCoherent(value: Double): Double = value * factor
 
     companion object {

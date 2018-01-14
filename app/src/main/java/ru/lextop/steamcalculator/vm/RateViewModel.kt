@@ -8,7 +8,6 @@ import java.util.*
 object RateViewModel {
     private val firstReleaseWithRateDialogTime = 1515527018000
     fun mustRate(context: Context): Boolean {
-        return true
         val prefs = context.defaultSharedPreferences
         val launchCounter = prefs.getInt(context.getString(R.string.preferenceKeyAppLaunchCounter), 0)
         val lastRateRequestTime = prefs.getLong(context.getString(R.string.preferenceKeyRateLastRequestTime), 0L)
