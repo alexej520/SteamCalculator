@@ -19,6 +19,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "production"
+    productFlavors {
+        github {
+            dimension "production"
+        }
+        production {
+            dimension "production"
+        }
+    }
     buildToolsVersion '27.0.0'
 }
 

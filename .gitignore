@@ -37,4 +37,4 @@ local.properties
 ehthumbs.db
 Thumbs.db
 
-app/config.xml
+app/src/production/
