@@ -6,9 +6,9 @@ data class UnitPh(
         val dimension: Dimension,
         val factor: Double = Double.NaN,
         val name: String = "AnonymousUnit",
-        val symbol: String = defaultSymbol(factor, dimension)): UnitConverter{
+        val symbol: String = defaultSymbol(factor, dimension)) : UnitConverter {
     override val unit: UnitPh get() = this
-    fun convertToCoherent(value: Double): Double = value / factor
+    override fun convertToCoherent(value: Double): Double = value / factor
 
     fun equals(other: UnitPh, ignoreName: Boolean = false, ignoreSymbol: Boolean = false): Boolean {
         if (this === other) return true
@@ -44,6 +44,7 @@ data class UnitPh(
 interface UnitConverter {
     val unit: UnitPh
     fun convertFromCoherent(value: Double): Double
+    fun convertToCoherent(value: Double): Double
 }
 
 // Use with Temperature Units for example (C, F, etc.)
@@ -52,7 +53,7 @@ class OffsetConverter(
         override val unit: UnitPh,
         val offset: Double)
     : UnitConverter {
-    //override fun convertToCoherent(value: Double): Double = (value - offset) / factor
+    override fun convertToCoherent(value: Double): Double = (value - offset) / unit.factor
     override fun convertFromCoherent(value: Double): Double = value * unit.factor + offset
 }
 

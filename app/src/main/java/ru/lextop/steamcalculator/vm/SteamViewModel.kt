@@ -139,19 +139,18 @@ class SteamViewModel @Inject constructor
         }
         repo.arg1QuantityValueLive.observeForever(firstQuantityObserver)
         repo.arg2QuantityValueLive.observeForever(secondQuantityObserver)
-        val refractiveIndexWrapper = RefractiveIndex.wrapper
         refractiveIndexViewModel = RefractiveIndexViewModel(
                 context = context,
                 isQuantityNameVisibleLive = isQuantityNameVisibleLive,
                 refractiveIndexQuantityValueViewModel = QuantityValueViewModel(
                 repo.refractiveIndexQuantityValueLive,
-                repo.getViewUnitLive(refractiveIndexWrapper),
+                repo.getViewUnitLive(RefractiveIndex.wrapper),
                 context,
                 isQuantityNameVisibleLive,
-                { repo.setViewUnit(refractiveIndexWrapper, it) }),
+                { repo.setViewUnit(RefractiveIndex.wrapper, it) }),
                 wavelengthQuantityValueLive = repo.wavelengthQuantityValueLive,
                 wavelengthUnitLive = repo.getEditUnitLive(Wavelength.wrapper),
-                onWavelengthUnitSelected = { repo.setEditUnit(refractiveIndexWrapper, it)},
+                onWavelengthUnitSelected = { repo.setEditUnit(Wavelength.wrapper, it)},
                 onWavelengthQuantityValueChanged = { repo.setWavelength(it) })
     }
 
@@ -170,7 +169,7 @@ class SteamViewModel @Inject constructor
             context.getString(R.string.preferenceKeyUnitSet) -> {
                 val unitSystem = DefaultUnits.getUnitSystem(context, prefs.getString(key, ""))
                 if (unitSystem != null) {
-                    computableQuantities.forEach {
+                    (computableQuantities + Wavelength.wrapper).forEach {
                         repo.setEditUnit(it, unitSystem(it.defaultUnits))
                     }
                     allQuantities.forEach {

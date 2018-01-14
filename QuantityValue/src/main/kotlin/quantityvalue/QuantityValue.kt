@@ -3,14 +3,16 @@ package quantityvalue
 import java.util.Locale
 
 data class QuantityValue(val quantity: Quantity, val value: Double, val unit: UnitPh) {
-    constructor(quantity: Quantity, value: Number, unit: UnitPh) : this(quantity, value.toDouble(), unit)
-
+    var coherentValue = Double.NaN
     init {
         if (quantity.dimension != unit.dimension)
             throw IllegalArgumentException("Incompatible Dimension: ${unit.dimension}")
+       coherentValue = unit.convertToCoherent(value)
+    }
+    constructor(quantity: Quantity, value: Number, unitConverter: UnitConverter) : this(quantity, value.toDouble(), unitConverter.unit){
+        coherentValue = unitConverter.convertToCoherent(value.toDouble())
     }
 
-    private val coherentValue = unit.convertToCoherent(value)
 /*
 
     operator fun get(unit: UnitPh): QuantityValue =

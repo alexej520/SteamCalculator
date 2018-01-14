@@ -276,7 +276,7 @@ val quantityIdMap = allQuantities.associate { it.id to it }
 class QuantityValueWrapper(internal val quantityValue: QuantityValue) {
     constructor(quantity: QuantityWrapper, value: Double, unit: UnitConverterWrapper) :
             this(try {
-                QuantityValue(quantity.quantity, value, unit.unit.unit)
+                QuantityValue(quantity.quantity, value, unit.unit)
             } catch (e: Exception) {
                 throw Exception()
             })

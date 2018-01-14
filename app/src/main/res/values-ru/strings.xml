@@ -106,4 +106,6 @@
     <string name="mcm">мкм</string>
     <string name="nm">нм</string>
     <string name="inch">дюйм</string>
+    <string name="Wavelength">Длина Волны</string>
+    <string name="RefractiveIndex">Показатель Преломления</string>
 </resources>

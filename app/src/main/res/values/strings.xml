@@ -170,5 +170,5 @@
     <string name="inch">in</string>
     <string name="Wavelength">Wavelength</string>
     <string name="RefractiveIndex">Refractive Index</string>
-    <string name="n">n</string>
+    <string name="n" translatable="false">n</string>
 </resources>
