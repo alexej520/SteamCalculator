@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    buildToolsVersion '27.0.3'
     compileSdkVersion 27
     defaultConfig {
         applicationId "ru.lextop.steamcalculator"
@@ -28,7 +29,6 @@ android {
             dimension "production"
         }
     }
-    buildToolsVersion '27.0.0'
 }
 
 dependencies {
@@ -59,7 +59,7 @@ dependencies {
     //implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     //implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
-    implementation 'android.arch.lifecycle:extensions:1.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
     //implementation 'android.arch.paging:runtime:1.0.0-alpha4-1'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt "android.arch.persistence.room:compiler:1.0.0"

@@ -65,7 +65,7 @@ class Steam private constructor(pair: Pair<QuantityValue, QuantityValue>)
     val av: QuantityValue by if97(IsobaricCubicExpansionCoefficient)
     val kT: QuantityValue by if97(IsothermalCompressibility)
     val nu: QuantityValue by if97(KinematicViscosity)
-    val Pr: QuantityValue by if97(IsothermalCompressibility)
+    val Pr: QuantityValue by if97(PrandtlNumber)
     val P: QuantityValue by if97(Pressure)
     /*
         val n: QuantityValue by if97(KinematicViscosity)
