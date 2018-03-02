@@ -12,7 +12,7 @@ class QuantityValueViewModel(
         unitLive: LiveData<UnitConverterWrapper>,
         context: Context,
         val isQuantityNameVisibleLive: LiveData<Boolean>,
-        val onUnitSelect: (UnitConverterWrapper) -> Unit) {
+        private val onUnitSelect: (UnitConverterWrapper) -> Unit) {
     private val quantity = quantityValueLive.value!!.quantity
     val quantityName = context.getSpanned(quantity.nameRes)
     val quantitySymbol = context.getSpanned(quantity.symbolRes)

@@ -68,8 +68,8 @@ class RefractiveIndexUI : Binding.Component<RefractiveIndexViewModel, ViewGroup>
                                 addTextChangedListener(listener)
                             }.lparams(0, wrapContent, 1f)
                             spinner {
-                                adapter = SimpleArrayAdapter(ctx)
-                                bind({ (adapter as SimpleArrayAdapter).items = it!! }) { wavelengthUnits }
+                                adapter = UnitArrayAdapter(ctx)
+                                bind({ (adapter as UnitArrayAdapter).items = it!! }) { wavelengthUnits }
                                 bindLive({ setSelection(it!!) }) { wavelengthUnitSelectionLive }
                                 onItemSelectedListener = OnItemSelectedListener { callback { selectWavelengthUnit(it) } }
                             }.lparams(wrapContent, wrapContent)

@@ -15,10 +15,12 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.SteamFragment
 import ru.lextop.steamcalculator.binding.*
+import ru.lextop.steamcalculator.databinding.ItemQuantityBinding
 import ru.lextop.steamcalculator.vm.RateViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 
@@ -110,8 +112,8 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                             addTextChangedListener(listener)
                         }.lparams(0, wrapContent, 1f)
                         spinner {
-                            adapter = SimpleArrayAdapter(ctx)
-                            bindLive({ (adapter as SimpleArrayAdapter).items = it!! }) { firstUnitsLive }
+                            adapter = UnitArrayAdapter(ctx)
+                            bindLive({ (adapter as UnitArrayAdapter).items = it!! }) { firstUnitsLive }
                             bindLive({ setSelection(it!!) }) { firstUnitSelectionLive }
                             onItemSelectedListener = OnItemSelectedListener { callback { selectFirstUnit(it) } }
                         }.lparams(wrapContent, wrapContent)
@@ -159,8 +161,8 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                             addTextChangedListener(listener)
                         }.lparams(0, wrapContent, 1f)
                         spinner {
-                            adapter = SimpleArrayAdapter(ctx)
-                            bindLive({ (adapter as SimpleArrayAdapter).items = it!! }) { secondUnitsLive }
+                            adapter = UnitArrayAdapter(ctx)
+                            bindLive({ (adapter as UnitArrayAdapter).items = it!! }) { secondUnitsLive }
                             bindLive({ setSelection(it!!) }) { secondUnitSelectionLive }
                             onItemSelectedListener = OnItemSelectedListener { callback { selectSecondUnit(it) } }
                         }.lparams(wrapContent, wrapContent)
@@ -174,8 +176,16 @@ class SteamUI : Binding.SimpleComponent<SteamViewModel, SteamFragment>() {
                 addItemDecoration(DividerItemDecoration(ctx, lm.orientation))
                 adapter = SteamBindingAdapter(owner)
                 bind({ (adapter as SteamBindingAdapter).viewModels = it!! }) { quantityValueViewModels }
-                bind({ (adapter as SteamBindingAdapter).refractiveIndexViewModel = it!! }) { refractiveIndexViewModel }
+                //bind({ (adapter as SteamBindingAdapter).refractiveIndexViewModel = it!! }) { refractiveIndexViewModel }
             }.lparams(matchParent, wrapContent)
+            ankoView({ctx ->
+                val binding = ItemQuantityBinding.inflate(ctx.layoutInflater)
+                binding!!.setLifecycleOwner(ui.owner)
+                bind({binding.vm = it}) {quantityValueViewModels[0]}
+                binding.quantityUnits.adapter = UnitArrayAdapter(ctx)
+                bind({ (binding.quantityUnits.adapter as UnitArrayAdapter).items = it!! }) { quantityValueViewModels[0].units }
+                binding.root
+            }, 0, {}).lparams(matchParent, wrapContent)
         }
     }
 }

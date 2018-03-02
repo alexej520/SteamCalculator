@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="ru.lextop.steamcalculator.vm.QuantityValueViewModel" />
+
+        <import
+            alias="V"
+            type="android.view.View" />
+
+        <import
+            alias="U"
+            type="ru.lextop.steamcalculator.binding.BindingAdaptersKt" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/quantity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:text="@{vm.quantityName}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:visibility="@{vm.isQuantityNameVisibleLive ? V.VISIBLE : V.GONE}"
+            tools:text="@string/SpecificEntropy" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAlignedChildIndex="0"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/quantity_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:ems="2"
+                android:paddingBottom="@{U.sp(context, @dimen/abc_text_size_subhead_material * 0.25f)}"
+                android:paddingTop="@{U.sp(context, @dimen/abc_text_size_subhead_material * 0.25f)}"
+                android:text="@{vm.quantitySymbol}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                tools:text="@string/s" />
+
+            <TextView
+                android:id="@+id/quantity_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:paddingEnd="8dp"
+                android:text="@{vm.valueLive}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <Spinner
+                android:id="@+id/quantity_units"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onItemSelected="@{(a,b,c,id)->vm.selectUnit((int) id)}"
+                android:selectedItemPosition="@{vm.unitSelectionLive}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -3,12 +3,15 @@ package ru.lextop.steamcalculator.ui
 import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import org.jetbrains.anko.layoutInflater
 import ru.lextop.steamcalculator.binding.BindingHolder
+import ru.lextop.steamcalculator.binding.DataBoundViewHolder
+import ru.lextop.steamcalculator.databinding.ItemQuantityBinding
 import ru.lextop.steamcalculator.vm.QuantityValueViewModel
 import ru.lextop.steamcalculator.vm.RefractiveIndexViewModel
 
 class SteamBindingAdapter(private val bindingLo: LifecycleOwner)
-    : RecyclerView.Adapter<BindingHolder<*>>() {
+    : RecyclerView.Adapter<DataBoundViewHolder<*>>() {
     companion object {
         const val REFRACTIVE_INDEX_BINDING_ID = 1
     }
@@ -20,18 +23,17 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner)
 
 
     @Suppress("UNCHECKED_CAST")
-    override fun onBindViewHolder(holder: BindingHolder<*>, position: Int) {
+    override fun onBindViewHolder(holder: DataBoundViewHolder<*>, position: Int) {
         val viewType = getItemViewType(position)
         if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
             (holder as BindingHolder<RefractiveIndexViewModel>).bind(refractiveIndexViewModel!!)
         } else {
-            (holder as BindingHolder<QuantityValueViewModel>).bind(viewModels[position])
+            val binding = (holder as DataBoundViewHolder<ItemQuantityBinding>).binding
+            binding.setLifecycleOwner(bindingLo)
+            val item = viewModels[position]
+            binding.vm = item
+            (binding.quantityUnits.adapter as UnitArrayAdapter).items = item.units
         }
-        Unit
-    }
-
-    override fun onViewRecycled(holder: BindingHolder<*>) {
-        holder.unbind()
     }
 
     override fun getItemCount() = viewModels.size + if (refractiveIndexViewModel != null) 1 else 0
@@ -41,10 +43,14 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner)
             else
                 REFRACTIVE_INDEX_BINDING_ID
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder<*> =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> =
             if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
-                BindingHolder.create(parent, bindingLo, ribc)
+                throw Exception()
+                //BindingHolder.create(parent, bindingLo, ribc)
             } else {
-                BindingHolder.create(parent, bindingLo, bc)
+                val binding = ItemQuantityBinding.inflate(parent.context.layoutInflater, parent, false)
+                binding.quantityUnits.adapter = UnitArrayAdapter(parent.context)
+                DataBoundViewHolder(binding)
+                //BindingHolder.create(parent, bindingLo, bc)
             }
 }

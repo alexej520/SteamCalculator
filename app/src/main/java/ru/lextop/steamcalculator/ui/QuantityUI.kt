@@ -35,8 +35,8 @@ class QuantityUI : Binding.SimpleComponent<QuantityValueViewModel, ViewGroup>() 
                     gravity = Gravity.CENTER
                 }
                 spinner {
-                    adapter = SimpleArrayAdapter(ctx)
-                    bind({ (adapter as SimpleArrayAdapter).items = it!! }) { units }
+                    adapter = UnitArrayAdapter(ctx)
+                    bind({ (adapter as UnitArrayAdapter).items = it!! }) { units }
                     bindLive({ setSelection(it!!) }) { unitSelectionLive }
                     onItemSelectedListener = OnItemSelectedListener { callback { selectUnit(it) } }
                 }.lparams(wrapContent, wrapContent) {

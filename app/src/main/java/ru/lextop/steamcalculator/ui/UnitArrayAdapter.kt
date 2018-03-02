@@ -11,7 +11,7 @@ import org.jetbrains.anko.custom.ankoView
 import ru.lextop.steamcalculator.binding.endPadding
 import ru.lextop.steamcalculator.binding.startPadding
 
-class SimpleArrayAdapter(context: Context) :
+class UnitArrayAdapter(context: Context) :
         ArrayAdapter<CharSequence>(context, android.R.layout.simple_spinner_item) {
     private val ui = AnkoContext.createReusable(context)
     var items: List<CharSequence> = listOf()

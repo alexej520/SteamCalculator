@@ -4,14 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    dataBinding.enabled = true
     buildToolsVersion '27.0.3'
     compileSdkVersion 27
     defaultConfig {
         applicationId "ru.lextop.steamcalculator"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 7
-        versionName "1.4.2"
+        versionCode 8
+        versionName "1.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
