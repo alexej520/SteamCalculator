@@ -42,18 +42,23 @@ class SteamRepository @Inject constructor
     val arg2QuantityValueLive: LiveData<QuantityValueWrapper> = MutableLiveData()
     val wavelengthQuantityValueLive: LiveData<QuantityValueWrapper> = MutableLiveData()
 
+    // Strong refs for GC
+    private val viewUnitsLive = steamDao.getViewUnitsLive()
+    private val editUnitsLive = steamDao.getEditUnitsLive()
+    private val selectedQuantityValue = steamDao.getSelectedQuantityValue()
+
     init {
-        steamDao.getViewUnitsLive().observeForever { list ->
+        viewUnitsLive.observeForever { list ->
             list!!.toQuantityUnitPairs().forEach { (quantity, unit) ->
                 (viewUnits[quantity]!! as MutableLiveData).setValueIfNotSame(unit)
             }
         }
-        steamDao.getEditUnitsLive().observeForever { list ->
+        editUnitsLive.observeForever { list ->
             list!!.toQuantityUnitPairs().forEach { (quantity, unit) ->
                 (editUnits[quantity]!! as MutableLiveData).setValueIfNotSame(unit)
             }
         }
-        steamDao.getSelectedQuantityValue().observeForever {
+        selectedQuantityValue.observeForever {
             val map = it!!.toQuantityValueMap()
             val arg1 = map[ID_ARG1]!!
             val arg2 = map[ID_ARG2]!!
