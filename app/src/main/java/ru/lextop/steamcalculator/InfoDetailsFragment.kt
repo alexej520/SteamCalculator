@@ -3,16 +3,10 @@ package ru.lextop.steamcalculator
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.ctx
-import ru.lextop.steamcalculator.binding.getSpanned
-import ru.lextop.steamcalculator.binding.textBody1
-import ru.lextop.steamcalculator.binding.textBody2
 import ru.lextop.steamcalculator.databinding.FragmentInfodetailsBinding
 
 class InfoDetailsFragment : Fragment() {

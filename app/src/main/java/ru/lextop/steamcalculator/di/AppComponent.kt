@@ -3,12 +3,9 @@ package ru.lextop.steamcalculator.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
 import dagger.android.AndroidInjectionModule
-import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import ru.lextop.steamcalculator.App
-import ru.lextop.steamcalculator.MainActivity
 import javax.inject.Singleton
 
 @Singleton

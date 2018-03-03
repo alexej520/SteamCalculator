@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.horizontalPadding
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.verticalPadding
 import ru.lextop.steamcalculator.binding.endPadding
 import ru.lextop.steamcalculator.binding.startPadding
 

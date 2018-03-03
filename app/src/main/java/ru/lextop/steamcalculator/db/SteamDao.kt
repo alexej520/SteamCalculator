@@ -1,7 +1,9 @@
 package ru.lextop.steamcalculator.db
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Query
+import android.arch.persistence.room.Update
 import javax.inject.Singleton
 
 @Singleton
