@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="name"
+            type="android.arch.lifecycle.LiveData&lt;CharSequence&gt;" />
+
+        <variable
+            name="visible"
+            type="android.arch.lifecycle.LiveData&lt;Boolean&gt;" />
+
+        <variable
+            name="selection"
+            type="android.arch.lifecycle.LiveData&lt;Integer&gt;" />
+
+        <variable
+            name="value"
+            type="android.arch.lifecycle.LiveData&lt;CharSequence&gt;" />
+
+        <variable
+            name="focus"
+            type="android.arch.lifecycle.LiveData&lt;Boolean&gt;" />
+
+        <variable
+            name="quantityAdapter"
+            type="ru.lextop.steamcalculator.ui.DropdownHintArrayAdapter" />
+
+        <variable
+            name="unitAdapter"
+            type="ru.lextop.steamcalculator.ui.UnitArrayAdapter" />
+
+        <import
+            alias="V"
+            type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/selectquantity_value"
+            android:paddingStart="8dp"
+            android:text="@{name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:visibility="@{visible ? V.VISIBLE : V.GONE}"
+            tools:text="Temperature" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/selectquantity_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adapter="@{quantityAdapter}"
+                android:selectedItemPosition="@{selection}" />
+
+            <EditText
+                android:id="@+id/selectquantity_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focus="@{focus}"
+                android:inputType="number|numberSigned|numberDecimal"
+                bind:inputValue="@{value}"
+                tools:text="560" />
+
+            <Spinner
+                android:id="@+id/selectquantity_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adapter="@{unitAdapter}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

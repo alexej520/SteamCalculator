@@ -35,24 +35,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:text="@{vm.firstQuantityNameLive}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    android:visibility="@{vm.isQuantityNameVisibleLive ? V.VISIBLE : V.GONE}" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <Spinner
-                        android:id="@+id/steam_firstQuantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
+                <include android:id="@+id/firstSelectedQuantity" layout="@layout/item_selectquantity" />
+                <include android:id="@+id/secondSelectedQuantity" layout="@layout/item_selectquantity" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
+        <android.support.v7.widget.RecyclerView
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </layout>

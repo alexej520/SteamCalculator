@@ -7,6 +7,10 @@ import android.text.Editable
 import android.text.Html
 import android.text.Spanned
 import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Adapter
+import android.widget.AdapterView
 import android.widget.EditText
 import ru.lextop.steamcalculator.R
 
@@ -27,19 +31,36 @@ fun getSpanned(context: Context, resId: Int): Spanned? {
     }
 }
 
-@BindingAdapter("bind:onInputValue", requireAll = true)
-fun textListener(editText: EditText, onInputValue: OnInputValue) {
-    val  text: CharSequence? = null
+@BindingAdapter("android:setAdapter")
+fun setAdapter(view: AdapterView<*>, adapter: Adapter?) {
+    view.adapter = adapter
+}
+
+@BindingAdapter("android:focus")
+fun focus(view: View, focus: Boolean) {
+    if (!focus) return
+    view.requestFocus()
+    (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+        .showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+}
+
+@BindingAdapter("bind:onInputValue")
+fun onInputValue(editText: EditText, onInputValue: OnInputValue) {
     val listener = editText.getTag(R.id.onChangedListener) as InternalTextWatcher?
             ?: InternalTextWatcher().also { editText.addTextChangedListener(it) }
     listener.afterTextChanged = onInputValue
     editText.setTag(R.id.onChangedListener, listener)
-    listener.isEnabled = false
-    if (editText.text != text) {
-        editText.setText(text)
+}
+
+@BindingAdapter("bind:inputValue")
+fun inputValue(editText: EditText, value: CharSequence?) {
+    val listener = editText.getTag(R.id.onChangedListener) as InternalTextWatcher?
+    listener?.isEnabled = false
+    if (editText.text != value) {
+        editText.setText(value)
         editText.setSelection(editText.length())
     }
-    listener.isEnabled = true
+    listener?.isEnabled = true
 }
 
 private class InternalTextWatcher(

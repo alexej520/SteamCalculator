@@ -28,9 +28,9 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
             binding.setLifecycleOwner(bindingLo)
             binding.refractiveIndex.setLifecycleOwner(bindingLo)
             binding.vm = refractiveIndexViewModel
-            (binding.wavelengthUnits.adapter as UnitArrayAdapter).items =
+            binding.wavelengthUnitAdapter!!.items =
                     refractiveIndexViewModel?.wavelengthUnits ?: emptyList()
-            (binding.refractiveIndex.quantityUnits.adapter as UnitArrayAdapter).items =
+            binding.refractiveIndex.unitAdapter!!.items =
                     refractiveIndexViewModel?.refractiveIndexQuantityValueViewModel?.units ?:
                     emptyList()
         } else {
@@ -38,7 +38,7 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
             binding.setLifecycleOwner(bindingLo)
             val item = viewModels[position]
             binding.vm = item
-            (binding.quantityUnits.adapter as UnitArrayAdapter).items = item.units
+            binding.unitAdapter!!.items = item.units
         }
     }
 
@@ -53,12 +53,12 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
         if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
             val binding =
                 ItemRefractiveindexBinding.inflate(parent.context.layoutInflater, parent, false)
-            binding.wavelengthUnits.adapter = UnitArrayAdapter(parent.context)
-            binding.refractiveIndex.quantityUnits.adapter = UnitArrayAdapter(parent.context)
+            binding.wavelengthUnitAdapter = UnitArrayAdapter(parent.context)
+            binding.refractiveIndex.unitAdapter = UnitArrayAdapter(parent.context)
             DataBoundViewHolder(binding)
         } else {
             val binding = ItemQuantityBinding.inflate(parent.context.layoutInflater, parent, false)
-            binding.quantityUnits.adapter = UnitArrayAdapter(parent.context)
+            binding.unitAdapter = UnitArrayAdapter(parent.context)
             DataBoundViewHolder(binding)
         }
 }

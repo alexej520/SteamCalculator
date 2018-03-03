@@ -47,4 +47,8 @@ class UnitArrayAdapter(context: Context) :
         textView.text = getItem(position)
         return view
     }
+    companion object {
+        @JvmStatic
+        fun create(context: Context) = UnitArrayAdapter(context)
+    }
 }

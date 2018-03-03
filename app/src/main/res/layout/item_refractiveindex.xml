@@ -15,6 +15,10 @@
         <variable
             name="vm"
             type="ru.lextop.steamcalculator.vm.RefractiveIndexViewModel" />
+
+        <variable
+            name="wavelengthUnitAdapter"
+            type="ru.lextop.steamcalculator.ui.UnitArrayAdapter" />
     </data>
 
     <LinearLayout
@@ -44,32 +48,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
                     android:ems="2"
                     android:paddingBottom="@{U.sp(context, @dimen/abc_text_size_subhead_material * 0.25f)}"
                     android:paddingTop="@{U.sp(context, @dimen/abc_text_size_subhead_material * 0.25f)}"
                     android:text="@{U.getSpanned(context, vm.WavelengthWrapper.symbolRes)}"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                 <EditText
                     android:layout_width="0dp"
-                    android:text="@{vm.wavelengthValueLive}"
-                    bind:onInputValue="@{(input) -> vm.inputWavelengthValue(input)}"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:inputType="number|numberSigned|numberDecimal"
+                    bind:inputValue="@{vm.wavelengthValueLive}"
+                    bind:onInputValue="@{(input) -> vm.inputWavelengthValue(input)}" />
 
                 <Spinner
                     android:id="@+id/wavelength_units"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:adapter="@{wavelengthUnitAdapter}"
                     android:onItemSelected="@{(a,b,c,id) -> vm.selectWavelengthUnit((int) id)}"
                     android:selectedItemPosition="@{vm.wavelengthUnitSelectionLive}" />
             </LinearLayout>
         </LinearLayout>
+
         <include
             android:id="@+id/refractive_index"
-            layout="@layout/item_quantity" bind:vm="@{vm.refractiveIndexQuantityValueViewModel}"/>
+            layout="@layout/item_quantity"
+            bind:vm="@{vm.refractiveIndexQuantityValueViewModel}" />
     </LinearLayout>
 </layout>
