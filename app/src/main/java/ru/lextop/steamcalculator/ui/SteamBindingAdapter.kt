@@ -7,26 +7,32 @@ import org.jetbrains.anko.layoutInflater
 import ru.lextop.steamcalculator.binding.BindingHolder
 import ru.lextop.steamcalculator.binding.DataBoundViewHolder
 import ru.lextop.steamcalculator.databinding.ItemQuantityBinding
+import ru.lextop.steamcalculator.databinding.ItemRefractiveindexBinding
 import ru.lextop.steamcalculator.vm.QuantityValueViewModel
 import ru.lextop.steamcalculator.vm.RefractiveIndexViewModel
 
-class SteamBindingAdapter(private val bindingLo: LifecycleOwner)
-    : RecyclerView.Adapter<DataBoundViewHolder<*>>() {
+class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
+    RecyclerView.Adapter<DataBoundViewHolder<*>>() {
     companion object {
         const val REFRACTIVE_INDEX_BINDING_ID = 1
     }
 
-    private val bc = QuantityUI()
     var viewModels: List<QuantityValueViewModel> = listOf()
     var refractiveIndexViewModel: RefractiveIndexViewModel? = null
-    val ribc = RefractiveIndexUI()
-
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: DataBoundViewHolder<*>, position: Int) {
         val viewType = getItemViewType(position)
         if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
-            (holder as BindingHolder<RefractiveIndexViewModel>).bind(refractiveIndexViewModel!!)
+            val binding = (holder as DataBoundViewHolder<ItemRefractiveindexBinding>).binding
+            binding.setLifecycleOwner(bindingLo)
+            binding.refractiveIndex.setLifecycleOwner(bindingLo)
+            binding.vm = refractiveIndexViewModel
+            (binding.wavelengthUnits.adapter as UnitArrayAdapter).items =
+                    refractiveIndexViewModel?.wavelengthUnits ?: emptyList()
+            (binding.refractiveIndex.quantityUnits.adapter as UnitArrayAdapter).items =
+                    refractiveIndexViewModel?.refractiveIndexQuantityValueViewModel?.units ?:
+                    emptyList()
         } else {
             val binding = (holder as DataBoundViewHolder<ItemQuantityBinding>).binding
             binding.setLifecycleOwner(bindingLo)
@@ -38,19 +44,21 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner)
 
     override fun getItemCount() = viewModels.size + if (refractiveIndexViewModel != null) 1 else 0
     override fun getItemViewType(position: Int): Int =
-            if (position < viewModels.size)
-                super.getItemViewType(position)
-            else
-                REFRACTIVE_INDEX_BINDING_ID
+        if (position < viewModels.size)
+            super.getItemViewType(position)
+        else
+            REFRACTIVE_INDEX_BINDING_ID
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> =
-            if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
-                throw Exception()
-                //BindingHolder.create(parent, bindingLo, ribc)
-            } else {
-                val binding = ItemQuantityBinding.inflate(parent.context.layoutInflater, parent, false)
-                binding.quantityUnits.adapter = UnitArrayAdapter(parent.context)
-                DataBoundViewHolder(binding)
-                //BindingHolder.create(parent, bindingLo, bc)
-            }
+        if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
+            val binding =
+                ItemRefractiveindexBinding.inflate(parent.context.layoutInflater, parent, false)
+            binding.wavelengthUnits.adapter = UnitArrayAdapter(parent.context)
+            binding.refractiveIndex.quantityUnits.adapter = UnitArrayAdapter(parent.context)
+            DataBoundViewHolder(binding)
+        } else {
+            val binding = ItemQuantityBinding.inflate(parent.context.layoutInflater, parent, false)
+            binding.quantityUnits.adapter = UnitArrayAdapter(parent.context)
+            DataBoundViewHolder(binding)
+        }
 }

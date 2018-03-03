@@ -3,4 +3,5 @@
     <item name="fragmentContainer" type="id" />
     <item name="rateViewNoButton" type="id" />
     <item name="rateViewYesButton" type="id" />
+    <item name="onChangedListener" type="id" />
 </resources>
