@@ -18,30 +18,30 @@ object RateViewModel {
         val now = Date().time
         val firstInstallTime = context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime
         return if (lastRateRequestLaunch == 0) {
-            (now - firstInstallTime >= 72 * 60 * 60 * 1000 /* 72 Hours */)
+            (now - firstInstallTime >= 48 * 60 * 60 * 1000 /* 48 Hours */)
                     &&
                     (firstReleaseWithRateDialogTime >= firstInstallTime
                             || launchCounter >= 3)
         } else if (completed) {
             (!success && positive
-                    && now - lastRateRequestTime >= 30L * 24 * 60 * 60 * 1000  // 30 days
+                    && now - lastRateRequestTime >= 15L * 24 * 60 * 60 * 1000  // 15 days
                     && launchCounter - lastRateRequestLaunch >= 5)
                     ||
                     (!success && !positive
-                            && now - lastRateRequestTime >= 60L * 24 * 60 * 60 * 1000  // 60 days
+                            && now - lastRateRequestTime >= 30L * 24 * 60 * 60 * 1000  // 30 days
                             && launchCounter - lastRateRequestLaunch >= 5)
                     ||
                     (success && !positive
-                            && now - lastRateRequestTime >= 90L * 24 * 60 * 60 * 1000  // 90 days
+                            && now - lastRateRequestTime >= 45L * 24 * 60 * 60 * 1000  // 45 days
                             && launchCounter - lastRateRequestLaunch >= 5)
                     ||
                     (success && positive
-                            && now - lastRateRequestTime >= 360L * 24 * 60 * 60 * 1000  // 360 days
+                            && now - lastRateRequestTime >= 180L * 24 * 60 * 60 * 1000  // 180 days
                             && launchCounter - lastRateRequestLaunch >= 5)
         } else {
             (launchCounter == lastRateRequestLaunch)  // same session
                     ||
-                    (now - lastRateRequestTime >= 5 * 24 * 60 * 60 * 1000  // 5 days
+                    (now - lastRateRequestTime >= 3 * 24 * 60 * 60 * 1000  // 3 days
                             && launchCounter - lastRateRequestLaunch >= 5)
         }
     }

@@ -53,8 +53,6 @@ class OnItemSelectedListener(private val onItemSelected: (id: Int) -> Unit)
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 }
 
-fun <VM : Any> View.getBinding(): Binding<VM> = Binding.getForView(this)
-
 fun Context.getSpanned(resId: Int): Spanned {
     val string = getString(resId)
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

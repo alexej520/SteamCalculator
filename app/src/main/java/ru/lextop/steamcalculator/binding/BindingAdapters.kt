@@ -31,6 +31,16 @@ fun getSpanned(context: Context, resId: Int): Spanned? {
     }
 }
 
+fun getSpanned(context: Context, string: String?): Spanned? {
+    if (string == null) return null
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(string, Html.FROM_HTML_MODE_COMPACT)
+    } else {
+        @Suppress("DEPRECATION")
+        Html.fromHtml(string)
+    }
+}
+
 @BindingAdapter("android:setAdapter")
 fun setAdapter(view: AdapterView<*>, adapter: Adapter?) {
     view.adapter = adapter

@@ -6,24 +6,8 @@
     <data>
 
         <variable
-            name="name"
-            type="android.arch.lifecycle.LiveData&lt;CharSequence&gt;" />
-
-        <variable
-            name="visible"
-            type="android.arch.lifecycle.LiveData&lt;Boolean&gt;" />
-
-        <variable
-            name="selection"
-            type="android.arch.lifecycle.LiveData&lt;Integer&gt;" />
-
-        <variable
-            name="value"
-            type="android.arch.lifecycle.LiveData&lt;CharSequence&gt;" />
-
-        <variable
-            name="focus"
-            type="android.arch.lifecycle.LiveData&lt;Boolean&gt;" />
+            name="vm"
+            type="ru.lextop.steamcalculator.vm.SelectQuantityViewModel"/>
 
         <variable
             name="quantityAdapter"
@@ -48,9 +32,9 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/selectquantity_value"
             android:paddingStart="8dp"
-            android:text="@{name}"
+            android:text="@{vm.nameLive}"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:visibility="@{visible ? V.VISIBLE : V.GONE}"
+            android:visibility="@{vm.nameVisibleLive ? V.VISIBLE : V.GONE}"
             tools:text="Temperature" />
 
         <LinearLayout
@@ -62,22 +46,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adapter="@{quantityAdapter}"
-                android:selectedItemPosition="@{selection}" />
+                android:onItemSelected="@{(a,b,c,id) -> vm.selectQuantity((int) id)}"
+                android:selectedItemPosition="@{vm.quantitySelectionLive}" />
 
             <EditText
                 android:id="@+id/selectquantity_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:focus="@{focus}"
+                android:focus="@{vm.focusLive}"
                 android:inputType="number|numberSigned|numberDecimal"
-                bind:inputValue="@{value}"
+                bind:inputValue="@{vm.valueLive}"
+                bind:onInputValue="@{(input) -> vm.inputValue(input)}"
                 tools:text="560" />
 
             <Spinner
                 android:id="@+id/selectquantity_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onItemSelected="@{(a,b,c,id) -> vm.selectUnit((int) id)}"
+                android:selectedItemPosition="@{vm.unitSelectionLive}"
                 android:adapter="@{unitAdapter}" />
         </LinearLayout>
     </LinearLayout>

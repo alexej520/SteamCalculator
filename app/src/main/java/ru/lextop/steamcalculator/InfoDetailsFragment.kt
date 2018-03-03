@@ -13,6 +13,7 @@ import org.jetbrains.anko.support.v4.ctx
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.binding.textBody1
 import ru.lextop.steamcalculator.binding.textBody2
+import ru.lextop.steamcalculator.databinding.FragmentInfodetailsBinding
 
 class InfoDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,37 +25,7 @@ class InfoDetailsFragment : Fragment() {
         val ab = (activity!! as AppCompatActivity).supportActionBar!!
         ab.setDisplayHomeAsUpEnabled(true)
         ab.setTitle(R.string.menu_title_info_details)
-        return AnkoContext.create(context!!)
-                .verticalLayout {
-                    lparams(matchParent, matchParent)
-                    verticalPadding = dip(16)
-                    textBody1 {
-                        text = ctx.getSpanned(R.string.sourcesInfo)
-                        movementMethod = LinkMovementMethod.getInstance()
-                        horizontalPadding = dip(16)
-                    }.lparams(matchParent, wrapContent)
-                    textBody2 {
-                        text = getString(R.string.contactUs)
-                        horizontalPadding = dip(16)
-                    }.lparams(matchParent, wrapContent){
-                        topMargin = dip(16)
-                    }
-                    textBody1 {
-                        text = ctx.getSpanned(R.string.contactUsByTwitter, getString(R.string.contactUsTwitter))
-                        movementMethod = LinkMovementMethod.getInstance()
-                        horizontalPadding = dip(32)
-                    }
-                    textBody1 {
-                        text = ctx.getSpanned(R.string.contactUsByEmail, getString(R.string.contactUsEmail))
-                        movementMethod = LinkMovementMethod.getInstance()
-                        horizontalPadding = dip(32)
-                    }
-                    textBody1 {
-                        text = ctx.getSpanned(R.string.contactUsByGooglePlay, getString(R.string.contactUsGooglePlay), getString(R.string.app_name))
-                        movementMethod = LinkMovementMethod.getInstance()
-                        horizontalPadding = dip(32)
-                    }
-                }
+        return FragmentInfodetailsBinding.inflate(inflater, container, false).root
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.content.Context
-import ru.lextop.steamcalculator.binding.BindingViewModel
 import ru.lextop.steamcalculator.binding.getSpanned
 import ru.lextop.steamcalculator.binding.nullIfNotInitialized
 import ru.lextop.steamcalculator.model.QuantityValueWrapper
@@ -20,13 +19,7 @@ class RefractiveIndexViewModel(
         val refractiveIndexQuantityValueViewModel: QuantityValueViewModel,
         val onWavelengthUnitSelected: (UnitConverterWrapper) -> Unit,
         val onWavelengthQuantityValueChanged: (QuantityValueWrapper) -> Unit
-) : BindingViewModel {
-    override val nested: MutableMap<Any, Any> = mutableMapOf()
-
-    init {
-        nested[RefractiveIndexViewModel::refractiveIndexQuantityValueViewModel] = refractiveIndexQuantityValueViewModel
-    }
-
+) {
     val WavelengthWrapper = Wavelength.wrapper
 
     val wavelengthUnits: List<CharSequence> = WavelengthWrapper.units.map { context.getSpanned(it.symbolRes) }

@@ -4,7 +4,6 @@ import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.jetbrains.anko.layoutInflater
-import ru.lextop.steamcalculator.binding.BindingHolder
 import ru.lextop.steamcalculator.binding.DataBoundViewHolder
 import ru.lextop.steamcalculator.databinding.ItemQuantityBinding
 import ru.lextop.steamcalculator.databinding.ItemRefractiveindexBinding

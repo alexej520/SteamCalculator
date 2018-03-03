@@ -252,4 +252,72 @@ class SteamViewModel @Inject constructor
     fun selectSecondUnit(index: Int) {
         repo.setEditUnit(secondQuantityValue.quantity, secondUnits[index])
     }
+
+    val firstSelectQuantityViewModel: SelectQuantityViewModel = object: SelectQuantityViewModel() {
+        override val quantityNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>>
+            get() = MutableLiveData<List<Pair<CharSequence, CharSequence>>>().apply{
+                postValue(firstQuantityNameToSymbolList)
+            }
+        override val nameLive: LiveData<CharSequence>
+            get() = firstQuantityNameLive
+        override val nameVisibleLive: LiveData<Boolean>
+            get() = isQuantityNameVisibleLive
+        override val quantitySelectionLive: LiveData<Int>
+            get() = firstQuantitySelectionLive
+
+        override fun selectQuantity(position: Int) {
+            selectFirstQuantity(position)
+        }
+
+        override val valueLive: LiveData<CharSequence>
+            get() = firstValueLive
+
+        override fun inputValue(value: CharSequence) {
+            inputFirstValue(value)
+        }
+
+        override val focusLive: LiveData<Boolean>
+            get() = firstInputFocusLive
+        override val unitsLive: LiveData<List<CharSequence>>
+            get() = firstUnitsLive
+        override val unitSelectionLive: LiveData<Int>
+            get() = firstUnitSelectionLive
+
+        override fun selectUnit(position: Int) {
+            selectFirstUnit(position)
+        }
+    }
+
+    val secondSelectQuantityViewModel: SelectQuantityViewModel = object : SelectQuantityViewModel() {
+        override val quantityNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>>
+            get() = secondQuantityNameToSymbolListLive
+        override val nameLive: LiveData<CharSequence>
+            get() = secondQuantityNameLive
+        override val nameVisibleLive: LiveData<Boolean>
+            get() = isQuantityNameVisibleLive
+        override val quantitySelectionLive: LiveData<Int>
+            get() = secondQuantitySelectionLive
+
+        override fun selectQuantity(position: Int) {
+            selectSecondProp(position)
+        }
+
+        override val valueLive: LiveData<CharSequence>
+            get() = secondValueLive
+
+        override fun inputValue(value: CharSequence) {
+            inputSecondValue(value)
+        }
+
+        override val focusLive: LiveData<Boolean>
+            get() = secondInputFocusLive
+        override val unitsLive: LiveData<List<CharSequence>>
+            get() = secondUnitsLive
+        override val unitSelectionLive: LiveData<Int>
+            get() = secondUnitSelectionLive
+
+        override fun selectUnit(position: Int) {
+            selectSecondUnit(position)
+        }
+    }
 }
