@@ -2,26 +2,40 @@ package ru.lextop.steamcalculator.ui
 
 import android.animation.LayoutTransition
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.view.ViewManager
+import android.widget.ImageView
 import android.widget.LinearLayout
-import org.jetbrains.anko.*
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.layoutInflater
 import ru.lextop.steamcalculator.R
-import ru.lextop.steamcalculator.binding.borderlessButton
-import ru.lextop.steamcalculator.binding.startOf
+import ru.lextop.steamcalculator.databinding.DialogYesnoBinding
 
-class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
+class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+    LinearLayout(context, attrs, defStyleAttr) {
     var onRatedListener: ((success: Boolean, positive: Boolean) -> Unit)? = null
     private var positive = true
     private var success = true
     private var nextState: Int = 0
     private val transitionListener = object : LayoutTransition.TransitionListener {
-        override fun startTransition(transition: LayoutTransition, container: ViewGroup, target: View, transitionType: Int) {}
-        override fun endTransition(transition: LayoutTransition, container: ViewGroup, target: View, transitionType: Int) {
+        override fun startTransition(
+            transition: LayoutTransition,
+            container: ViewGroup,
+            target: View,
+            transitionType: Int
+        ) {
+        }
+
+        override fun endTransition(
+            transition: LayoutTransition,
+            container: ViewGroup,
+            target: View,
+            transitionType: Int
+        ) {
             if (transitionType == LayoutTransition.DISAPPEARING) {
                 setContent(nextState)
             }
@@ -30,14 +44,27 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Line
 
     init {
         // by default LinearLayout has transparent background
-        backgroundColor = TypedValue().also { context.theme.resolveAttribute(android.R.attr.windowBackground, it, true) }.data
+        backgroundColor = TypedValue().also {
+            context.theme.resolveAttribute(
+                android.R.attr.windowBackground,
+                it,
+                true
+            )
+        }.data
         layoutTransition = LayoutTransition().apply {
             R.style.Widget_Design_Snackbar
             addTransitionListener(transitionListener)
         }
-        imageView(R.mipmap.ic_launcher_round) {
-            setPadding(dip(8), dip(8), 0, dip(8))
-        }
+        addView(
+            ImageView(context).apply {
+                setPadding(context.dip(8), context.dip(8), 0, context.dip(8))
+                setImageResource(R.mipmap.ic_launcher_round)
+            },
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
         setContent(ASK_LIKE)
     }
 
@@ -53,46 +80,27 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : Line
         this.removeViewAt(1)
     }
 
-    private fun ViewManager.yesNo(string: String, yes: (View) -> Unit, no: (View) -> Unit) {
-        relativeLayout {
-            textView(string) {
-                singleLine = true
-                ellipsize = TextUtils.TruncateAt.MARQUEE
-                marqueeRepeatLimit = -1
-                textAppearance = R.style.TextAppearance_AppCompat_Body2
-                isSelected = true
-            }.lparams(matchParent, matchParent).lparams {
-                alignParentStart()
-                baselineOf(R.id.rateViewYesButton)
-                startOf(R.id.rateViewNoButton)
-            }
-            borderlessButton(R.string.rateViewNo) {
-                id = R.id.rateViewNoButton
-                setOnClickListener(no)
-            }.lparams {
-                startOf(R.id.rateViewYesButton)
-                baselineOf(R.id.rateViewYesButton)
-            }
-            borderlessButton(R.string.rateViewYes) {
-                id = R.id.rateViewYesButton
-                setOnClickListener(yes)
-            }.lparams {
-                alignParentEnd()
-            }
-        }
+    private fun yesNo(string: String, yes: OnClickListener, no: OnClickListener) {
+        val binding = DialogYesnoBinding.inflate(context.layoutInflater, this@RateView, true)
+        binding.text = string
+        binding.onYes = yes
+        binding.onNo = no
     }
 
     private fun setContent(state: Int) {
         when (state) {
-            ASK_LIKE -> yesNo(context.getString(R.string.rateViewAskLike, context.getString(R.string.app_name)),
-                    yes = { positive = true; setState(ASK_GP_FEEDBACK) },
-                    no = { positive = false; setState(ASK_EMAIL_FEEDBACK) })
+            ASK_LIKE -> yesNo(context.getString(
+                R.string.rateViewAskLike,
+                context.getString(R.string.app_name)
+            ),
+                yes = OnClickListener { positive = true; setState(ASK_GP_FEEDBACK) },
+                no = OnClickListener { positive = false; setState(ASK_EMAIL_FEEDBACK) })
             ASK_GP_FEEDBACK -> yesNo(context.getString(R.string.rateViewAskGPFeedback),
-                    yes = { success = true; setState(COMPLETED) },
-                    no = { success = false; setState(COMPLETED) })
+                yes = OnClickListener { success = true; setState(COMPLETED) },
+                no = OnClickListener { success = false; setState(COMPLETED) })
             ASK_EMAIL_FEEDBACK -> yesNo(context.getString(R.string.rateViewAskEmailFeedback),
-                    yes = { success = true; setState(COMPLETED) },
-                    no = { success = false; setState(COMPLETED) })
+                yes = OnClickListener { success = true; setState(COMPLETED) },
+                no = OnClickListener { success = false; setState(COMPLETED) })
             COMPLETED -> onRatedListener?.invoke(success, positive)
         }
     }
