@@ -19,6 +19,7 @@ import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.email
 import ru.lextop.steamcalculator.binding.viewModel
 import ru.lextop.steamcalculator.databinding.FragmentSteamBinding
+import ru.lextop.steamcalculator.databinding.ItemSelectquantityBinding
 import ru.lextop.steamcalculator.di.Injectable
 import ru.lextop.steamcalculator.model.DefaultUnits
 import ru.lextop.steamcalculator.ui.DropdownHintArrayAdapter
@@ -26,6 +27,7 @@ import ru.lextop.steamcalculator.ui.RateView
 import ru.lextop.steamcalculator.ui.SteamBindingAdapter
 import ru.lextop.steamcalculator.ui.UnitArrayAdapter
 import ru.lextop.steamcalculator.vm.RateViewModel
+import ru.lextop.steamcalculator.vm.SelectQuantityViewModel
 import ru.lextop.steamcalculator.vm.SteamViewModel
 import ru.lextop.steamcalculator.vm.ViewModelFactory
 import javax.inject.Inject
@@ -53,8 +55,6 @@ class SteamFragment : Fragment(), Injectable {
         ab.setTitle(R.string.app_name)
         val binding = FragmentSteamBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
-        binding.firstSelectedQuantity.setLifecycleOwner(this)
-        binding.secondSelectedQuantity.setLifecycleOwner(this)
 
         val bannerSize = AdSize.SMART_BANNER
         if (!RateViewModel.mustRate(context!!)) {
@@ -76,25 +76,26 @@ class SteamFragment : Fragment(), Injectable {
             )
         )
 
-        binding.firstSelectedQuantity.quantityAdapter = DropdownHintArrayAdapter(context!!)
-        binding.firstSelectedQuantity.unitAdapter = UnitArrayAdapter(context!!)
-        vm.firstSelectQuantityViewModel.quantityNameToSymbolListLive.observe(this, Observer {
-            binding.firstSelectedQuantity.quantityAdapter!!.items = it!!
-        })
-        vm.firstSelectQuantityViewModel.unitsLive.observe(this, Observer {
-            binding.firstSelectedQuantity.unitAdapter!!.items = it!!
-        })
-
-        binding.secondSelectedQuantity.quantityAdapter = DropdownHintArrayAdapter(context!!)
-        binding.secondSelectedQuantity.unitAdapter = UnitArrayAdapter(context!!)
-        vm.secondSelectQuantityViewModel.quantityNameToSymbolListLive.observe(this, Observer {
-            binding.secondSelectedQuantity.quantityAdapter!!.items = it!!
-        })
-        vm.secondSelectQuantityViewModel.unitsLive.observe(this, Observer {
-            binding.secondSelectedQuantity.unitAdapter!!.items = it!!
-        })
+        initSelectedQuantity(vm.firstSelectQuantityViewModel, binding.firstSelectedQuantity)
+        initSelectedQuantity(vm.secondSelectQuantityViewModel, binding.secondSelectedQuantity)
 
         return binding.root
+    }
+
+    private fun initSelectedQuantity(sq: SelectQuantityViewModel, b: ItemSelectquantityBinding) {
+        b.setLifecycleOwner(this)
+        b.quantityAdapter = DropdownHintArrayAdapter(context!!)
+        b.unitAdapter = UnitArrayAdapter(context!!)
+
+        sq.quantityNameToSymbolListLive.observe(this, Observer {
+            b.quantityAdapter!!.items = it!!
+        })
+        sq.nameVisibleLive.observe(this, Observer {
+            b.quantityAdapter!!.isHintVisible = it!!
+        })
+        sq.unitsLive.observe(this, Observer {
+            b.unitAdapter!!.items = it!!
+        })
     }
 
     private fun setAdView(binding: FragmentSteamBinding, bannerSize: AdSize) {

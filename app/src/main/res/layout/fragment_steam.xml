@@ -30,6 +30,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="0dp"
+            app:cardPreventCornerOverlap="false"
+            android:layout_marginTop="@dimen/fix_cardview_top"
+            android:layout_marginStart="@dimen/fix_cardview_horizontal"
+            android:layout_marginEnd="@dimen/fix_cardview_horizontal"
             app:cardElevation="4dp">
 
             <LinearLayout

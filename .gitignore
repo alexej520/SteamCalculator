@@ -17,6 +17,7 @@ local.properties
 # User-specific configurations
 .idea
 *.iml
+*.log
 
 # OS-specific files
 .DS_Store

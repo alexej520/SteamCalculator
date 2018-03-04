@@ -2,6 +2,7 @@ package ru.lextop.steamcalculator.ui
 
 import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.jetbrains.anko.layoutInflater
 import ru.lextop.steamcalculator.binding.DataBoundViewHolder
@@ -18,6 +19,7 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
 
     var viewModels: List<QuantityValueViewModel> = listOf()
     var refractiveIndexViewModel: RefractiveIndexViewModel? = null
+    var layoutInflater: LayoutInflater? = null
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: DataBoundViewHolder<*>, position: Int) {
@@ -27,6 +29,9 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
             binding.setLifecycleOwner(bindingLo)
             binding.refractiveIndex.setLifecycleOwner(bindingLo)
             binding.vm = refractiveIndexViewModel
+
+            binding.executePendingBindings()
+
             binding.wavelengthUnitAdapter!!.items =
                     refractiveIndexViewModel?.wavelengthUnits ?: emptyList()
             binding.refractiveIndex.unitAdapter!!.items =
@@ -37,6 +42,9 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
             binding.setLifecycleOwner(bindingLo)
             val item = viewModels[position]
             binding.vm = item
+
+            binding.executePendingBindings()
+
             binding.unitAdapter!!.items = item.units
         }
     }
@@ -48,16 +56,20 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
         else
             REFRACTIVE_INDEX_BINDING_ID
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> =
-        if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<*> {
+        if (layoutInflater == null) {
+            layoutInflater = parent.context.layoutInflater
+        }
+        return if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
             val binding =
-                ItemRefractiveindexBinding.inflate(parent.context.layoutInflater, parent, false)
+                ItemRefractiveindexBinding.inflate(layoutInflater!!, parent, false)
             binding.wavelengthUnitAdapter = UnitArrayAdapter(parent.context)
             binding.refractiveIndex.unitAdapter = UnitArrayAdapter(parent.context)
             DataBoundViewHolder(binding)
         } else {
-            val binding = ItemQuantityBinding.inflate(parent.context.layoutInflater, parent, false)
+            val binding = ItemQuantityBinding.inflate(layoutInflater!!, parent, false)
             binding.unitAdapter = UnitArrayAdapter(parent.context)
             DataBoundViewHolder(binding)
         }
+    }
 }

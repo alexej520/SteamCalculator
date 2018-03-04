@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn com.google.errorprone.annotations.*
 -dontwarn com.hummeling.if97.AxesIF97*
+-keep class android.support.v7.app.AppCompatViewInflater

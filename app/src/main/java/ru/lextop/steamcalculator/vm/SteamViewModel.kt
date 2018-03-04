@@ -17,69 +17,67 @@ import javax.inject.Inject
 
 class SteamViewModel @Inject constructor
 (private val repo: SteamRepository, private val context: Context, private val prefs: SharedPreferences) : ViewModel() {
-    val firstInputFocusLive: LiveData<Boolean> = MutableLiveData()
-    val secondInputFocusLive: LiveData<Boolean> = MutableLiveData()
+    private val firstInputFocusLive: MutableLiveData<Boolean> = MutableLiveData()
+    private val secondInputFocusLive: MutableLiveData<Boolean> = MutableLiveData()
 
     val quantityValueViewModels: List<QuantityValueViewModel>
     val refractiveIndexViewModel: RefractiveIndexViewModel
     private val firstQuantities: List<QuantityWrapper> = computablePropMap.keys.toList()
-    val firstQuantityNameLive: LiveData<CharSequence> = MutableLiveData()
-    val secondQuantityNameLive: LiveData<CharSequence> = MutableLiveData()
-    val firstQuantityNameToSymbolList: List<Pair<CharSequence, CharSequence>> = firstQuantities.map {
+    private val firstQuantityNameLive: MutableLiveData<CharSequence> = MutableLiveData()
+    private val secondQuantityNameLive: MutableLiveData<CharSequence> = MutableLiveData()
+    private val firstQuantityNameToSymbolList: List<Pair<CharSequence, CharSequence>> = firstQuantities.map {
         context.getSpanned(it.symbolRes) to context.getSpanned(it.nameRes)
     }
     private var secondQuantities: List<QuantityWrapper> = listOf()
         set(value) {
             field = value
-            (secondQuantityNameToSymbolListLive as MutableLiveData).value = value.map {
+            secondQuantityNameToSymbolListLive.value = value.map {
                 context.getSpanned(it.symbolRes) to context.getSpanned(it.nameRes)
             }
         }
-    val secondQuantityNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>> = MutableLiveData()
-    val firstQuantitySelectionLive: LiveData<Int> = MutableLiveData()
-    val secondQuantitySelectionLive: LiveData<Int> = MutableLiveData()
-    var isQuantityNameVisibleLive: LiveData<Boolean> = MutableLiveData()
+    private val secondQuantityNameToSymbolListLive: MutableLiveData<List<Pair<CharSequence, CharSequence>>> = MutableLiveData()
+    private val firstQuantitySelectionLive: MutableLiveData<Int> = MutableLiveData()
+    private val secondQuantitySelectionLive: MutableLiveData<Int> = MutableLiveData()
+    private val isQuantityNameVisibleLive: MutableLiveData<Boolean> = MutableLiveData()
     private lateinit var firstQuantityValue: QuantityValueWrapper
     private lateinit var secondQuantityValue: QuantityValueWrapper
     private var firstUnitLive: LiveData<UnitConverterWrapper> = MutableLiveData()
     private var secondUnitLive: LiveData<UnitConverterWrapper> = MutableLiveData()
-    val firstUnitsLive: LiveData<List<CharSequence>> = MutableLiveData()
-    val secondUnitsLive: LiveData<List<CharSequence>> = MutableLiveData()
+    private val firstUnitsLive: MutableLiveData<List<CharSequence>> = MutableLiveData()
+    private val secondUnitsLive: MutableLiveData<List<CharSequence>> = MutableLiveData()
     private var firstUnits: List<UnitConverterWrapper> = listOf()
         set(value) {
             field = value
-            firstUnitsLive as MutableLiveData
             firstUnitsLive.value = value.map { context.getSpanned(it.symbolRes) }
         }
     private var secondUnits: List<UnitConverterWrapper> = listOf()
         set(value) {
             field = value
-            secondUnitsLive as MutableLiveData
             secondUnitsLive.value = value.map { context.getSpanned(it.symbolRes) }
         }
-    val firstUnitSelectionLive: LiveData<Int> = MutableLiveData()
-    val secondUnitSelectionLive: LiveData<Int> = MutableLiveData()
-    val firstValueLive: LiveData<CharSequence> = MutableLiveData()
-    val secondValueLive: LiveData<CharSequence> = MutableLiveData()
+    private val firstUnitSelectionLive: MutableLiveData<Int> = MutableLiveData()
+    private val secondUnitSelectionLive: MutableLiveData<Int> = MutableLiveData()
+    private val firstValueLive: MutableLiveData<CharSequence> = MutableLiveData()
+    private val secondValueLive: MutableLiveData<CharSequence> = MutableLiveData()
     private fun setFirstValueLive(value: Double){
-        (firstValueLive as MutableLiveData).value = doubleToInputValue(value)
+        firstValueLive.value = doubleToInputValue(value)
     }
     private fun setSecondValueLive(value: Double){
-        (secondValueLive as MutableLiveData).value = doubleToInputValue(value)
+        secondValueLive.value = doubleToInputValue(value)
     }
 
     private val firstUnitObserver = Observer<UnitConverterWrapper> { unit ->
-        (firstUnitSelectionLive as MutableLiveData).value = firstUnits.indexOf(unit)
+        firstUnitSelectionLive.value = firstUnits.indexOf(unit)
         setFirstValueLive(firstQuantityValue[unit!!].value)
-        (secondInputFocusLive as MutableLiveData).value = false
-        (firstInputFocusLive as MutableLiveData).value = true
+        secondInputFocusLive.value = false
+        firstInputFocusLive.value = true
     }
     private val secondUnitObserver = Observer<UnitConverterWrapper> { unit ->
-        (secondUnitSelectionLive as MutableLiveData).value = secondUnits.indexOf(unit)
+        secondUnitSelectionLive.value = secondUnits.indexOf(unit)
         setSecondValueLive(secondQuantityValue[unit!!].value)
         if (secondUnitSelectedByUser) {
-            (firstInputFocusLive as MutableLiveData).value = false
-            (secondInputFocusLive as MutableLiveData).value = true
+            firstInputFocusLive.value = false
+            secondInputFocusLive.value = true
         } else {
             secondUnitSelectedByUser = true
         }
@@ -92,8 +90,8 @@ class SteamViewModel @Inject constructor
         firstQuantityValue = quantityValue
 
         if (newQuantity != oldQuantity) {
-            (firstQuantityNameLive as MutableLiveData).value = context.getSpanned(newQuantity.nameRes)
-            (firstQuantitySelectionLive as MutableLiveData).value = firstQuantities.indexOf(newQuantity)
+            firstQuantityNameLive.value = context.getSpanned(newQuantity.nameRes)
+            firstQuantitySelectionLive.value = firstQuantities.indexOf(newQuantity)
             firstUnits = newQuantity.units
             firstUnitLive.removeObserver(firstUnitObserver)
             firstUnitLive = repo.getEditUnitLive(newQuantity)
@@ -107,13 +105,13 @@ class SteamViewModel @Inject constructor
         val newQuantity = quantityValue!!.quantity
         val oldQuantity = nullIfNotInitialized { secondQuantityValue.quantity }
         secondQuantityValue = quantityValue
-        (secondQuantitySelectionLive as MutableLiveData).value = secondQuantities.indexOf(newQuantity)
+        secondQuantitySelectionLive.value = secondQuantities.indexOf(newQuantity)
         if (!secondQuantitySelectedByUser) {
             secondQuantitySelectedByUser = true
             secondUnitSelectedByUser = false
         }
         if (newQuantity != oldQuantity) {
-            (secondQuantityNameLive as MutableLiveData).value = context.getSpanned(newQuantity.nameRes)
+            secondQuantityNameLive.value = context.getSpanned(newQuantity.nameRes)
             secondUnits = newQuantity.units
             secondUnitLive.removeObserver(secondUnitObserver)
             secondUnitLive = repo.getEditUnitLive(newQuantity)
@@ -123,7 +121,7 @@ class SteamViewModel @Inject constructor
     }
 
     init {
-        (isQuantityNameVisibleLive as MutableLiveData).value =
+        isQuantityNameVisibleLive.value =
                 prefs.getBoolean(context.getString(R.string.preferenceKeyShowPropertyNames), false)
         CustomFormat.maxSymbols = prefs.getInt(context.getString(R.string.preferenceKeyDecimals), 5)
         CustomFormat.scientificFormatOnly = prefs.getBoolean(context.getString(R.string.preferenceKeyScientificFormatOnly), false)
@@ -157,7 +155,7 @@ class SteamViewModel @Inject constructor
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
         when (key) {
             context.getString(R.string.preferenceKeyShowPropertyNames) ->
-                (isQuantityNameVisibleLive as MutableLiveData).value = prefs.getBoolean(key, false)
+                isQuantityNameVisibleLive.value = prefs.getBoolean(key, false)
             context.getString(R.string.preferenceKeyScientificFormatOnly) -> {
                 CustomFormat.scientificFormatOnly = prefs.getBoolean(key, false)
                 updateValues()
@@ -206,7 +204,7 @@ class SteamViewModel @Inject constructor
             CustomFormat.parse(input.toString())
 
     fun inputFirstValue(input: CharSequence) {
-        (firstValueLive as MutableLiveData).value = input
+        firstValueLive.value = input
         repo.setArg1Arg2(
                 QuantityValueWrapper(
                         quantity = firstQuantityValue.quantity,
@@ -216,7 +214,7 @@ class SteamViewModel @Inject constructor
     }
 
     fun inputSecondValue(input: CharSequence) {
-        (secondValueLive as MutableLiveData).value = input
+        secondValueLive.value = input
         repo.setArg1Arg2(
                 firstQuantityValue,
                 QuantityValueWrapper(
@@ -240,7 +238,7 @@ class SteamViewModel @Inject constructor
         repo.setArg1Arg2(repo.quantityValueLives[newProp]!!.value!!, repo.quantityValueLives[newSecondProp]!!.value!!)
     }
 
-    fun selectSecondProp(index: Int) {
+    fun selectSecondQuantity(index: Int) {
         val newType = secondQuantities[index]
         repo.setArg1Arg2(firstQuantityValue, repo.quantityValueLives[newType]!!.value!!)
     }
@@ -255,7 +253,7 @@ class SteamViewModel @Inject constructor
 
     val firstSelectQuantityViewModel: SelectQuantityViewModel = object: SelectQuantityViewModel() {
         override val quantityNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>>
-            get() = MutableLiveData<List<Pair<CharSequence, CharSequence>>>().apply{
+            = MutableLiveData<List<Pair<CharSequence, CharSequence>>>().apply{
                 postValue(firstQuantityNameToSymbolList)
             }
         override val nameLive: LiveData<CharSequence>
@@ -299,7 +297,7 @@ class SteamViewModel @Inject constructor
             get() = secondQuantitySelectionLive
 
         override fun selectQuantity(position: Int) {
-            selectSecondProp(position)
+            selectSecondQuantity(position)
         }
 
         override val valueLive: LiveData<CharSequence>
