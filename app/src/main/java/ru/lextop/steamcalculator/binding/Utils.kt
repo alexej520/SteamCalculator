@@ -2,12 +2,12 @@
 
 package ru.lextop.steamcalculator.binding
 
-import android.arch.lifecycle.*
+import androidx.lifecycle.*
 import android.content.Context
 import android.os.Build
-import android.support.annotation.IdRes
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.CardView
+import androidx.annotation.IdRes
+import androidx.fragment.app.FragmentActivity
+import androidx.cardview.widget.CardView
 import android.text.Html
 import android.text.Spanned
 import android.view.ContextThemeWrapper
@@ -27,7 +27,7 @@ inline fun <reified VM : ViewModel> FragmentActivity.viewModel(key: String) =
         ViewModelProviders.of(this).get(key, VM::class.java)
 
 inline fun <T> LiveData<T>.observe(lo: LifecycleOwner, crossinline onReceive: (T?) -> Unit) {
-    this.observe(lo, android.arch.lifecycle.Observer { onReceive(it) })
+    this.observe(lo, Observer { onReceive(it) })
 }
 
 fun <T> MutableLiveData<T>.setValueIfNotSame(value: T?): Boolean =

@@ -1,7 +1,7 @@
 package ru.lextop.steamcalculator.binding
 
 import android.content.Context
-import android.databinding.BindingAdapter
+import androidx.databinding.BindingAdapter
 import android.os.Build
 import android.text.Editable
 import android.text.Html

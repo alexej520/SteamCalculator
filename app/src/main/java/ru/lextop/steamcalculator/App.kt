@@ -2,7 +2,7 @@ package ru.lextop.steamcalculator
 
 import android.app.Activity
 import android.app.Application
-import android.support.v7.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.google.android.gms.ads.MobileAds
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

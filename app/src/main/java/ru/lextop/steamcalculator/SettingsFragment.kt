@@ -1,15 +1,15 @@
 package ru.lextop.steamcalculator
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompatDividers
+import androidx.preference.PreferenceFragmentCompat
 
-class SettingsFragment : PreferenceFragmentCompatDividers() {
-    override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
+class SettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
@@ -25,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompatDividers() {
         return try {
             super.onCreateView(inflater, container, savedInstanceState)
         } finally {
-            setDividerPreferences(DIVIDER_DEFAULT)
+           // setDividerPreferences(DIVIDER_DEFAULT)
         }
     }
 

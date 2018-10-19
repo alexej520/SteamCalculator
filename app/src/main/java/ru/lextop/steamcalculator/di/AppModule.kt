@@ -1,10 +1,10 @@
 package ru.lextop.steamcalculator.di
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import ru.lextop.steamcalculator.db.AppDatabase

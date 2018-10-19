@@ -1,7 +1,7 @@
 package ru.lextop.steamcalculator.ui
 
-import android.arch.lifecycle.LifecycleOwner
-import android.support.v7.widget.RecyclerView
+import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.jetbrains.anko.layoutInflater

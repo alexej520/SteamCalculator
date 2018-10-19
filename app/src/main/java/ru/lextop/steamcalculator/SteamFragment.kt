@@ -2,13 +2,13 @@ package ru.lextop.steamcalculator
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.*
 import android.widget.FrameLayout
 import com.google.android.gms.ads.AdRequest

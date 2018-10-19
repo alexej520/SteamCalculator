@@ -2,8 +2,8 @@ package ru.lextop.steamcalculator.ui
 
 import android.content.Context
 import android.graphics.Rect
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
 
@@ -37,18 +37,18 @@ class BlockRequestChildRectangleOnScreenLinearLayoutManager : LinearLayoutManage
     )
 
     override fun requestChildRectangleOnScreen(
-        parent: RecyclerView?,
-        child: View?,
-        rect: Rect?,
+        parent: RecyclerView,
+        child: View,
+        rect: Rect,
         immediate: Boolean
     ): Boolean {
         return false
     }
 
     override fun requestChildRectangleOnScreen(
-        parent: RecyclerView?,
-        child: View?,
-        rect: Rect?,
+        parent: RecyclerView,
+        child: View,
+        rect: Rect,
         immediate: Boolean,
         focusedChildVisible: Boolean
     ): Boolean {

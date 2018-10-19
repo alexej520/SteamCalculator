@@ -1,6 +1,6 @@
 package ru.lextop.steamcalculator.vm
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 abstract class SelectQuantityViewModel {
     abstract val quantityNameToSymbolListLive: LiveData<List<Pair<CharSequence, CharSequence>>>
