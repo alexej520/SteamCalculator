@@ -6,7 +6,6 @@ apply plugin: 'kotlin-kapt'
 ext {
     v_anko = '0.10.7'
     v_app_compat = '1.0.0'
-    v_legacy_app_compat = '28.0.0'
     v_dagger = '2.16'
     v_room = '2.0.0'
     v_lifecycle_extensions = '2.0.0'
@@ -53,8 +52,7 @@ dependencies {
     implementation "androidx.cardview:cardview:$v_app_compat"
     implementation "com.google.android.material:material:$v_app_compat"
 
-    implementation "com.takisoft.fix:preference-v7:$v_legacy_app_compat.0"
-    //implementation "com.android.support:preference-v7:$app_compat_version"
+    implementation "com.takisoft.preferencex:preferencex:$v_app_compat"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-beta02'

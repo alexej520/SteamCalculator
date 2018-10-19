@@ -5,25 +5,29 @@
         android:defaultValue="true"
         android:key="@string/preferenceKeyShowPropertyNames"
         android:summary="@string/preferenceSummaryPropertyNames"
-        android:title="@string/preferenceTitlePropertyNames" />
+        android:title="@string/preferenceTitlePropertyNames"
+        app:iconSpaceReserved="false" />
     <SeekBarPreference
         android:defaultValue="5"
         android:key="@string/preferenceKeyDecimals"
         android:max="10"
         android:summary="@string/preferenceSummaryDecimals"
         android:title="@string/preferenceTitleDecimals"
+        app:iconSpaceReserved="false"
         app:min="3" />
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/preferenceKeyScientificFormatOnly"
         android:summary="@string/preferenceSummaryScientificFormatOnly"
-        android:title="@string/preferenceTitleScientificFormatOnly" />
+        android:title="@string/preferenceTitleScientificFormatOnly"
+        app:iconSpaceReserved="false" />
 
     <ListPreference
         android:defaultValue="@string/unitSetDefaultValue"
-        android:key="@string/preferenceKeyUnitSet"
-        android:title="@string/preferenceTitleUnitSet"
-        android:summary="@string/preferenceSummaryUnitSet"
         android:entries="@array/unitSets"
-        android:entryValues="@array/unitSetsValues"/>
+        android:entryValues="@array/unitSetsValues"
+        android:key="@string/preferenceKeyUnitSet"
+        android:summary="@string/preferenceSummaryUnitSet"
+        android:title="@string/preferenceTitleUnitSet"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

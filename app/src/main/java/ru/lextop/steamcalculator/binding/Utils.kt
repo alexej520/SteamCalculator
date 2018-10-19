@@ -94,7 +94,7 @@ inline fun ViewManager.adView(init: AdView.() -> Unit): AdView =
         ankoView({ AdView(it) }, 0, init)
 
 inline fun ViewManager.rateView(init: RateView.() -> Unit): RateView =
-        ankoView({ RateView(ContextThemeWrapper(it, R.style.PreferenceFixTheme), null, 0) }, 0, init)
+        ankoView({ RateView(ContextThemeWrapper(it, R.style.Theme_AppCompat), null, 0) }, 0, init)
 
 // because Button(context: Context) does not apply the style
 inline fun ViewManager.borderlessButton(textRes: Int = 0, init: Button.() -> Unit) =

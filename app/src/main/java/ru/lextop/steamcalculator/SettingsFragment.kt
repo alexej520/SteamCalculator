@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.preference.PreferenceFragmentCompat
+import com.takisoft.preferencex.PreferenceFragmentCompat
 
 class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
@@ -22,11 +22,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val ab = (activity!! as AppCompatActivity).supportActionBar!!
         ab.setDisplayHomeAsUpEnabled(true)
         ab.setTitle(R.string.menu_title_preferences)
-        return try {
-            super.onCreateView(inflater, container, savedInstanceState)
-        } finally {
-           // setDividerPreferences(DIVIDER_DEFAULT)
-        }
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

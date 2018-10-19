@@ -115,7 +115,7 @@ class SteamFragment : Fragment(), Injectable {
 
     private fun setRateView(binding: FragmentSteamBinding, bannerSize: AdSize) {
         val rateView =
-            RateView(ContextThemeWrapper(context!!, R.style.PreferenceFixTheme), null, 0).apply {
+            RateView(ContextThemeWrapper(context!!, R.style.Theme_AppCompat), null, 0).apply {
                 RateViewModel.onRateDialogStarted(context!!)
                 onRatedListener = { success, positive ->
                     if (success) {
