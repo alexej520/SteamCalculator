@@ -4,13 +4,16 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 ext {
-    v_anko = '0.10.7'
-    v_app_compat = '1.0.0'
-    v_dagger = '2.16'
+    v_anko = '0.10.8'
+    v_app_compat = '1.0.2'
+    v_recyclerview = '1.0.0'
+    v_cardview = '1.0.0'
+    v_material = '1.0.0'
+    v_dagger = '2.21'
     v_room = '2.0.0'
     v_lifecycle_extensions = '2.0.0'
-    v_play_services_ads = '17.0.0'
-    v_databinding_compiler = '3.2.0-alpha11'
+    v_play_services_ads = '17.1.3'
+    v_databinding_compiler = '3.3.1'
 }
 
 android {
@@ -48,15 +51,15 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$v_kotlin"
     implementation "androidx.appcompat:appcompat:$v_app_compat"
-    implementation "androidx.recyclerview:recyclerview:$v_app_compat"
-    implementation "androidx.cardview:cardview:$v_app_compat"
-    implementation "com.google.android.material:material:$v_app_compat"
+    implementation "androidx.recyclerview:recyclerview:$v_recyclerview"
+    implementation "androidx.cardview:cardview:$v_cardview"
+    implementation "com.google.android.material:material:$v_material"
 
-    implementation "com.takisoft.preferencex:preferencex:$v_app_compat"
+    implementation "com.takisoft.preferencex:preferencex:$v_material"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation "org.jetbrains.anko:anko:$v_anko"
     implementation "org.jetbrains.anko:anko-appcompat-v7:$v_anko"
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$v_anko"
@@ -71,8 +74,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$v_dagger"
     implementation "com.google.dagger:dagger-android-support:$v_dagger"
     kapt "com.google.dagger:dagger-android-processor:$v_dagger"
-
-    kapt "androidx.databinding:compiler:$v_databinding_compiler"
 
     implementation "com.google.android.gms:play-services-ads:$v_play_services_ads"
 }
