@@ -44,7 +44,7 @@ class QuantityValueViewModel(
         }
     }
 
-    fun selectUnit(id: Int) {
-        onUnitSelect(_units[id])
+    fun selectUnit(position: Int) {
+        onUnitSelect(_units[position])
     }
 }

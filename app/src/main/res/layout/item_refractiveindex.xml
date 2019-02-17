@@ -18,7 +18,7 @@
 
         <variable
             name="wavelengthUnitAdapter"
-            type="ru.lextop.steamcalculator.ui.UnitArrayAdapter" />
+            type="ru.lextop.steamcalculator.list.SpinnerListAdapter" />
     </data>
 
     <LinearLayout
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:adapter="@{wavelengthUnitAdapter}"
-                    android:onItemSelected="@{(a,b,c,id) -> vm.selectWavelengthUnit((int) id)}"
+                    android:onItemSelected="@{(a,b,position,d) -> vm.selectWavelengthUnit(position)}"
                     android:selectedItemPosition="@{vm.wavelengthUnitSelectionLive}" />
             </LinearLayout>
         </LinearLayout>

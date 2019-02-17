@@ -269,7 +269,7 @@ val allQuantities: List<QuantityWrapper> = listOf(
 
 private val quantityQuantityWrapperMap = allQuantities.associate { it.quantity to it }
 
-val Quantity.wrapper: QuantityWrapper get() = quantityQuantityWrapperMap[this]!!
+val Quantity.wrapper: QuantityWrapper get() = quantityQuantityWrapperMap.getValue(this)
 
 val quantityIdMap = allQuantities.associate { it.id to it }
 
@@ -345,7 +345,7 @@ private val computablePairs: List<Pair<QuantityWrapper, QuantityWrapper>> = list
         SpecificVolume to Temperature,
         Pressure to VapourFraction,
         Temperature to VapourFraction
-).map { (q1, q2) -> quantityQuantityWrapperMap[q1]!! to quantityQuantityWrapperMap[q2]!! }
+).map { (q1, q2) -> quantityQuantityWrapperMap.getValue(q1) to quantityQuantityWrapperMap.getValue(q2) }
 
 val computablePropMap: Map<QuantityWrapper, List<QuantityWrapper>> = with(computablePairs.unzip()) {
     first.union(second).associate { prop ->

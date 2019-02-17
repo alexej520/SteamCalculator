@@ -10,10 +10,6 @@ import android.view.ViewGroup
 import ru.lextop.steamcalculator.databinding.FragmentInfodetailsBinding
 
 class InfoDetailsFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ab = (activity!! as AppCompatActivity).supportActionBar!!

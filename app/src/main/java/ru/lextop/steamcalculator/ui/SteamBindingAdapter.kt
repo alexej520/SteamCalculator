@@ -26,26 +26,28 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
         val viewType = getItemViewType(position)
         if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
             val binding = (holder as DataBoundViewHolder<ItemRefractiveindexBinding>).binding
-            binding.setLifecycleOwner(bindingLo)
-            binding.refractiveIndex.setLifecycleOwner(bindingLo)
+            binding.lifecycleOwner = bindingLo
+            binding.refractiveIndex.lifecycleOwner = bindingLo
             binding.vm = refractiveIndexViewModel
 
             binding.executePendingBindings()
 
-            binding.wavelengthUnitAdapter!!.items =
-                    refractiveIndexViewModel?.wavelengthUnits ?: emptyList()
-            binding.refractiveIndex.unitAdapter!!.items =
-                    refractiveIndexViewModel?.refractiveIndexQuantityValueViewModel?.units ?:
-                    emptyList()
+            binding.wavelengthUnitAdapter!!.submitList(
+                refractiveIndexViewModel?.wavelengthUnits
+            )
+            binding.refractiveIndex.unitAdapter!!.submitList(
+                refractiveIndexViewModel?.refractiveIndexQuantityValueViewModel?.units
+            )
+
         } else {
             val binding = (holder as DataBoundViewHolder<ItemQuantityBinding>).binding
-            binding.setLifecycleOwner(bindingLo)
+            binding.lifecycleOwner = bindingLo
             val item = viewModels[position]
             binding.vm = item
 
             binding.executePendingBindings()
 
-            binding.unitAdapter!!.items = item.units
+            binding.unitAdapter!!.submitList(item.units)
         }
     }
 
@@ -63,12 +65,12 @@ class SteamBindingAdapter(private val bindingLo: LifecycleOwner) :
         return if (viewType == REFRACTIVE_INDEX_BINDING_ID) {
             val binding =
                 ItemRefractiveindexBinding.inflate(layoutInflater!!, parent, false)
-            binding.wavelengthUnitAdapter = UnitArrayAdapter(parent.context)
-            binding.refractiveIndex.unitAdapter = UnitArrayAdapter(parent.context)
+            binding.wavelengthUnitAdapter = UnitArrayAdapter()
+            binding.refractiveIndex.unitAdapter = UnitArrayAdapter()
             DataBoundViewHolder(binding)
         } else {
             val binding = ItemQuantityBinding.inflate(layoutInflater!!, parent, false)
-            binding.unitAdapter = UnitArrayAdapter(parent.context)
+            binding.unitAdapter = UnitArrayAdapter()
             DataBoundViewHolder(binding)
         }
     }

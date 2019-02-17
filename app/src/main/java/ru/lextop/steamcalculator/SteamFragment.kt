@@ -2,15 +2,14 @@ package ru.lextop.steamcalculator
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import androidx.lifecycle.Observer
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.*
 import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -22,7 +21,7 @@ import ru.lextop.steamcalculator.databinding.FragmentSteamBinding
 import ru.lextop.steamcalculator.databinding.ItemSelectquantityBinding
 import ru.lextop.steamcalculator.di.Injectable
 import ru.lextop.steamcalculator.model.DefaultUnits
-import ru.lextop.steamcalculator.ui.DropdownHintArrayAdapter
+import ru.lextop.steamcalculator.ui.PropertySpinnerListAdapter
 import ru.lextop.steamcalculator.ui.RateView
 import ru.lextop.steamcalculator.ui.SteamBindingAdapter
 import ru.lextop.steamcalculator.ui.UnitArrayAdapter
@@ -40,27 +39,37 @@ class SteamFragment : Fragment(), Injectable {
     @Inject
     lateinit var repo: SteamRepository
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val ab = (activity!! as AppCompatActivity).supportActionBar!!
-        ab.setDisplayHomeAsUpEnabled(false)
-        ab.setTitle(R.string.app_name)
         val binding = FragmentSteamBinding.inflate(inflater, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
+
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_preferences -> {
+                    setActualUnitSetPreference()
+                    activity!!.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, SettingsFragment())
+                        .addToBackStack("settings")
+                        .commit()
+                }
+                R.id.menu_info_details -> activity!!.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, InfoDetailsFragment())
+                    .addToBackStack("info_details")
+                    .commit()
+                else -> return@setOnMenuItemClickListener false
+            }
+            true
+        }
 
         val bannerSize = AdSize.SMART_BANNER
         if (!RateViewModel.mustRate(context!!)) {
-            setAdView(binding, bannerSize)
+            setAdView(binding.steamAdContainer, bannerSize)
         } else {
-            setRateView(binding, bannerSize)
+            setRateView(binding.steamAdContainer, bannerSize)
         }
 
         val vm: SteamViewModel = activity!!.viewModel(viewModelFactory)
@@ -83,29 +92,29 @@ class SteamFragment : Fragment(), Injectable {
     }
 
     private fun initSelectedQuantity(sq: SelectQuantityViewModel, b: ItemSelectquantityBinding) {
-        b.setLifecycleOwner(this)
-        b.quantityAdapter = DropdownHintArrayAdapter(context!!)
-        b.unitAdapter = UnitArrayAdapter(context!!)
+        b.lifecycleOwner = this
+        b.quantityAdapter = PropertySpinnerListAdapter()
+        b.unitAdapter = UnitArrayAdapter()
 
         sq.quantityNameToSymbolListLive.observe(this, Observer {
-            b.quantityAdapter!!.items = it!!
+            b.quantityAdapter!!.submitList(it!!)
         })
         sq.nameVisibleLive.observe(this, Observer {
             b.quantityAdapter!!.isHintVisible = it!!
         })
         sq.unitsLive.observe(this, Observer {
-            b.unitAdapter!!.items = it!!
+            b.unitAdapter!!.submitList(it!!)
         })
     }
 
-    private fun setAdView(binding: FragmentSteamBinding, bannerSize: AdSize) {
+    private fun setAdView(container: FrameLayout, bannerSize: AdSize) {
         val adView = AdView(context!!).apply {
             adSize = bannerSize
             adUnitId = context!!.getString(R.string.adUnitIdBanner)
             loadAd(AdRequest.Builder().build())
         }
-        binding.steamAdContainer.removeAllViews()
-        binding.steamAdContainer.addView(
+        container.removeAllViews()
+        container.addView(
             adView, FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
@@ -113,61 +122,36 @@ class SteamFragment : Fragment(), Injectable {
         )
     }
 
-    private fun setRateView(binding: FragmentSteamBinding, bannerSize: AdSize) {
-        val rateView =
-            RateView(ContextThemeWrapper(context!!, R.style.Theme_AppCompat), null, 0).apply {
-                RateViewModel.onRateDialogStarted(context!!)
-                onRatedListener = { success, positive ->
-                    if (success) {
-                        if (positive) {
-                            browse(context!!.getString(R.string.contactUsGooglePlay))
-                        } else {
-                            email(
-                                context!!.getString(R.string.contactUsEmail),
-                                subject = context!!.getString(R.string.app_name)
-                            )
-                        }
-                    }
-                    animate()
-                        .alpha(0f)
-                        .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationEnd(animation: Animator?) {
-                                setAdView(binding, bannerSize)
-                            }
-                        })
-                    RateViewModel.onRateDialogCompleted(context!!, success, positive)
+    private fun setRateView(container: FrameLayout, bannerSize: AdSize) {
+        val rateView = RateView(ContextThemeWrapper(context!!, R.style.Theme_AppCompat), null, 0)
+        RateViewModel.onRateDialogStarted(context!!)
+        rateView.onRatedListener = { success, positive ->
+            if (success) {
+                if (positive) {
+                    browse(context!!.getString(R.string.contactUsGooglePlay))
+                } else {
+                    email(
+                        context!!.getString(R.string.contactUsEmail),
+                        subject = context!!.getString(R.string.app_name)
+                    )
                 }
             }
-        binding.steamAdContainer.removeAllViews()
-        binding.steamAdContainer.addView(
+            rateView.animate()
+                .alpha(0f)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        setAdView(container, bannerSize)
+                    }
+                })
+            RateViewModel.onRateDialogCompleted(context!!, success, positive)
+        }
+        container.removeAllViews()
+        container.addView(
             rateView, FrameLayout.LayoutParams(
                 bannerSize.getWidthInPixels(context!!),
                 maxOf(bannerSize.getHeightInPixels(context!!), context!!.dip(48))
             )
         )
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.steam_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_preferences -> {
-                setActualUnitSetPreference()
-                activity!!.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, SettingsFragment())
-                    .addToBackStack("settings")
-                    .commit()
-            }
-            R.id.menu_info_details -> activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, InfoDetailsFragment())
-                .addToBackStack("info_details")
-                .commit()
-            else -> return super.onOptionsItemSelected(item)
-        }
-        return true
     }
 
     private fun setActualUnitSetPreference() {

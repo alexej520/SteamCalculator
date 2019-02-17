@@ -4,4 +4,5 @@
     <item name="rateViewNoButton" type="id" />
     <item name="rateViewYesButton" type="id" />
     <item name="onChangedListener" type="id" />
+    <item name="tag_holder" type="id" />
 </resources>

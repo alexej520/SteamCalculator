@@ -11,11 +11,11 @@
 
         <variable
             name="quantityAdapter"
-            type="ru.lextop.steamcalculator.ui.DropdownHintArrayAdapter" />
+            type="ru.lextop.steamcalculator.ui.PropertySpinnerListAdapter" />
 
         <variable
             name="unitAdapter"
-            type="ru.lextop.steamcalculator.ui.UnitArrayAdapter" />
+            type="ru.lextop.steamcalculator.list.SpinnerListAdapter" />
 
         <import
             alias="V"
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adapter="@{quantityAdapter}"
-                android:onItemSelected="@{(a,b,c,id) -> vm.selectQuantity((int) id)}"
+                android:onItemSelected="@{(a,b,position,d) -> vm.selectQuantity(position)}"
                 android:selectedItemPosition="@{vm.quantitySelectionLive}" />
 
             <EditText
@@ -64,7 +64,7 @@
                 android:id="@+id/selectquantity_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onItemSelected="@{(a,b,c,id) -> vm.selectUnit((int) id)}"
+                android:onItemSelected="@{(a,b,position,d) -> vm.selectUnit(position)}"
                 android:selectedItemPosition="@{vm.unitSelectionLive}"
                 android:adapter="@{unitAdapter}" />
         </LinearLayout>

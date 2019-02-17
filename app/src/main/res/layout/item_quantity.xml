@@ -10,7 +10,7 @@
 
         <variable
             name="unitAdapter"
-            type="ru.lextop.steamcalculator.ui.UnitArrayAdapter"/>
+            type="ru.lextop.steamcalculator.list.SpinnerListAdapter"/>
 
         <import
             alias="V"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:adapter="@{unitAdapter}"
-                android:onItemSelected="@{(a,b,c,id)->vm.selectUnit((int) id)}"
+                android:onItemSelected="@{(a,b,position,d)->vm.selectUnit(position)}"
                 android:selectedItemPosition="@{vm.unitSelectionLive}" />
         </LinearLayout>
     </LinearLayout>
