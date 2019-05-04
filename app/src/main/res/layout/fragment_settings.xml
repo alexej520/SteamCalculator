@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <ru.lextop.steamcalculator.ui.Toolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.App.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_arrow_back" />
+        app:title="@string/menu_title_preferences" />
 
     <FrameLayout
         android:id="@+id/settingsContainer"

@@ -6,7 +6,13 @@
     </style>
 
     <style name="Widget.App.Toolbar" parent="Widget.AppCompat.Toolbar">
-
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back</item>
+        <item name="android:background">@color/cardview_dark_background</item>
     </style>
+
+    <declare-styleable name="Toolbar">
+        <attr name="menu" format="reference" />
+    </declare-styleable>
 
 </resources>

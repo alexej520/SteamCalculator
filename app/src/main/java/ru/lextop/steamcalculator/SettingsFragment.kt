@@ -19,7 +19,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
-        super.onCreateView(inflater, view.settingsContainer, savedInstanceState)
+        val preferenceView =
+            super.onCreateView(inflater, view.settingsContainer, savedInstanceState)
+        view.settingsContainer.addView(preferenceView)
         return view
     }
 
@@ -27,7 +29,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         super.onViewCreated(view, savedInstanceState)
 
         toolbar.setNavigationOnClickListener {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         }
     }
 }

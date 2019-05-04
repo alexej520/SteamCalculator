@@ -12,8 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.EditText
-import androidx.annotation.MenuRes
-import androidx.appcompat.widget.Toolbar
 import ru.lextop.steamcalculator.R
 
 fun dp(context: Context, size: Float): Int =
@@ -90,9 +88,4 @@ private class InternalTextWatcher(
 
 interface OnInputValue {
     fun onInputValue(input: Editable)
-}
-
-@BindingAdapter("bind:menu")
-fun menu(toolbar: Toolbar, @MenuRes menu: Int) {
-    toolbar.inflateMenu(menu)
 }

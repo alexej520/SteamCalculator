@@ -1,28 +1,28 @@
 package ru.lextop.steamcalculator
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_infodetails.*
 import ru.lextop.steamcalculator.databinding.FragmentInfodetailsBinding
 
 class InfoDetailsFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val ab = (activity!! as AppCompatActivity).supportActionBar!!
-        ab.setDisplayHomeAsUpEnabled(true)
-        ab.setTitle(R.string.menu_title_info_details)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return FragmentInfodetailsBinding.inflate(inflater, container, false).root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> activity!!.onBackPressed()
-            else -> return super.onOptionsItemSelected(item)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
         }
-        return true
     }
 }

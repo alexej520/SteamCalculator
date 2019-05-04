@@ -4,7 +4,10 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.*
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,9 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.support.v4.browse
-import org.jetbrains.anko.support.v4.email
+import ru.lextop.steamcalculator.binding.browse
+import ru.lextop.steamcalculator.binding.email
 import ru.lextop.steamcalculator.binding.viewModel
 import ru.lextop.steamcalculator.databinding.FragmentSteamBinding
 import ru.lextop.steamcalculator.databinding.ItemSelectquantityBinding
@@ -33,7 +35,7 @@ import javax.inject.Inject
 
 class SteamFragment : Fragment(), Injectable {
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    lateinit var steamViewModelFactory: ViewModelFactory<SteamViewModel>
     @Inject
     lateinit var prefs: SharedPreferences
     @Inject
@@ -66,13 +68,14 @@ class SteamFragment : Fragment(), Injectable {
         }
 
         val bannerSize = AdSize.SMART_BANNER
-        if (!RateViewModel.mustRate(context!!)) {
+        binding.steamAdContainer.minimumHeight = bannerSize.getHeightInPixels(requireContext())
+        if (!RateViewModel.mustRate(requireContext())) {
             setAdView(binding.steamAdContainer, bannerSize)
         } else {
             setRateView(binding.steamAdContainer, bannerSize)
         }
 
-        val vm: SteamViewModel = activity!!.viewModel(viewModelFactory)
+        val vm: SteamViewModel = requireActivity().viewModel(steamViewModelFactory)
         binding.vm = vm
         binding.steamQuantityValues.adapter = SteamBindingAdapter(this).apply {
             viewModels = vm.quantityValueViewModels
@@ -128,9 +131,9 @@ class SteamFragment : Fragment(), Injectable {
         rateView.onRatedListener = { success, positive ->
             if (success) {
                 if (positive) {
-                    browse(context!!.getString(R.string.contactUsGooglePlay))
+                    requireContext().browse(context!!.getString(R.string.contactUsGooglePlay))
                 } else {
-                    email(
+                    requireContext().email(
                         context!!.getString(R.string.contactUsEmail),
                         subject = context!!.getString(R.string.app_name)
                     )
@@ -149,7 +152,9 @@ class SteamFragment : Fragment(), Injectable {
         container.addView(
             rateView, FrameLayout.LayoutParams(
                 bannerSize.getWidthInPixels(context!!),
-                maxOf(bannerSize.getHeightInPixels(context!!), context!!.dip(48))
+                bannerSize.getHeightInPixels(context!!).coerceAtLeast(
+                    resources.getDimensionPixelSize(R.dimen.banner_min_height)
+                )
             )
         )
     }

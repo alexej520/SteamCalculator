@@ -1,10 +1,11 @@
 package ru.lextop.steamcalculator.list
 
 import android.view.View
+import kotlinx.android.extensions.LayoutContainer
 
 abstract class Holder<T>(
-    val containerView: View
-) {
+    override val containerView: View
+): LayoutContainer {
     private lateinit var _adapter: Adapter<*>
     private var _viewType: Int = 0
     internal val viewType: Int get() = _viewType

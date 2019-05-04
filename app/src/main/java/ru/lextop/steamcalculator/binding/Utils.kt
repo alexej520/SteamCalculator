@@ -2,22 +2,21 @@
 
 package ru.lextop.steamcalculator.binding
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewManager
 import android.widget.AdapterView
-import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
-import org.jetbrains.anko.custom.ankoView
-import org.jetbrains.anko.textAppearance
-import ru.lextop.steamcalculator.R
 
 inline fun <reified VM : ViewModel> FragmentActivity.viewModel(factory: ViewModelProvider.Factory) =
     ViewModelProviders.of(this, factory).get(VM::class.java)
@@ -25,7 +24,7 @@ inline fun <reified VM : ViewModel> FragmentActivity.viewModel(factory: ViewMode
 inline fun <reified VM : ViewModel> FragmentActivity.viewModel(key: String) =
     ViewModelProviders.of(this).get(key, VM::class.java)
 
-inline fun <T> LiveData<T>.observe(lo: LifecycleOwner, crossinline onReceive: (T?) -> Unit) {
+inline fun <T> LiveData<T>.observe(lo: LifecycleOwner, crossinline onReceive: (T) -> Unit) {
     this.observe(lo, Observer { onReceive(it) })
 }
 
@@ -85,4 +84,44 @@ var View.endPadding: Int
 fun ViewGroup.inflate(@LayoutRes resId: Int, attach: Boolean = false): View {
     val layoutInflater = LayoutInflater.from(context)
     return layoutInflater.inflate(resId, this, attach)
+}
+
+fun <T : ViewDataBinding> ViewGroup.inflate(
+    bindingFactory: (LayoutInflater, ViewGroup, Boolean) -> T,
+    attach: Boolean = false
+): T {
+    val layoutInflater = LayoutInflater.from(context)
+    val binding = bindingFactory.invoke(layoutInflater, this, attach)
+    return binding as T
+}
+
+fun Context.browse(url: String, newTask: Boolean = false): Boolean {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        if (newTask) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(intent)
+        return true
+    } catch (e: ActivityNotFoundException) {
+        e.printStackTrace()
+        return false
+    }
+}
+
+fun Context.email(email: String, subject: String = "", text: String = ""): Boolean {
+    val intent = Intent(Intent.ACTION_SENDTO)
+    intent.data = Uri.parse("mailto:")
+    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+    if (subject.isNotEmpty())
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+    if (text.isNotEmpty())
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
+        return true
+    }
+    return false
+
 }

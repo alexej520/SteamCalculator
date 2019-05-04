@@ -1,10 +1,12 @@
 package ru.lextop.steamcalculator
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
-import org.jetbrains.anko.doAsync
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.lextop.steamcalculator.binding.setValueIfNotSame
 import ru.lextop.steamcalculator.db.*
 import ru.lextop.steamcalculator.model.*
@@ -15,29 +17,41 @@ import javax.inject.Singleton
 
 @Singleton
 class SteamRepository @Inject constructor
-(private val steamDao: SteamDao, private val prefs: SharedPreferences, private val context: Context) {
+    (
+    private val steamDao: SteamDao,
+    private val prefs: SharedPreferences,
+    private val context: Context
+) {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var steam: SteamWrapper = SteamWrapper()
     val viewUnits: Map<QuantityWrapper, LiveData<UnitConverterWrapper>> = allQuantities.associate {
         val live = MutableLiveData<UnitConverterWrapper>()
         live.value = it.units.first()
         it to live
     }
-    val editUnits: Map<QuantityWrapper, LiveData<UnitConverterWrapper>> = (computableQuantities + Wavelength.wrapper).associate {
-        val live = MutableLiveData<UnitConverterWrapper>()
-        live.value = it.units.first()
-        it to live
-    }
-    val quantityValueLives: Map<QuantityWrapper, LiveData<QuantityValueWrapper>> = allQuantities.filterNot {
-        it.quantity == RefractiveIndex || it.quantity == Wavelength
-    }.associate {
-        val live = MutableLiveData<QuantityValueWrapper>()
-        live.value = QuantityValueWrapper(it, Double.NaN, it.units.first())
-        it to live
-    }.toMutableMap()
-    val refractiveIndexQuantityValueLive: LiveData<QuantityValueWrapper> = MutableLiveData<QuantityValueWrapper>().apply {
-        val RefractiveIndexWrapper = RefractiveIndex.wrapper
-        value = QuantityValueWrapper(RefractiveIndexWrapper, Double.NaN, RefractiveIndexWrapper.units.first())
-    }
+    val editUnits: Map<QuantityWrapper, LiveData<UnitConverterWrapper>> =
+        (computableQuantities + Wavelength.wrapper).associate {
+            val live = MutableLiveData<UnitConverterWrapper>()
+            live.value = it.units.first()
+            it to live
+        }
+    val quantityValueLives: Map<QuantityWrapper, LiveData<QuantityValueWrapper>> =
+        allQuantities.filterNot {
+            it.quantity == RefractiveIndex || it.quantity == Wavelength
+        }.associate {
+            val live = MutableLiveData<QuantityValueWrapper>()
+            live.value = QuantityValueWrapper(it, Double.NaN, it.units.first())
+            it to live
+        }.toMutableMap()
+    val refractiveIndexQuantityValueLive: LiveData<QuantityValueWrapper> =
+        MutableLiveData<QuantityValueWrapper>().apply {
+            val RefractiveIndexWrapper = RefractiveIndex.wrapper
+            value = QuantityValueWrapper(
+                RefractiveIndexWrapper,
+                Double.NaN,
+                RefractiveIndexWrapper.units.first()
+            )
+        }
     val arg1QuantityValueLive: LiveData<QuantityValueWrapper> = MutableLiveData()
     val arg2QuantityValueLive: LiveData<QuantityValueWrapper> = MutableLiveData()
     val wavelengthQuantityValueLive: LiveData<QuantityValueWrapper> = MutableLiveData()
@@ -85,36 +99,36 @@ class SteamRepository @Inject constructor
 
 
     fun getEditUnitLive(quantity: QuantityWrapper): LiveData<UnitConverterWrapper> =
-            editUnits[quantity]!!
+        editUnits[quantity]!!
 
     fun setEditUnit(quantity: QuantityWrapper, unit: UnitConverterWrapper) {
-        doAsync {
+        coroutineScope.launch {
             steamDao.insertEditUnit(EditUnit(quantity.id, unit.id))
         }
     }
 
     fun getViewUnitLive(quantity: QuantityWrapper): LiveData<UnitConverterWrapper> =
-            viewUnits[quantity]!!
+        viewUnits[quantity]!!
 
     fun setViewUnit(quantity: QuantityWrapper, unit: UnitConverterWrapper) {
-        doAsync {
+        coroutineScope.launch {
             steamDao.insertViewUnit(ViewUnit(quantity.id, unit.id))
         }
     }
 
     fun setArg1Arg2(arg1: QuantityValueWrapper, arg2: QuantityValueWrapper) {
-        doAsync {
+        coroutineScope.launch {
             steamDao.insertSelectedQuantityValue(
-                    SelectedQuantityValue(ID_ARG1, arg1),
-                    SelectedQuantityValue(ID_ARG2, arg2)
+                SelectedQuantityValue(ID_ARG1, arg1),
+                SelectedQuantityValue(ID_ARG2, arg2)
             )
         }
     }
 
     fun setWavelength(wavelength: QuantityValueWrapper) {
-        doAsync {
+        coroutineScope.launch {
             steamDao.insertSelectedQuantityValue(
-                    SelectedQuantityValue(ID_WAVELENGTH, wavelength)
+                SelectedQuantityValue(ID_WAVELENGTH, wavelength)
             )
         }
     }

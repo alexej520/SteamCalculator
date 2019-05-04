@@ -1,11 +1,8 @@
 package ru.lextop.steamcalculator.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.SteamRepository
 import ru.lextop.steamcalculator.binding.getSpanned

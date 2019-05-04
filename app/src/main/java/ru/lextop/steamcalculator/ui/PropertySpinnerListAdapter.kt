@@ -1,8 +1,7 @@
 package ru.lextop.steamcalculator.ui
 
 import android.view.View
-import android.widget.TextView
-import kotlinx.android.synthetic.main.item_dropdown_property.view.*
+import kotlinx.android.synthetic.main.item_dropdown_property.*
 import ru.lextop.steamcalculator.R
 import ru.lextop.steamcalculator.binding.toVisibleOrGone
 import ru.lextop.steamcalculator.list.Holder
@@ -25,7 +24,7 @@ private class ViewHolder(
     containerView
 ) {
     override fun bind(payload: Any?) {
-        (containerView as TextView).text = item.first
+        symbolTextView.text = item.first
     }
 }
 
@@ -41,8 +40,8 @@ private class DropdownHolder(
     val propertyAdapter by lazy { adapter as PropertySpinnerListAdapter }
     override fun bind(payload: Any?) {
         val (item, hint) = item
-        containerView.symbolTextView.text = item
-        containerView.nameTextView.text = hint
-        containerView.nameTextView.visibility = propertyAdapter.isHintVisible.toVisibleOrGone()
+        symbolTextView.text = item
+        nameTextView.text = hint
+        nameTextView.visibility = propertyAdapter.isHintVisible.toVisibleOrGone()
     }
 }

@@ -9,7 +9,7 @@ data class Quantity(
 
         if (dimension != other.dimension) return false
         if (!ignoreName && name != other.name) return false
-        if (!ignoreSymbol && symbol != other.symbol) return true
+        if (!ignoreSymbol && symbol != other.symbol) return false
 
         return true
     }

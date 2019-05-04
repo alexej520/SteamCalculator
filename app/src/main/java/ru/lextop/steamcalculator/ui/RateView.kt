@@ -9,10 +9,8 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.layoutInflater
 import ru.lextop.steamcalculator.R
+import ru.lextop.steamcalculator.binding.inflate
 import ru.lextop.steamcalculator.databinding.DialogYesnoBinding
 
 class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
@@ -44,20 +42,22 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     init {
         // by default LinearLayout has transparent background
-        backgroundColor = TypedValue().also {
+        val backgroundColor = TypedValue().also {
             context.theme.resolveAttribute(
                 android.R.attr.windowBackground,
                 it,
                 true
             )
         }.data
+        setBackgroundColor(backgroundColor)
         layoutTransition = LayoutTransition().apply {
             R.style.Widget_Design_Snackbar
             addTransitionListener(transitionListener)
         }
+        val imgPadding = resources.getDimensionPixelSize(R.dimen.size_small)
         addView(
             ImageView(context).apply {
-                setPadding(context.dip(8), context.dip(8), 0, context.dip(8))
+                setPadding(imgPadding, imgPadding, 0, imgPadding)
                 setImageResource(R.mipmap.ic_launcher_round)
             },
             LinearLayout.LayoutParams(
@@ -81,7 +81,7 @@ class RateView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     }
 
     private fun yesNo(string: String, yes: OnClickListener, no: OnClickListener) {
-        val binding = DialogYesnoBinding.inflate(context.layoutInflater, this@RateView, true)
+        val binding = inflate(DialogYesnoBinding::inflate, true)
         binding.text = string
         binding.onYes = yes
         binding.onNo = no

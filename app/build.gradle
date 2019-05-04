@@ -4,16 +4,21 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 ext {
-    v_anko = '0.10.8'
     v_app_compat = '1.0.2'
     v_recyclerview = '1.0.0'
     v_cardview = '1.0.0'
     v_material = '1.0.0'
-    v_dagger = '2.21'
+    v_dagger = '2.22.1'
     v_room = '2.0.0'
     v_lifecycle_extensions = '2.0.0'
-    v_play_services_ads = '17.1.3'
+    v_play_services_ads = '17.2.0'
     v_databinding_compiler = '3.3.1'
+    v_core_ktx = '1.0.1'
+    v_coroutines = '1.2.0'
+}
+
+androidExtensions {
+    experimental = true
 }
 
 android {
@@ -43,6 +48,18 @@ android {
             dimension "production"
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
 }
 
 dependencies {
@@ -51,6 +68,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$v_kotlin"
     implementation "androidx.appcompat:appcompat:$v_app_compat"
+    implementation "androidx.core:core-ktx:$v_core_ktx"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$v_coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$v_coroutines"
     implementation "androidx.recyclerview:recyclerview:$v_recyclerview"
     implementation "androidx.cardview:cardview:$v_cardview"
     implementation "com.google.android.material:material:$v_material"
@@ -60,11 +80,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation "org.jetbrains.anko:anko:$v_anko"
-    implementation "org.jetbrains.anko:anko-appcompat-v7:$v_anko"
-    implementation "org.jetbrains.anko:anko-recyclerview-v7:$v_anko"
-    implementation "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$v_anko"
-    implementation "org.jetbrains.anko:anko-cardview-v7:$v_anko"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$v_lifecycle_extensions"
     implementation "androidx.room:room-runtime:$v_room"
