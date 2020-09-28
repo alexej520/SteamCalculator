@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import dagger.android.AndroidInjection
+import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import ru.lextop.steamcalculator.App
 
 object AppInjector {
@@ -21,11 +21,11 @@ object AppInjector {
             override fun onActivityResumed(activity: Activity) {}
             override fun onActivityStarted(activity: Activity) {}
             override fun onActivityDestroyed(activity: Activity) {}
-            override fun onActivitySaveInstanceState(activity: Activity, p1: Bundle?) {}
+            override fun onActivitySaveInstanceState(activity: Activity, p1: Bundle) {}
             override fun onActivityStopped(activity: Activity) {}
             // try inject all Activities was created
             override fun onActivityCreated(activity: Activity, p1: Bundle?) {
-                if (activity is Injectable || activity is HasSupportFragmentInjector) {
+                if (activity is Injectable || activity is HasAndroidInjector) {
                     AndroidInjection.inject(activity)
                 }
                 if (activity is FragmentActivity) {

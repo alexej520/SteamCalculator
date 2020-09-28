@@ -4,17 +4,18 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 ext {
-    v_app_compat = '1.0.2'
-    v_recyclerview = '1.0.0'
+    v_app_compat = '1.2.0'
+    v_recyclerview = '1.1.0'
     v_cardview = '1.0.0'
-    v_material = '1.0.0'
-    v_dagger = '2.22.1'
-    v_room = '2.0.0'
-    v_lifecycle_extensions = '2.0.0'
-    v_play_services_ads = '17.2.0'
+    v_material = '1.2.1'
+    v_preferencex = '1.1.0'
+    v_dagger = '2.25.2'
+    v_room = '2.3.0-alpha02'
+    v_lifecycle_extensions = '2.2.0'
+    v_play_services_ads = '19.4.0'
     v_databinding_compiler = '3.3.1'
-    v_core_ktx = '1.0.1'
-    v_coroutines = '1.2.0'
+    v_core_ktx = '1.3.1'
+    v_coroutines = '1.3.7'
 }
 
 androidExtensions {
@@ -22,13 +23,13 @@ androidExtensions {
 }
 
 android {
-    dataBinding.enabled = true
-    buildToolsVersion '28.0.3'
-    compileSdkVersion 28
+    buildFeatures.dataBinding = true
+    buildToolsVersion '30.0.2'
+    compileSdkVersion 30
     defaultConfig {
         applicationId "ru.lextop.steamcalculator"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 8
         versionName "1.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -75,11 +76,11 @@ dependencies {
     implementation "androidx.cardview:cardview:$v_cardview"
     implementation "com.google.android.material:material:$v_material"
 
-    implementation "com.takisoft.preferencex:preferencex:$v_material"
+    implementation "com.takisoft.preferencex:preferencex:$v_preferencex"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation "androidx.lifecycle:lifecycle-extensions:$v_lifecycle_extensions"
     implementation "androidx.room:room-runtime:$v_room"

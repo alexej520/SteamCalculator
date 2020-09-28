@@ -1,21 +1,20 @@
 package ru.lextop.steamcalculator
 
-import android.app.Activity
 import android.app.Application
 import androidx.preference.PreferenceManager
 import com.google.android.gms.ads.MobileAds
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import ru.lextop.steamcalculator.di.AppInjector
 import java.util.*
 import javax.inject.Inject
 
-class App : Application(), HasActivityInjector {
+class App : Application(), HasAndroidInjector {
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
-    override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
+    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 
     override fun onCreate() {
         super.onCreate()
