@@ -1,6 +1,8 @@
 package ru.lextop.steamcalculator
 
 import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import com.google.android.gms.ads.MobileAds
 import dagger.android.AndroidInjector
@@ -15,6 +17,11 @@ class App : Application(), HasAndroidInjector {
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(base)
+    }
 
     override fun onCreate() {
         super.onCreate()

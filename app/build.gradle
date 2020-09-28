@@ -16,6 +16,7 @@ ext {
     v_databinding_compiler = '3.3.1'
     v_core_ktx = '1.3.1'
     v_coroutines = '1.3.7'
+    v_multidex = '2.0.1'
 }
 
 androidExtensions {
@@ -30,6 +31,7 @@ android {
         applicationId "ru.lextop.steamcalculator"
         minSdkVersion 19
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode 8
         versionName "1.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -92,4 +94,5 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$v_dagger"
 
     implementation "com.google.android.gms:play-services-ads:$v_play_services_ads"
+    implementation "androidx.multidex:multidex:$v_multidex"
 }
